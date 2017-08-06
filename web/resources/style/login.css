@@ -1,0 +1,24 @@
+.welcome-logo {
+    display: block;
+    margin: auto;
+}
+
+.welcome-login-button {
+    display: inline-block;
+    margin: auto;
+}
+
+.login-button-container {
+    text-align: center;
+}
+
+.login-main-panel {
+    margin-top: 40px;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+.login-form {
+    margin-top: 20px;
+}
