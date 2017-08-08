@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://www.springframework.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Sergiusz
@@ -38,12 +39,12 @@
                         <p class="lead info">Witamy w ajjsa djaskjds kadksasl sdas. Zaloguj sie aby ask daskdka sjdkassk a</p>
                     </div>
                     -->
-                    <form class="login-form">
+                    <form name="loginForm" action="<c:url value='login' />" method="post" class="login-form">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-xs-2"></div>
                                 <div class="col-xs-8">
-                                    <input type="text" class="form-control" placeholder="Login lub email">
+                                    <input id="login" type="text" class="form-control" placeholder="Login lub email">
                                 </div>
                                 <div class="col-xs-2"></div>
                             </div>
@@ -52,7 +53,7 @@
                             <div class="row">
                                 <div class="col-xs-2"></div>
                                 <div class="col-xs-8">
-                                    <input type="password" class="form-control" placeholder="Haslo">
+                                    <input id="password" type="password" class="form-control" placeholder="Hasło">
                                 </div>
                                 <div class="col-xs-2"></div>
                             </div>
