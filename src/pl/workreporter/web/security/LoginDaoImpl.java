@@ -1,6 +1,7 @@
 package pl.workreporter.web.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -23,42 +24,66 @@ public class LoginDaoImpl implements LoginDao {
     @Override
     public String getEmail(int id) {
         String query = "select email from account where id="+id;
-        String email = jdbcTemplate.queryForObject(query, String.class);
-        return email;
+        try {
+            String email = jdbcTemplate.queryForObject(query, String.class);
+            return email;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public String getEmail(String login) {
         String query = "select email from account where login='"+login+"'";
-        String email = jdbcTemplate.queryForObject(query, String.class);
-        return email;
+        try {
+            String email = jdbcTemplate.queryForObject(query, String.class);
+            return email;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public String getLogin(int id) {
         String query = "select login from account where id="+id;
-        String login = jdbcTemplate.queryForObject(query, String.class);
-        return login;
+        try {
+            String login = jdbcTemplate.queryForObject(query, String.class);
+            return login;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public String getPasswordHash(int id) {
         String query = "select password from account where id="+id;
-        String password = jdbcTemplate.queryForObject(query, String.class);
-        return password;
+        try {
+            String password = jdbcTemplate.queryForObject(query, String.class);
+            return password;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public String getPasswordHash(String login) {
         String query = "select password from account where login='"+login+"'";
-        String password = jdbcTemplate.queryForObject(query, String.class);
-        return password;
+        try {
+            String password = jdbcTemplate.queryForObject(query, String.class);
+            return password;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public String getPasswordHashByEmail(String email) {
         String query = "select password from account where email='"+email+"'";
-        String password = jdbcTemplate.queryForObject(query, String.class);
-        return password;
+        try {
+            String password = jdbcTemplate.queryForObject(query, String.class);
+            return password;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }
