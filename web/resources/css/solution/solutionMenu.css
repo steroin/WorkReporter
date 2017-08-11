@@ -1,0 +1,50 @@
+/* Styles go here */
+
+.solutionChooserContainer {
+    margin-bottom: 80px;
+}
+
+.chooseSolutionContainer {
+    margin: auto;
+    text-align: center;
+}
+
+.chooseSolutionSelect {
+    margin: auto;
+    width: 100%;
+}
+
+.chooseSolutionButton {
+    width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .container, .container-fluid {
+        max-width: 80%;
+        margin: auto;
+    }
+}
+
+.solutionMenu a, .solutionMenu a:hover, .solutionMenu a:active, .solutionMenu a:visited, .solutionMenu a:focus {
+    text-decoration: none;
+}
+
+.solutionMenu a {
+    color: black;
+}
+
+.solutionMenu a:hover, .solutionMenu a:active {
+    color: #337ab7;
+}
+
+.solutionMenuItemActive {
+    color: #337ab7;
+}
+
+.solutionMenuItemName {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.solutionContent {
+}
