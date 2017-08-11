@@ -88,13 +88,18 @@ NAVBAR
         <div class="col-xs-4"></div>
     </div>
     <div class="row">
+        <div class="loaderConainer">
+            <div class="wrLoader"></div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-3">
             <div class="panel panel-default">
                 <ul class="list-group solutionMenu">
-                    <a href="#"><li class="list-group-item solutionMenuItemActive"><h4 class="solutionMenuItemName">Informacje</h4></li></a>
-                    <a href="#"><li class="list-group-item"><h4 class="solutionMenuItemName">Zespoly</h4></li></a>
-                    <a href="#"><li class="list-group-item"><h4 class="solutionMenuItemName">Pracownicy</h4></li></a>
-                    <a href="#"><li class="list-group-item"><h4 class="solutionMenuItemName">Statystyki</h4></li></a>
+                    <a href="#"><li class="list-group-item solutionMenuItemActive"><h5 class="solutionMenuItemName">Informacje</h5></li></a>
+                    <a href="#"><li class="list-group-item"><span class="solutionMenuItemName">Zespoly</span></li></a>
+                    <a href="#"><li class="list-group-item"><span class="solutionMenuItemName">Pracownicy</span></li></a>
+                    <a href="#"><li class="list-group-item"><span class="solutionMenuItemName">Statystyki</span></li></a>
                 </ul>
             </div>
         </div>
@@ -104,7 +109,7 @@ NAVBAR
                     <tr>
                         <td>Nazwa:</td>
                         <td>Solution</td>
-                        <td><button><span class="glyphicons glyphicons-pen"></span></button></td>
+                        <td><a href="#"><span class="glyphicon glyphicon-edit"></span></a></td>
                     </tr>
                     <tr>
                         <td>Liczba zespolow:</td>
@@ -127,26 +132,52 @@ NAVBAR
             <div class="panel panel-default solutionContent">
                 <table class="table table-striped">
                     <thead>
-                    <td>Zespol</td>
-                    <td></td>
+                    <tr>
+                        <td>Zespol</td>
+                        <td></td>
+                    </tr>
                     </thead>
                     <tr>
                         <td>Zespol 1</td>
+                        <td>
+                            <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
                     </tr>
                     <tr>
                         <td>Zespol 2</td>
+                        <td>
+                            <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
                     </tr>
                     <tr>
                         <td>Zespol 3</td>
+                        <td>
+                            <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
                     </tr>
                     <tr>
                         <td>Zespol 4</td>
+                        <td>
+                            <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
                     </tr>
                     <tr>
                         <td>Zespol 5</td>
+                        <td>
+                            <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
                     </tr>
                     <tr>
                         <td>Zespol 6</td>
+                        <td>
+                            <a href="#"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -158,4 +189,5 @@ NAVBAR
 </body>
 
 </html>
+
 
