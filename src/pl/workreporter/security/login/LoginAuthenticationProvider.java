@@ -27,7 +27,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         LoginDataValidationSettings settings = new LoginDataValidationSettings(5, 32, 5, 32);
         LoginDataValidator validator = new LoginDataValidator(settings);
         SecurityContext context = SecurityContextHolder.getContext();
-        System.out.println(context.getAuthentication());
+
         if (!validator.validateLogin(login) || !validator.validatePassword(password)) {
             context.setAuthentication(null);
             return null;
