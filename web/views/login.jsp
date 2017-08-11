@@ -44,7 +44,7 @@
                             <div class="row">
                                 <div class="col-xs-2"></div>
                                 <div class="col-xs-8">
-                                    <input id="login" type="text" class="form-control" placeholder="Login lub email">
+                                    <input name="login" type="text" class="form-control" placeholder="Login lub email">
                                 </div>
                                 <div class="col-xs-2"></div>
                             </div>
@@ -53,7 +53,7 @@
                             <div class="row">
                                 <div class="col-xs-2"></div>
                                 <div class="col-xs-8">
-                                    <input id="password" type="password" class="form-control" placeholder="Hasło">
+                                    <input name="password" type="password" class="form-control" placeholder="Hasło">
                                 </div>
                                 <div class="col-xs-2"></div>
                             </div>

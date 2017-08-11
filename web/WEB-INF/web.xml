@@ -13,7 +13,11 @@
             org.springframework.web.context.ContextLoaderListener
         </listener-class>
     </listener>
-
+    <listener>
+        <listener-class>
+            org.springframework.security.web.session.HttpSessionEventPublisher
+        </listener-class>
+    </listener>
     <display-name>Gradle + Spring MVC Hello World + XML</display-name>
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
