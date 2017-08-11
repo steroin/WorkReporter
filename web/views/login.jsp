@@ -10,15 +10,10 @@
 <html>
 
 <head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="resources/css/ext/bootstrap.min.css">
     <link rel="stylesheet" href="resources/css/login.css">
-
-    <!-- jQuery library -->
-    <script src="resources/js/ext/jquery.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="resources/js/ext/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css">
+    <script src="resources/jquery/jquery-3.2.1.min.js"></script>
+    <script src="resources/bootstrap/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
