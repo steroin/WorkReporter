@@ -13,6 +13,10 @@ public class UserDetailsController {
 
     @ModelAttribute("userDetails")
     public CompleteUserDetails populateUserDetails() {
-        return (CompleteUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof  CompleteUserDetails) {
+            return (CompleteUserDetails) principal;
+        }
+        return null;
     }
 }
