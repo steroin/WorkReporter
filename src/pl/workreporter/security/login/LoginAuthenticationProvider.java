@@ -26,10 +26,8 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         LoginDataValidationSettings settings = new LoginDataValidationSettings(5, 32, 5, 32);
         LoginDataValidator validator = new LoginDataValidator(settings);
-        SecurityContext context = SecurityContextHolder.getContext();
 
         if (!validator.validateLogin(login) || !validator.validatePassword(password)) {
-            context.setAuthentication(null);
             return null;
         }
 
@@ -40,21 +38,9 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
             cud = loginDao.loadUserDetails(login);
         }
 
-        if (cud == null) {
-            context.setAuthentication(null);
-            return null;
+        if (cud != null && cud.getPassword() != null && BCrypt.checkpw(password, cud.getPassword())) {
+            return new UsernamePasswordAuthenticationToken(cud, password, cud.getAuthorities());
         }
-
-        if (cud.getPassword() != null && BCrypt.checkpw(password, cud.getPassword())) {
-            System.out.println(login+"_"+password);
-            for (GrantedAuthority authority : cud.getAuthorities()) {
-                System.out.println(authority.getAuthority());
-            }
-            Authentication newAuth = new UsernamePasswordAuthenticationToken(login, password, cud.getAuthorities());
-            context.setAuthentication(newAuth);
-            return newAuth;
-        }
-        context.setAuthentication(null);
         return null;
     }
 

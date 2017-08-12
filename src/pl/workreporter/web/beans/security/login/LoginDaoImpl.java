@@ -31,176 +31,145 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public String getEmail(int id) {
-        String query = "select email from account where id="+id;
-        try {
-            String email = jdbcTemplate.queryForObject(query, String.class);
-            return email;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return getEmail("id", id+"");
     }
 
     @Override
     public String getEmail(String login) {
-        String query = "select email from account where login='"+login+"'";
-        try {
-            String email = jdbcTemplate.queryForObject(query, String.class);
-            return email;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return getEmail("login", login);
+    }
+
+    private String getEmail(String keyAttribute, String value) {
+        String query = "select email from account where "+keyAttribute+"='"+value+"'";
+        String login = jdbcTemplate.queryForObject(query, String.class);
+        return login;
     }
 
     @Override
     public String getLogin(int id) {
-        String query = "select login from account where id="+id;
-        try {
-            String login = jdbcTemplate.queryForObject(query, String.class);
-            return login;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return getLogin("id", id+"");
+    }
+
+    private String getLogin(String keyAttribute, String value) {
+        String query = "select login from account where "+keyAttribute+"='"+value+"'";
+        String login = jdbcTemplate.queryForObject(query, String.class);
+        return login;
     }
 
     @Override
     public String getPasswordHash(int id) {
-        String query = "select password from account where id="+id;
-        try {
-            String password = jdbcTemplate.queryForObject(query, String.class);
-            return password;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return getPasswordHash("id", id+"");
     }
 
     @Override
     public String getPasswordHash(String login) {
-        String query = "select password from account where login='"+login+"'";
-        try {
-            String password = jdbcTemplate.queryForObject(query, String.class);
-            return password;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return getPasswordHash("login", login);
     }
 
     @Override
     public String getPasswordHashByEmail(String email) {
-        String query = "select password from account where email='"+email+"'";
-        try {
-            String password = jdbcTemplate.queryForObject(query, String.class);
-            return password;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return getPasswordHash("email", email);
+    }
+
+    private String getPasswordHash(String keyAttribute, String value) {
+        String query = "select password from account where "+keyAttribute+"='"+value+"'";
+        String password = jdbcTemplate.queryForObject(query, String.class);
+        return password;
     }
 
     @Override
     public CompleteUserDetails loadUserDetails(String login) {
-        String query = "select login, password, email from account where login='"+login+"'";
-        try {
-            Map<String, Object> result = jdbcTemplate.queryForMap(query);
-
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new UserRole("ROLE_USER"));
-
-            CompleteUserDetails cud = new CompleteUserDetails();
-            cud.setAuthorities(authorities);
-            cud.setPassword(result.get("password").toString());
-            cud.setUsername(result.get("login").toString());
-            cud.setEmail(result.get("email").toString());
-            cud.setAccountNonExpired(true);
-            cud.setAccountNonLocked(true);
-            cud.setCredentialsNonExpired(true);
-            cud.setEnabled(true);
-            cud.setManagedSolutions(getManagedSolutions(login));
-            cud.setManagedTeams(getManagedTeams(login));
-
-            return cud;
-        } catch (IncorrectResultSizeDataAccessException e) {
-            return null;
-        }
+        return loadUserDetails("account", "login", login);
     }
 
     @Override
     public CompleteUserDetails loadUserDetailsByEmail(String email) {
-        String query = "select login, password, email from account where email='"+email+"'";
-        try {
-            Map<String, Object> result = jdbcTemplate.queryForMap(query);
+        return loadUserDetails("account", "email", email);
+    }
 
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new UserRole("ROLE_USER"));
+    private CompleteUserDetails loadUserDetails(String tableName, String keyAttribute, String value) {
+        String query = "select au.id as userId, ac.id as accountId, firstname, lastname, login, password, email " +
+                "from account ac " +
+                "inner join appuser au on ac.id = au.accountid " +
+                "inner join personal_data pd on au.personaldataid = pd.id " +
+                "where "+tableName+"."+keyAttribute+"='"+value+"'";
 
-            CompleteUserDetails cud = new CompleteUserDetails();
-            cud.setAuthorities(authorities);
-            cud.setPassword(result.get("password").toString());
-            cud.setUsername(result.get("login").toString());
-            cud.setEmail(result.get("email").toString());
-            cud.setAccountNonExpired(true);
-            cud.setAccountNonLocked(true);
-            cud.setCredentialsNonExpired(true);
-            cud.setEnabled(true);
-            cud.setManagedSolutions(getManagedSolutionsByEmail(email));
-            cud.setManagedTeams(getManagedTeamsByEmail(email));
+        Map<String, Object> result = jdbcTemplate.queryForMap(query);
 
-            return cud;
-        } catch (IncorrectResultSizeDataAccessException e) {
-            return null;
+        List<Long> managedSolutions = getManagedSolutions(result.get("login").toString());
+        List<Long> managedTeams = getManagedTeams(result.get("login").toString());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new UserRole("ROLE_USER"));
+
+        if (managedSolutions.size() > 0) {
+            authorities.add(new UserRole("ROLE_SOLUTION_ADMIN"));
         }
+        if (managedTeams.size() > 0) {
+            authorities.add(new UserRole("ROLE_TEAM_ADMIN"));
+        }
+
+        CompleteUserDetails cud = new CompleteUserDetails();
+        cud.setAuthorities(authorities);
+        cud.setAccountId(Long.parseLong(result.get("accountId").toString()));
+        cud.setUserId(Long.parseLong(result.get("userId").toString()));
+        cud.setFirstName(result.get("firstname").toString());
+        cud.setLastName(result.get("lastname").toString());
+        cud.setPassword(result.get("password").toString());
+        cud.setUsername(result.get("login").toString());
+        cud.setEmail(result.get("email").toString());
+        cud.setAccountNonExpired(true);
+        cud.setAccountNonLocked(true);
+        cud.setCredentialsNonExpired(true);
+        cud.setEnabled(true);
+        cud.setManagedSolutions(managedSolutions);
+        cud.setManagedTeams(managedTeams);
+
+        return cud;
     }
 
     @Override
-    public List<Integer> getManagedSolutions(String login) {
-        String query = "select sa.solutionid from solution_administrator sa inner join appuser au on sa.userid=au.id " +
-                "inner join account ac on au.accountid=ac.id where ac.login='"+login+"'";
+    public List<Long> getManagedSolutions(String login) {
+        return getManagedSolutions("account", "login", login);
+    }
 
-        List<Integer> managedSolutions = new ArrayList<>();
+    @Override
+    public List<Long> getManagedSolutionsByEmail(String email) {
+        return getManagedSolutions("account", "email", email);
+    }
+
+    private List<Long> getManagedSolutions(String tableName, String keyAttribute, String value) {
+        String query = "select sa.solutionid from solution_administrator sa inner join appuser au on sa.userid=au.id " +
+                "inner join account ac on au.accountid=ac.id where "+tableName+"."+keyAttribute+"='"+value+"'";
+
+        List<Long> managedSolutions = new ArrayList<>();
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
 
         for (Map<String, Object> map : result) {
-            managedSolutions.add(Integer.parseInt(map.get("solutionid").toString()));
+            managedSolutions.add(Long.parseLong(map.get("solutionid").toString()));
         }
         return managedSolutions;
     }
 
     @Override
-    public List<Integer> getManagedSolutionsByEmail(String email) {
-        String query = "select sa.solutionid from solution_administrator sa inner join appuser au on sa.userid=au.id " +
-                "inner join account ac on au.accountid=ac.id where ac.email='"+email+"'";
-
-        List<Integer> managedSolutions = new ArrayList<>();
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-
-        for (Map<String, Object> map : result) {
-            managedSolutions.add(Integer.parseInt(map.get("solutionid").toString()));
-        }
-        return managedSolutions;
+    public List<Long> getManagedTeams(String login) {
+        return getManagedTeams("account", "login", login);
     }
 
     @Override
-    public List<Integer> getManagedTeams(String login) {
-        String query = "select ta.teamid from team_administrator ta inner join appuser au on ta.userid=au.id " +
-                "inner join account ac on au.accountid=ac.id where ac.login='"+login+"'";
-
-        List<Integer> managedTeams = new ArrayList<>();
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-
-        for (Map<String, Object> map : result) {
-            managedTeams.add(Integer.parseInt(map.get("teamid").toString()));
-        }
-        return managedTeams;
+    public List<Long> getManagedTeamsByEmail(String email) {
+        return getManagedTeams("account", "email", email);
     }
 
-    @Override
-    public List<Integer> getManagedTeamsByEmail(String email) {
+    private List<Long> getManagedTeams(String tableName, String keyAttribute, String value) {
         String query = "select ta.teamid from team_administrator ta inner join appuser au on ta.userid=au.id " +
-                "inner join account ac on au.accountid=ac.id where ac.email='"+email+"'";
+                "inner join account ac on au.accountid=ac.id where "+tableName+"."+keyAttribute+"='"+value+"'";
 
-        List<Integer> managedTeams = new ArrayList<>();
+        List<Long> managedTeams = new ArrayList<>();
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
 
         for (Map<String, Object> map : result) {
-            managedTeams.add(Integer.parseInt(map.get("teamid").toString()));
+            managedTeams.add(Long.parseLong(map.get("teamid").toString()));
         }
         return managedTeams;
     }
