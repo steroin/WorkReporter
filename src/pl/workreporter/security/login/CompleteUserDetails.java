@@ -12,6 +12,10 @@ import java.util.List;
 public class CompleteUserDetails implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
+    private long accountId;
+    private long userId;
+    private String firstName;
+    private String lastName;
     private String password;
     private String username;
     private String email;
@@ -19,8 +23,8 @@ public class CompleteUserDetails implements UserDetails {
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
-    private List<Integer> managedSolutions;
-    private List<Integer> managedTeams;
+    private List<Long> managedSolutions;
+    private List<Long> managedTeams;
 
 
     @Override
@@ -30,6 +34,38 @@ public class CompleteUserDetails implements UserDetails {
 
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
+    }
+
+    public long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(long id) {
+        accountId = id;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long id) {
+        userId = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
@@ -94,19 +130,19 @@ public class CompleteUserDetails implements UserDetails {
         isEnabled = enabled;
     }
 
-    public List<Integer> getManagedSolutions() {
+    public List<Long> getManagedSolutions() {
         return managedSolutions;
     }
 
-    public void setManagedSolutions(List<Integer> managedSolutions) {
+    public void setManagedSolutions(List<Long> managedSolutions) {
         this.managedSolutions = managedSolutions;
     }
 
-    public List<Integer> getManagedTeams() {
+    public List<Long> getManagedTeams() {
         return managedTeams;
     }
 
-    public void setManagedTeams(List<Integer> managedTeams) {
+    public void setManagedTeams(List<Long> managedTeams) {
         this.managedTeams = managedTeams;
     }
 }
