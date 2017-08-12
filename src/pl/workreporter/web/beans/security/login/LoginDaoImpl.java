@@ -30,7 +30,7 @@ public class LoginDaoImpl implements LoginDao {
     }
 
     @Override
-    public String getEmail(int id) {
+    public String getEmail(long id) {
         return getEmail("id", id);
     }
 
@@ -46,7 +46,7 @@ public class LoginDaoImpl implements LoginDao {
     }
 
     @Override
-    public String getLogin(int id) {
+    public String getLogin(long id) {
         return getLogin("id", id);
     }
 
@@ -57,7 +57,7 @@ public class LoginDaoImpl implements LoginDao {
     }
 
     @Override
-    public String getPasswordHash(int id) {
+    public String getPasswordHash(long id) {
         return getPasswordHash("id", id);
     }
 
