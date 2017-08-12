@@ -26,3 +26,5 @@ gradle/
 out/
 build/
 src/main/
+web/resources/full.css
+web/resources/solutionFull.html
