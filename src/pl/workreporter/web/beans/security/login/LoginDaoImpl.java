@@ -31,70 +31,76 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public String getEmail(int id) {
-        return getEmail("id", id+"");
+        return getEmail("id", id);
     }
 
     @Override
     public String getEmail(String login) {
-        return getEmail("login", login);
+        return getEmail("login", "'"+login+"'");
     }
 
-    private String getEmail(String keyAttribute, String value) {
-        String query = "select email from account where "+keyAttribute+"='"+value+"'";
+    private String getEmail(String keyAttribute, Object value) {
+        String query = "select email from account where "+keyAttribute+"="+value.toString();
         String login = jdbcTemplate.queryForObject(query, String.class);
         return login;
     }
 
     @Override
     public String getLogin(int id) {
-        return getLogin("id", id+"");
+        return getLogin("id", id);
     }
 
-    private String getLogin(String keyAttribute, String value) {
-        String query = "select login from account where "+keyAttribute+"='"+value+"'";
+    private String getLogin(String keyAttribute, Object value) {
+        String query = "select login from account where "+keyAttribute+"="+value.toString();
         String login = jdbcTemplate.queryForObject(query, String.class);
         return login;
     }
 
     @Override
     public String getPasswordHash(int id) {
-        return getPasswordHash("id", id+"");
+        return getPasswordHash("id", id);
     }
 
     @Override
     public String getPasswordHash(String login) {
-        return getPasswordHash("login", login);
+        return getPasswordHash("login", "'"+login+"'");
     }
 
     @Override
     public String getPasswordHashByEmail(String email) {
-        return getPasswordHash("email", email);
+        return getPasswordHash("email", "'"+email+"'");
     }
 
-    private String getPasswordHash(String keyAttribute, String value) {
-        String query = "select password from account where "+keyAttribute+"='"+value+"'";
+    private String getPasswordHash(String keyAttribute, Object value) {
+        String query = "select password from account where "+keyAttribute+"="+value.toString();
         String password = jdbcTemplate.queryForObject(query, String.class);
         return password;
     }
 
     @Override
     public CompleteUserDetails loadUserDetails(String login) {
-        return loadUserDetails("account", "login", login);
+        return loadUserDetails("login", "'"+login+"'");
     }
 
     @Override
     public CompleteUserDetails loadUserDetailsByEmail(String email) {
-        return loadUserDetails("account", "email", email);
+        return loadUserDetails("email", "'"+email+"'");
     }
 
-    private CompleteUserDetails loadUserDetails(String tableName, String keyAttribute, String value) {
-        String query = "select au.id as userId, ac.id as accountId, firstname, lastname, login, password, email " +
+    private CompleteUserDetails loadUserDetails(String keyAttribute, Object value) {
+        String query = "select au.id as userId, ac.id as accountId, firstname, lastname, login, password, ac.email as email " +
                 "from account ac " +
                 "inner join appuser au on ac.id = au.accountid " +
                 "inner join personal_data pd on au.personaldataid = pd.id " +
-                "where "+tableName+"."+keyAttribute+"='"+value+"'";
+                "where "+keyAttribute+"="+value.toString();
 
-        Map<String, Object> result = jdbcTemplate.queryForMap(query);
+        Map<String, Object> result;
+
+        try {
+            result = jdbcTemplate.queryForMap(query);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return null;
+        }
 
         List<Long> managedSolutions = getManagedSolutions(result.get("login").toString());
         List<Long> managedTeams = getManagedTeams(result.get("login").toString());
@@ -130,17 +136,17 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public List<Long> getManagedSolutions(String login) {
-        return getManagedSolutions("account", "login", login);
+        return getManagedSolutions("login", "'"+login+"'");
     }
 
     @Override
     public List<Long> getManagedSolutionsByEmail(String email) {
-        return getManagedSolutions("account", "email", email);
+        return getManagedSolutions("email", "'"+email+"'");
     }
 
-    private List<Long> getManagedSolutions(String tableName, String keyAttribute, String value) {
+    private List<Long> getManagedSolutions(String keyAttribute, Object value) {
         String query = "select sa.solutionid from solution_administrator sa inner join appuser au on sa.userid=au.id " +
-                "inner join account ac on au.accountid=ac.id where "+tableName+"."+keyAttribute+"='"+value+"'";
+                "inner join account ac on au.accountid=ac.id where "+keyAttribute+"="+value.toString();
 
         List<Long> managedSolutions = new ArrayList<>();
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
@@ -153,17 +159,17 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public List<Long> getManagedTeams(String login) {
-        return getManagedTeams("account", "login", login);
+        return getManagedTeams("login", "'"+login+"'");
     }
 
     @Override
     public List<Long> getManagedTeamsByEmail(String email) {
-        return getManagedTeams("account", "email", email);
+        return getManagedTeams("email", "'"+email+"'");
     }
 
-    private List<Long> getManagedTeams(String tableName, String keyAttribute, String value) {
+    private List<Long> getManagedTeams(String keyAttribute, Object value) {
         String query = "select ta.teamid from team_administrator ta inner join appuser au on ta.userid=au.id " +
-                "inner join account ac on au.accountid=ac.id where "+tableName+"."+keyAttribute+"='"+value+"'";
+                "inner join account ac on au.accountid=ac.id where "+keyAttribute+"="+value.toString();
 
         List<Long> managedTeams = new ArrayList<>();
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
