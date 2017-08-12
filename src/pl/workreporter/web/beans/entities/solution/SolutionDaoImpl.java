@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class SolutionDaoImpl implements SolutionDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Solution loadSolution(int id) {
+    public Solution loadSolution(long id) {
         String query = "select id, name, creation_date, last_edition_date from solution where id="+id;
 
         Solution solution = new Solution();
@@ -36,7 +37,7 @@ public class SolutionDaoImpl implements SolutionDao {
     }
 
     @Override
-    public List<Integer> getSolutionProjects(int id) {
+    public List<Integer> getSolutionProjects(long id) {
         List<Integer> projects = new ArrayList<>();
         String query = "select id from project where solutionid="+id;
 
@@ -49,7 +50,7 @@ public class SolutionDaoImpl implements SolutionDao {
     }
 
     @Override
-    public List<Integer> getSolutionTeams(int id) {
+    public List<Integer> getSolutionTeams(long id) {
         List<Integer> teams = new ArrayList<>();
         String query = "select id from team where solutionid="+id;
 
@@ -62,7 +63,7 @@ public class SolutionDaoImpl implements SolutionDao {
     }
 
     @Override
-    public List<Integer> getSolutionAdministrators(int id) {
+    public List<Integer> getSolutionAdministrators(long id) {
         List<Integer> administrators = new ArrayList<>();
         String query = "select userid from solution_administrator where solutionid="+id;
 
@@ -72,5 +73,20 @@ public class SolutionDaoImpl implements SolutionDao {
             administrators.add(Integer.parseInt(administrator.get("id").toString()));
         }
         return administrators;
+    }
+
+    @Override
+    public Map<Long, String> getSolutionIdNameMap(long userId) {
+        String query = "select s.id as solution_id, s.name as solution_name " +
+                "from solution s " +
+                "inner join solution_administrator sa on s.id = sa.solution id " +
+                "where sa.userid = "+userId;
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
+        Map<Long, String> map = new HashMap<>();
+
+        for (Map<String, Object> row : result) {
+            map.put(Long.parseLong(row.get("solution_id").toString()), row.get("solution_name").toString());
+        }
+        return map;
     }
 }
