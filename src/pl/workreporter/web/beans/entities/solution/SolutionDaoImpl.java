@@ -79,7 +79,7 @@ public class SolutionDaoImpl implements SolutionDao {
     public Map<Long, String> getSolutionIdNameMap(long userId) {
         String query = "select s.id as solution_id, s.name as solution_name " +
                 "from solution s " +
-                "inner join solution_administrator sa on s.id = sa.solution id " +
+                "inner join solution_administrator sa on s.id = sa.solutionid " +
                 "where sa.userid = "+userId;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         Map<Long, String> map = new HashMap<>();
