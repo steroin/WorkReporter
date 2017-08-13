@@ -5,6 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,53 +26,61 @@ public class SolutionDaoImpl implements SolutionDao {
     public Solution loadSolution(long id) {
         String query = "select id, name, creation_date, last_edition_date from solution where id="+id;
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
         Solution solution = new Solution();
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         solution.setId(Integer.parseInt(result.get("id").toString()));
         solution.setName(result.get("name").toString());
-        solution.setCreationDate(Date.valueOf(result.get("creation_date").toString()));
-        solution.setLastEditionDate(Date.valueOf(result.get("last_edition_date").toString()));
+        try {
+            solution.setCreationDate(sdf.parse(result.get("creation_date").toString()));
+            solution.setLastEditionDate(sdf.parse(result.get("last_edition_date").toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //solution.setProjects(new ArrayList<>());
         solution.setProjects(getSolutionProjects(id));
+        //solution.setTeams(new ArrayList<>());
         solution.setTeams(getSolutionTeams(id));
+        //solution.setAdministrators(new ArrayList<>());
         solution.setAdministrators(getSolutionAdministrators(id));
         return solution;
     }
 
     @Override
-    public List<Integer> getSolutionProjects(long id) {
-        List<Integer> projects = new ArrayList<>();
+    public List<Long> getSolutionProjects(long id) {
+        List<Long> projects = new ArrayList<>();
         String query = "select id from project where solutionid="+id;
 
         List<Map<String, Object>> projectsResult = jdbcTemplate.queryForList(query);
 
         for (Map<String, Object> team : projectsResult) {
-            projects.add(Integer.parseInt(team.get("id").toString()));
+            projects.add(Long.parseLong(team.get("id").toString()));
         }
         return projects;
     }
 
     @Override
-    public List<Integer> getSolutionTeams(long id) {
-        List<Integer> teams = new ArrayList<>();
+    public List<Long> getSolutionTeams(long id) {
+        List<Long> teams = new ArrayList<>();
         String query = "select id from team where solutionid="+id;
 
         List<Map<String, Object>> teamsResult = jdbcTemplate.queryForList(query);
 
         for (Map<String, Object> team : teamsResult) {
-            teams.add(Integer.parseInt(team.get("id").toString()));
+            teams.add(Long.parseLong(team.get("id").toString()));
         }
         return teams;
     }
 
     @Override
-    public List<Integer> getSolutionAdministrators(long id) {
-        List<Integer> administrators = new ArrayList<>();
+    public List<Long> getSolutionAdministrators(long id) {
+        List<Long> administrators = new ArrayList<>();
         String query = "select userid from solution_administrator where solutionid="+id;
 
         List<Map<String, Object>> administratorsResult = jdbcTemplate.queryForList(query);
 
         for (Map<String, Object> administrator : administratorsResult) {
-            administrators.add(Integer.parseInt(administrator.get("id").toString()));
+            administrators.add(Long.parseLong(administrator.get("userid").toString()));
         }
         return administrators;
     }

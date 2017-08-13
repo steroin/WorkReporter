@@ -8,8 +8,8 @@ import java.util.Map;
  */
 public interface SolutionDao {
     Solution loadSolution(long id);
-    List<Integer> getSolutionProjects(long id);
-    List<Integer> getSolutionTeams(long id);
-    List<Integer> getSolutionAdministrators(long id);
+    List<Long> getSolutionProjects(long id);
+    List<Long> getSolutionTeams(long id);
+    List<Long> getSolutionAdministrators(long id);
     Map<Long, String> getSolutionIdNameMap(long userId);
 }

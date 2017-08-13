@@ -11,9 +11,9 @@ public class Solution {
     private String name;
     private Date creationDate;
     private Date lastEditionDate;
-    private List<Integer> administrators;
-    private List<Integer> projects;
-    private List<Integer> teams;
+    private List<Long> administrators;
+    private List<Long> projects;
+    private List<Long> teams;
 
     public int getId() {
         return id;
@@ -47,27 +47,27 @@ public class Solution {
         this.lastEditionDate = lastEditionDate;
     }
 
-    public List<Integer> getAdministrators() {
+    public List<Long> getAdministrators() {
         return administrators;
     }
 
-    public void setAdministrators(List<Integer> administrators) {
+    public void setAdministrators(List<Long> administrators) {
         this.administrators = administrators;
     }
 
-    public List<Integer> getProjects() {
+    public List<Long> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Integer> projects) {
+    public void setProjects(List<Long> projects) {
         this.projects = projects;
     }
 
-    public List<Integer> getTeams() {
+    public List<Long> getTeams() {
         return teams;
     }
 
-    public void setTeams(List<Integer> teams) {
+    public void setTeams(List<Long> teams) {
         this.teams = teams;
     }
 }
