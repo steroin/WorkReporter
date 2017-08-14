@@ -14,6 +14,7 @@ public class Solution {
     private List<Long> administrators;
     private List<Long> projects;
     private List<Long> teams;
+    private List<Long> employees;
 
     public int getId() {
         return id;
@@ -69,5 +70,13 @@ public class Solution {
 
     public void setTeams(List<Long> teams) {
         this.teams = teams;
+    }
+
+    public List<Long> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Long> employees) {
+        this.employees = employees;
     }
 }

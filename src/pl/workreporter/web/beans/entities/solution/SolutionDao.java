@@ -11,5 +11,6 @@ public interface SolutionDao {
     List<Long> getSolutionProjects(long id);
     List<Long> getSolutionTeams(long id);
     List<Long> getSolutionAdministrators(long id);
+    List<Long> getSolutionEmployees(long id);
     Map<Long, String> getSolutionIdNameMap(long userId);
 }

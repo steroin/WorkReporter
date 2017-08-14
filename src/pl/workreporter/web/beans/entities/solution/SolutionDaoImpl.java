@@ -37,12 +37,10 @@ public class SolutionDaoImpl implements SolutionDao {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //solution.setProjects(new ArrayList<>());
         solution.setProjects(getSolutionProjects(id));
-        //solution.setTeams(new ArrayList<>());
         solution.setTeams(getSolutionTeams(id));
-        //solution.setAdministrators(new ArrayList<>());
         solution.setAdministrators(getSolutionAdministrators(id));
+        solution.setEmployees(getSolutionEmployees(id));
         return solution;
     }
 
@@ -83,6 +81,22 @@ public class SolutionDaoImpl implements SolutionDao {
             administrators.add(Long.parseLong(administrator.get("userid").toString()));
         }
         return administrators;
+    }
+
+    @Override
+    public List<Long> getSolutionEmployees(long id) {
+        List<Long> users = new ArrayList<>();
+        String query = "select au.id "+
+            "from solution s "+
+            "inner join team t on s.id = t.solutionid "+
+            "inner join appuser au on au.teamid = t.id "+
+            "where s.id = "+id;
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
+
+        for (Map<String, Object> user : result) {
+            users.add(Long.parseLong(user.get("id").toString()));
+        }
+        return users;
     }
 
     @Override
