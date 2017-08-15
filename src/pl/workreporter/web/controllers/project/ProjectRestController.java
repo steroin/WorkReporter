@@ -1,10 +1,7 @@
 package pl.workreporter.web.controllers.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.beans.entities.project.Project;
 import pl.workreporter.web.beans.entities.project.ProjectDao;
 
@@ -28,8 +25,8 @@ public class ProjectRestController {
         return result;
     }
 
-    @RequestMapping(value = "/solution/projects", method = DELETE)
-    public void removeProject(@RequestParam("solutionid") long solutionId, @RequestParam("projectid") long projectId) {
+    @RequestMapping(value = "/solution/projects/{id}", method = DELETE)
+    public void removeProject(@RequestParam("solutionid") long solutionId, @PathVariable("id") long projectId) {
 
     }
 }
