@@ -21,7 +21,6 @@ public class ProjectRestController {
     @Autowired
     ProjectDao projectDao;
 
-
     @RequestMapping(value = "/solution/projects", method = GET)
     public @ResponseBody
     List<Project> getAllProjects(@RequestParam("id") long solutionId) {

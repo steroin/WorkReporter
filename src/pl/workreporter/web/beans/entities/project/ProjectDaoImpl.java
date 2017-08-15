@@ -55,4 +55,10 @@ public class ProjectDaoImpl implements ProjectDao {
         }
         return projects;
     }
+
+    @Override
+    public void removeProject(long solutionId, long projectId) {
+        String query = "delete from project where id="+projectId+" and solutionid="+solutionId;
+        jdbcTemplate.execute(query);
+    }
 }
