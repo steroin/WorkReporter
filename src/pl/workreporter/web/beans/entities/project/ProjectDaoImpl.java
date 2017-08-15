@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,7 @@ public class ProjectDaoImpl implements ProjectDao {
         String query = "select * from project where solutionid="+solutionId;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         List<Project> projects = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
 
         for (Map<String, Object> map : result) {
             Project project = new Project();
@@ -42,6 +45,12 @@ public class ProjectDaoImpl implements ProjectDao {
             project.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             project.setName(map.get("name").toString());
             project.setDescription(map.get("description").toString());
+            try {
+                project.setCreationDate(sdf.parse(map.get("creation_date").toString()));
+                project.setLastEditionDate(sdf.parse(map.get("last_edition_date").toString()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             projects.add(project);
         }
         return projects;

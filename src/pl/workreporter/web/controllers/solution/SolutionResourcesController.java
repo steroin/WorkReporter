@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.workreporter.security.login.CompleteUserDetails;
+import pl.workreporter.web.beans.entities.project.Project;
+import pl.workreporter.web.beans.entities.project.ProjectDao;
 import pl.workreporter.web.beans.entities.solution.Solution;
 import pl.workreporter.web.beans.entities.solution.SolutionDao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -23,6 +26,8 @@ public class SolutionResourcesController {
 
     @Autowired
     SolutionDao solutionDao;
+    @Autowired
+    ProjectDao projectDao;
 
     @RequestMapping(value = "/solution/managedSolutions", method = GET)
     public Map<String, Object> managedSolutions() {
@@ -39,8 +44,14 @@ public class SolutionResourcesController {
     }
 
     @RequestMapping(value = "/solution/solution", method = GET)
-    public @ResponseBody Solution managedSolutions(@RequestParam("id") long solutionId) {
+    public @ResponseBody Solution getSolution(@RequestParam("id") long solutionId) {
         Solution result = solutionDao.loadSolution(solutionId);
+        return result;
+    }
+
+    @RequestMapping(value = "/solution/projects", method = GET)
+    public @ResponseBody List<Project> getAllProjects(@RequestParam("id") long solutionId) {
+        List<Project> result = projectDao.getAllProjectsInSolution(solutionId);
         return result;
     }
 }

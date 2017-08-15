@@ -1,5 +1,6 @@
 package pl.workreporter.web.beans.entities.project;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -10,8 +11,8 @@ public class Project {
     private long solutionId;
     private String name;
     private String description;
-    private Date creationDate;
-    private Date lastEditionDate;
+    private String creationDate;
+    private String lastEditionDate;
 
     public long getId() {
         return id;
@@ -45,19 +46,21 @@ public class Project {
         this.description = description;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
     public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy");
+        this.creationDate = sdf.format(creationDate);
     }
 
-    public Date getLastEditionDate() {
+    public String getLastEditionDate() {
         return lastEditionDate;
     }
 
     public void setLastEditionDate(Date lastEditionDate) {
-        this.lastEditionDate = lastEditionDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy");
+        this.lastEditionDate = sdf.format(lastEditionDate);
     }
 }
