@@ -32,13 +32,10 @@
 
         <div class="row">
             <%@ include file="../assets/solution/solutionMenu.html"%>
-            <div class="col-sm-6">
-                <%@ include file="../assets/solution/solutionInfo.html"%>
-                <%@ include file="../assets/solution/solutionProjects.html"%>
-                <%@ include file="../assets/solution/solutionTeams.html"%>
-                <%@ include file="../assets/solution/solutionEmployees.html"%>
-            </div>
-            <div class="col-sm-3"></div>
+            <%@ include file="../assets/solution/solutionInfo.html"%>
+            <%@ include file="../assets/solution/solutionProjects.html"%>
+            <%@ include file="../assets/solution/solutionTeams.html"%>
+            <%@ include file="../assets/solution/solutionEmployees.html"%>
         </div>
     </div>
 </body>

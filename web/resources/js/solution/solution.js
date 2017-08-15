@@ -33,8 +33,11 @@ module.controller('solutionController', function($scope, $http) {
 
     $scope.activeSolutionProjectsContent = function() {
         startLoading();
-        $scope.activeContent('solutionProjects', 'solutionMenuProjects');
-        finishLoading();
+        $http.get('solution/projects', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
+            $scope.solutionProjects = data.data;
+            $scope.activeContent('solutionProjects', 'solutionMenuProjects');
+            finishLoading();
+        });
     };
 
     $scope.activeSolutionPositionsContent = function() {
@@ -57,10 +60,6 @@ module.controller('solutionController', function($scope, $http) {
 
     $scope.getSolutionRequest = function(id) {
         return $http.get('solution/solution', {params : {'id' : id}});
-    };
-
-    $scope.getSolutionContentRequest = function(id) {
-        return $http.get('solution/solutionContent', {params : {'id' : id}});
     };
 
     $scope.activeContent = function(contentId, menuItemId) {

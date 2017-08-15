@@ -1,2 +1,30 @@
-<div id="solutionProjects" class="panel panel-default solutionContent">
+<div class="col-sm-9">
+    <div id="solutionProjects" class="panel panel-default solutionContent">
+        <table class="table table-striped">
+            <thead class="crudTableHeader">
+            <tr>
+                <td><input type="checkbox"/></td>
+                <td>Projekt</td>
+                <td>Opis</td>
+                <td>Data utworzenia</td>
+                <td>Ostatnia edycja</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tr ng-repeat="project in solutionProjects">
+                <td><input type="checkbox"/></td>
+                <td>{{project.name}}</td>
+                <td>{{project.description}}</td>
+                <td>{{project.creationDate}}</td>
+                <td>{{project.lastEditionDate}}</td>
+                <td>
+                    <div class="crudTableActionButtonsContainer">
+                        <a href="#" data-toggle="modal" data-target="#editTeamModal"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a href="#" data-toggle="modal" data-target="#deleteTeamModal"><span class="glyphicon glyphicon-remove"></span></a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
 </div>

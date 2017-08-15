@@ -1,28 +1,41 @@
-<div id="solutionInfo" class="panel panel-default solutionContent">
-    <table class="table table-striped">
-        <tr>
-            <td>Nazwa:</td>
-            <td>{{currentSolution.name}}</td>
-            <td>
-                <div class="crudTableActionButtonsContainer">
-                    <a href="#" data-toggle="modal" data-target="#editSolutionNameModal"><span class="glyphicon glyphicon-edit"></span></a>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>Liczba projektów:</td>
-            <td>{{currentSolution.projects.length}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Liczba zespolow:</td>
-            <td>{{currentSolution.teams.length}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Liczba pracownikow:</td>
-            <td>{{currentSolution.employees.length}}</td>
-            <td></td>
-        </tr>
-    </table>
+<div class="col-sm-6">
+    <div id="solutionInfo" class="panel panel-default solutionContent">
+        <table class="table table-striped">
+            <tr>
+                <td>Nazwa:</td>
+                <td>{{currentSolution.name}}</td>
+                <td>
+                    <div class="crudTableActionButtonsContainer">
+                        <a href="#" data-toggle="modal" data-target="#editSolutionNameModal"><span class="glyphicon glyphicon-edit"></span></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Liczba projektów:</td>
+                <td>{{currentSolution.projects.length}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Liczba zespolow:</td>
+                <td>{{currentSolution.teams.length}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Liczba pracownikow:</td>
+                <td>{{currentSolution.employees.length}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Data utworzenia:</td>
+                <td>{{currentSolution.creationDate}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Ostatnia edycja:</td>
+                <td>{{currentSolution.lastEditionDate}}</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
 </div>
+<div class="col-sm-3"></div>
