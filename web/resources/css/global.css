@@ -56,3 +56,11 @@
     width: 16px;
     height: 16px;
 }
+
+.modalButtonsContainer {
+    text-align: center;
+}
+
+.modalError {
+    display: none;
+}

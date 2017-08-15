@@ -69,6 +69,23 @@ module.controller('solutionController', function($scope, $http) {
         $("#"+contentId).show();
     };
 
+    $scope.editSolutionNameModalOpen = function() {
+        $("#solutionNameEditModalError").hide();
+        $("#solutionNameEditModalInput").val($scope.currentSolution.name);
+    };
+
+    $scope.editSolutionNameModalSave = function() {
+        var name = $("#solutionNameEditModalInput").val();
+        if (name.length === 0) {
+            $("#solutionNameEditModalError").show();
+        } else {
+            $("#editSolutionNameModal").modal("hide");
+            startLoading();
+            $http.get().then(function(data) {
+                finishLoading();
+            });
+        }
+    };
     $scope.init();
 });
 

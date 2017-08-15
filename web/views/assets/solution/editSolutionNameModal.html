@@ -1,0 +1,32 @@
+﻿<div id="editSolutionNameModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Zmiana nazwy firmy</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="editSolutionName" action="#" method="post">
+                            <div clas="form-group">
+                                <label for="solutionNameEditModalInput">Nazwa firmy:</label>
+                                <input id="solutionNameEditModalInput" type="text" class="form-control" value="{{currentSolution.name}}">
+                            </div>
+                        </form>
+                        <div id="solutionNameEditModalError" class="alert alert-danger modalError">
+                            Nieprawidłowa nazwa!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="modalButtonsContainer">
+                    <button id="editSolutionNameModalSave" type="button" class="btn btn-default" ng-click="editSolutionNameModalSave()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
