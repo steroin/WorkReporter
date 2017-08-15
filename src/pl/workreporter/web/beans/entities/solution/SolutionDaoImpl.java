@@ -113,4 +113,10 @@ public class SolutionDaoImpl implements SolutionDao {
         }
         return map;
     }
+
+    @Override
+    public void updateSolutionName(long solutionId, String name) {
+        String query = "update solution set name = "+name+" where id = "+solutionId;
+        jdbcTemplate.execute(query);
+    }
 }

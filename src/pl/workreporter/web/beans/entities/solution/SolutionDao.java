@@ -13,4 +13,5 @@ public interface SolutionDao {
     List<Long> getSolutionAdministrators(long id);
     List<Long> getSolutionEmployees(long id);
     Map<Long, String> getSolutionIdNameMap(long userId);
+    void updateSolutionName(long solutionId, String name);
 }
