@@ -14,9 +14,10 @@
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-reboot.min.css">
     <script src="resources/jquery/jquery-3.2.1.min.js"></script>
     <script src="resources/bootstrap/js/bootstrap.min.js"></script>
+    <script src="resources/angularjs/angular.min.js"></script>
 </head>
-<body>
-<%@ include file="html/navbar.html"%>
-cxzcxzzxnmcm
+<body ng-app="solution">
+<%@ include file="assets/navbar.html"%>
+
 </body>
 </html>

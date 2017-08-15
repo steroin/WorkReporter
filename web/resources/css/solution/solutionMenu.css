@@ -1,4 +1,5 @@
 .solutionChooserContainer {
+    margin-bottom: 10px;
 }
 
 .chooseSolutionContainer {
@@ -39,4 +40,5 @@
 }
 
 .solutionContent {
+    display: none;
 }
