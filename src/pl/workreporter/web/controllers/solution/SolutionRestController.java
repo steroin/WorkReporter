@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -26,11 +27,9 @@ public class SolutionRestController {
 
     @Autowired
     SolutionDao solutionDao;
-    @Autowired
-    ProjectDao projectDao;
 
-    @RequestMapping(value = "/solution/managedSolutions", method = GET)
-    public Map<String, Object> managedSolutions() {
+    @RequestMapping(value = "/solution/solution", method = GET)
+    public Map<String, Object> getManagedSolutions() {
         long userId = ((CompleteUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
         Map<Long, String> managedSolutions = solutionDao.getSolutionIdNameMap(userId);
 
@@ -46,12 +45,6 @@ public class SolutionRestController {
     @RequestMapping(value = "/solution/solution", method = GET)
     public @ResponseBody Solution getSolution(@RequestParam("id") long solutionId) {
         Solution result = solutionDao.loadSolution(solutionId);
-        return result;
-    }
-
-    @RequestMapping(value = "/solution/projects", method = GET)
-    public @ResponseBody List<Project> getAllProjects(@RequestParam("id") long solutionId) {
-        List<Project> result = projectDao.getAllProjectsInSolution(solutionId);
         return result;
     }
 }

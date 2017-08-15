@@ -6,7 +6,7 @@ module.controller('solutionController', function($scope, $http) {
 
     $scope.init = function() {
         startLoading();
-        $http.get("solution/managedSolutions").then(function(data) {
+        $http.get("solution/solution").then(function(data) {
             $scope.solutionChooserData = data.data;
             return $scope.getSolutionRequest($scope.solutionChooserData.firstSolutionId);
         }).then(function(data) {
