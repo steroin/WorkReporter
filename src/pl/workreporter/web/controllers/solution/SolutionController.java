@@ -9,7 +9,7 @@ import pl.workreporter.web.beans.entities.solution.SolutionDao;
  * Created by Sergiusz on 11.08.2017.
  */
 @Controller
-public class SolutionIndexController {
+public class SolutionController {
     @RequestMapping("/solution")
     public String solutionIndex() {
         return "solution/index";

@@ -22,7 +22,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * Created by Sergiusz on 13.08.2017.
  */
 @RestController
-public class SolutionResourcesController {
+public class SolutionRestController {
 
     @Autowired
     SolutionDao solutionDao;
