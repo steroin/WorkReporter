@@ -26,14 +26,15 @@ public class SolutionDaoImpl implements SolutionDao {
     public Solution loadSolution(long id) {
         String query = "select id, name, creation_date, last_edition_date from solution where id="+id;
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+        SimpleDateFormat srcSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+        SimpleDateFormat destSdf = new SimpleDateFormat("dd.MM.yyyy");
         Solution solution = new Solution();
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         solution.setId(Integer.parseInt(result.get("id").toString()));
         solution.setName(result.get("name").toString());
         try {
-            solution.setCreationDate(sdf.parse(result.get("creation_date").toString()));
-            solution.setLastEditionDate(sdf.parse(result.get("last_edition_date").toString()));
+            solution.setCreationDate(destSdf.format(srcSdf.parse(result.get("creation_date").toString())));
+            solution.setLastEditionDate(destSdf.format(srcSdf.parse(result.get("last_edition_date").toString())));
         } catch (ParseException e) {
             e.printStackTrace();
         }

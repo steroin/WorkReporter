@@ -23,12 +23,20 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public Project getProjectById(long id) {
         String query = "select * from project where id="+id;
+        SimpleDateFormat srcSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+        SimpleDateFormat destSdf = new SimpleDateFormat("dd.MM.yyyy");
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         Project project = new Project();
         project.setId(Long.parseLong(result.get("id").toString()));
         project.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         project.setName(result.get("name").toString());
         project.setDescription(result.get("description").toString());
+        try {
+            project.setCreationDate(destSdf.format(srcSdf.parse(result.get("creation_date").toString())));
+            project.setLastEditionDate(destSdf.format(srcSdf.parse(result.get("last_edition_date").toString())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return project;
     }
 
@@ -37,7 +45,8 @@ public class ProjectDaoImpl implements ProjectDao {
         String query = "select * from project where solutionid="+solutionId;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         List<Project> projects = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+        SimpleDateFormat srcSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+        SimpleDateFormat destSdf = new SimpleDateFormat("dd.MM.yyyy");
 
         for (Map<String, Object> map : result) {
             Project project = new Project();
@@ -46,8 +55,8 @@ public class ProjectDaoImpl implements ProjectDao {
             project.setName(map.get("name").toString());
             project.setDescription(map.get("description").toString());
             try {
-                project.setCreationDate(sdf.parse(map.get("creation_date").toString()));
-                project.setLastEditionDate(sdf.parse(map.get("last_edition_date").toString()));
+                project.setCreationDate(destSdf.format(srcSdf.parse(map.get("creation_date").toString())));
+                project.setLastEditionDate(destSdf.format(srcSdf.parse(map.get("last_edition_date").toString())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

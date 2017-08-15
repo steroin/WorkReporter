@@ -50,17 +50,15 @@ public class Project {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        this.creationDate = sdf.format(creationDate);
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
     }
 
     public String getLastEditionDate() {
         return lastEditionDate;
     }
 
-    public void setLastEditionDate(Date lastEditionDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        this.lastEditionDate = sdf.format(lastEditionDate);
+    public void setLastEditionDate(String lastEditionDate) {
+        this.lastEditionDate = lastEditionDate;
     }
 }
