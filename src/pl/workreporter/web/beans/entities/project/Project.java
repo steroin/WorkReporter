@@ -51,7 +51,7 @@ public class Project {
     }
 
     public void setCreationDate(Date creationDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         this.creationDate = sdf.format(creationDate);
     }
 
@@ -60,7 +60,7 @@ public class Project {
     }
 
     public void setLastEditionDate(Date lastEditionDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         this.lastEditionDate = sdf.format(lastEditionDate);
     }
 }
