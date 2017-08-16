@@ -1,12 +1,16 @@
 var module = angular.module('solution', []);
-
+module.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.headers.patch = {
+        'Content-Type': 'application/json;charset=utf-8'
+    }
+}]);
 module.controller('solutionController', function($scope, $http) {
     $scope.contents = ["solutionInfo", "solutionProjects", "solutionTeams", "solutionEmployees"];
     $scope.get
 
     $scope.init = function() {
         startLoading();
-        $http.get("solution/solution").then(function(data) {
+        $http.get("solution/solutions").then(function(data) {
             $scope.solutionChooserData = data.data;
             return $scope.getSolutionRequest($scope.solutionChooserData.firstSolutionId);
         }).then(function(data) {
@@ -59,7 +63,7 @@ module.controller('solutionController', function($scope, $http) {
     };
 
     $scope.getSolutionRequest = function(id) {
-        return $http.get('solution/solution', {params : {'id' : id}});
+        return $http.get('solution/solutions/'+id);
     };
 
     $scope.activeContent = function(contentId, menuItemId) {
@@ -81,7 +85,8 @@ module.controller('solutionController', function($scope, $http) {
         } else {
             $("#editSolutionNameModal").modal("hide");
             startLoading();
-            $http.get().then(function(data) {
+            $scope.currentSolution.name = name;
+            $http.patch('solution/solutions/'+$scope.currentSolution.id, $scope.currentSolution).then(function(data) {
                 finishLoading();
             });
         }

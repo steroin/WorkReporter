@@ -45,8 +45,6 @@ public class ProjectDaoImpl implements ProjectDao {
         String query = "select * from project where solutionid="+solutionId;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         List<Project> projects = new ArrayList<>();
-        SimpleDateFormat srcSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
-        SimpleDateFormat destSdf = new SimpleDateFormat("dd.MM.yyyy");
 
         for (Map<String, Object> map : result) {
             Project project = new Project();
@@ -54,12 +52,8 @@ public class ProjectDaoImpl implements ProjectDao {
             project.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             project.setName(map.get("name").toString());
             project.setDescription(map.get("description").toString());
-            try {
-                project.setCreationDate(destSdf.format(srcSdf.parse(map.get("creation_date").toString())));
-                project.setLastEditionDate(destSdf.format(srcSdf.parse(map.get("last_edition_date").toString())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            project.setCreationDate(map.get("creation_date").toString());
+            project.setLastEditionDate(map.get("last_edition_date").toString());
             projects.add(project);
         }
         return projects;

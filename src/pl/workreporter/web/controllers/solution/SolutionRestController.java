@@ -1,6 +1,7 @@
 package pl.workreporter.web.controllers.solution;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.workreporter.security.login.CompleteUserDetails;
@@ -46,8 +47,8 @@ public class SolutionRestController {
         return result;
     }
 
-    @RequestMapping(value="/solution/solutions/{id}", method = PATCH)
-    public void updateSolutionName(@PathVariable("id") long solutionId, @RequestParam("name") String newName) {
-        solutionDao.updateSolutionName(solutionId, newName);
+    @RequestMapping(value="/solution/solutions/{id}", method = PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updateSolutionName(@PathVariable("id") long solutionId, @RequestBody Solution newSolution) {
+        solutionDao.updateSolution(newSolution);
     }
 }

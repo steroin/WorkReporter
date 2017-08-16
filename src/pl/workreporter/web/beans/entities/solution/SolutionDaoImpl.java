@@ -25,19 +25,12 @@ public class SolutionDaoImpl implements SolutionDao {
     @Override
     public Solution loadSolution(long id) {
         String query = "select id, name, creation_date, last_edition_date from solution where id="+id;
-
-        SimpleDateFormat srcSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
-        SimpleDateFormat destSdf = new SimpleDateFormat("dd.MM.yyyy");
         Solution solution = new Solution();
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         solution.setId(Integer.parseInt(result.get("id").toString()));
         solution.setName(result.get("name").toString());
-        try {
-            solution.setCreationDate(destSdf.format(srcSdf.parse(result.get("creation_date").toString())));
-            solution.setLastEditionDate(destSdf.format(srcSdf.parse(result.get("last_edition_date").toString())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        solution.setCreationDate(result.get("creation_date").toString());
+        solution.setLastEditionDate(result.get("last_edition_date").toString());
         solution.setProjects(getSolutionProjects(id));
         solution.setTeams(getSolutionTeams(id));
         solution.setAdministrators(getSolutionAdministrators(id));
@@ -116,8 +109,11 @@ public class SolutionDaoImpl implements SolutionDao {
     }
 
     @Override
-    public void updateSolutionName(long solutionId, String name) {
-        String query = "update solution set name = "+name+" where id = "+solutionId;
-        jdbcTemplate.execute(query);
+    public void updateSolution(Solution solution) {
+        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
+        String creationDate = solution.getCreationDate();
+        String lastEditionDate = solution.getLastEditionDate();
+        String query = "update solution set name = ?, creation_date = to_timestamp(?, ?), last_edition_date = to_timestamp(?, ?) where id = ?";
+        jdbcTemplate.update(query, solution.getName(), creationDate, dateFormat, lastEditionDate, dateFormat,  solution.getId());
     }
 }
