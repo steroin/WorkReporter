@@ -3,6 +3,7 @@ package pl.workreporter.web.beans.entities.solution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -109,11 +110,13 @@ public class SolutionDaoImpl implements SolutionDao {
     }
 
     @Override
+    @Transactional
     public void updateSolution(Solution solution) {
         String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String creationDate = solution.getCreationDate();
         String lastEditionDate = solution.getLastEditionDate();
         String query = "update solution set name = ?, creation_date = to_timestamp(?, ?), last_edition_date = to_timestamp(?, ?) where id = ?";
-        jdbcTemplate.update(query, solution.getName(), creationDate, dateFormat, lastEditionDate, dateFormat,  solution.getId());
+        int ret = jdbcTemplate.update(query, solution.getName(), creationDate, dateFormat, lastEditionDate, dateFormat,  solution.getId());
+        System.out.println(ret);
     }
 }
