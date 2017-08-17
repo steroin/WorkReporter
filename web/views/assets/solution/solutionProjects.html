@@ -41,9 +41,9 @@
             <div class="col-xs-6">
                 <div class="crudPagination">
                    <ul id="solutionProjectsCrudPagination" class="pagination">
-                       <li><a href="#" ng-click="prevPage()">prev</a></li>
+                       <li id="prevPage"><a href="#" ng-click="prevPage()">prev</a></li>
                        <li ng-repeat="page in pagination" id="page{{page}}"><a href="#" ng-click="setPage(page)">{{page}}</a></li>
-                       <li><a href="#" ng-click="nextPage()">next</a></li>
+                       <li id="nextPage"><a href="#" ng-click="nextPage()">next</a></li>
                     </ul>
                 </div>
             </div>

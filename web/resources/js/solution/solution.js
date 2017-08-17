@@ -50,7 +50,18 @@ module.controller('solutionController', function($scope, $http) {
             maxVisiblePages = totalPages;
         }
         $scope.setPage = function(i) {
+
+            if (i == 1) {
+                $("#prevPage").addClass("disabled");
+            } else {
+                $("#prevPage").removeClass("disabled");
+            }
             if (i < 1 || i > totalPages) return;
+            if (i == totalPages) {
+                $("#nextPage").addClass("disabled");
+            } else {
+                $("#nextPage").removeClass("disabled");
+            }
             $("#"+pagesContainerId+" .active").removeClass("active");
             $("#page"+i).addClass("active");
             $scope.currentPageId = i;
