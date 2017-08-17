@@ -49,6 +49,11 @@ module.controller('solutionController', function($scope, $http) {
     };
     $scope.initPagination = function(content, itemsPerPage, maxVisiblePages, pagesContainerId, defaultPageId) {
         var totalPages = Math.ceil(content.length / itemsPerPage);
+        if (totalPages < 2) {
+            $("#"+pagesContainerId).hide();
+        } else {
+            $("#"+pagesContainerId).show();
+        }
         if (maxVisiblePages > totalPages) {
             maxVisiblePages = totalPages;
         }
