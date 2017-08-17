@@ -30,7 +30,7 @@ public class ProjectDaoImpl implements ProjectDao {
         project.setId(Long.parseLong(result.get("id").toString()));
         project.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         project.setName(result.get("name").toString());
-        project.setDescription(result.get("description").toString());
+        project.setDescription(result.get("description") == null ? "" : result.get("description").toString());
         try {
             project.setCreationDate(destSdf.format(srcSdf.parse(result.get("creation_date").toString())));
             project.setLastEditionDate(destSdf.format(srcSdf.parse(result.get("last_edition_date").toString())));
@@ -51,7 +51,7 @@ public class ProjectDaoImpl implements ProjectDao {
             project.setId(Long.parseLong(map.get("id").toString()));
             project.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             project.setName(map.get("name").toString());
-            project.setDescription(map.get("description").toString());
+            project.setDescription(map.get("description") == null ? "" : map.get("description").toString());
             project.setCreationDate(map.get("creation_date").toString());
             project.setLastEditionDate(map.get("last_edition_date").toString());
             projects.add(project);

@@ -6,7 +6,6 @@ module.config(['$httpProvider', function($httpProvider) {
 }]);
 module.controller('solutionController', function($scope, $http) {
     $scope.contents = ["solutionInfo", "solutionProjects", "solutionTeams", "solutionEmployees"];
-    $scope.get
 
     $scope.init = function() {
         startLoading();
@@ -40,8 +39,46 @@ module.controller('solutionController', function($scope, $http) {
         $http.get('solution/projects', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
             $scope.solutionProjects = data.data;
             $scope.activeContent('solutionProjects', 'solutionMenuProjects');
+            $scope.setUpPagination($scope.solutionProjects, 10, 5, 'solutionProjectsCrudPagination', 1);
             finishLoading();
         });
+    };
+
+    $scope.setUpPagination = function(content, itemsPerPage, maxVisiblePages, pagesContainerId, defaultPageId) {
+        var totalPages = Math.ceil(content.length / itemsPerPage);
+        if (maxVisiblePages > totalPages) {
+            maxVisiblePages = totalPages;
+        }
+        $scope.setPage = function(i) {
+            if (i < 1 || i > totalPages) return;
+            $("#"+pagesContainerId+" .active").removeClass("active");
+            $("#page"+i).addClass("active");
+            $scope.currentPageId = i;
+            $scope.currentPage = content.slice(($scope.currentPageId - 1) * itemsPerPage, $scope.currentPageId * itemsPerPage);
+            var currentPages = [];
+            var start = $scope.currentPageId - Math.floor(maxVisiblePages  / 2) + (maxVisiblePages + 1) % 2;
+            var end = $scope.currentPageId + Math.floor(maxVisiblePages / 2);
+            if (start < 1) {
+                end = end - start + 1;
+                start = 1;
+            }
+            if (end > totalPages) {
+                start = start - end + totalPages;
+                end = totalPages;
+            }
+            for (var n = start; n <= end; n++) {
+                currentPages.push(n);
+            }
+            $scope.pagination = currentPages;
+        };
+        $scope.nextPage = function() {
+            $scope.setPage($scope.currentPageId + 1);
+        };
+        $scope.prevPage = function() {
+            $scope.setPage($scope.currentPageId - 1);
+        };
+        $scope.setPage(defaultPageId);
+        $(document).ready(function() {$("#page"+defaultPageId).addClass("active");});
     };
 
     $scope.activeSolutionPositionsContent = function() {

@@ -64,3 +64,39 @@
 .modalError {
     display: none;
 }
+
+
+.crudTableHeader {
+    font-weight: bold;
+}
+
+.crudTableActionButtonsContainer {
+    float: right;
+}
+
+.crudButtonsContainer  {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.crudButtons button{
+    display: block;
+}
+
+.verticalButtonsContainer button {
+    display: block;
+}
+
+.crudButton {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 140px;
+}
+
+.crudPagination {
+    float: right;
+}
+
+.crudPagination ul {
+    margin-top: 12px;
+}

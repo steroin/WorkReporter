@@ -1,30 +1,52 @@
 ﻿<div class="col-sm-9">
-    <div id="solutionProjects" class="panel panel-default solutionContent">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th><input type="checkbox"/></th>
-                <th>Projekt</th>
-                <th>Opis</th>
-                <th>Data utworzenia</th>
-                <th>Ostatnia edycja</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tr ng-repeat="project in solutionProjects">
-                <td><input type="checkbox"/></td>
-                <td>{{project.name}}</td>
-                <td>{{project.description}}</td>
-                <td>{{project.creationDate}}</td>
-                <td>{{project.lastEditionDate}}</td>
-                <td>
-                    <div class="crudTableActionButtonsContainer">
-                        <a href="#" data-toggle="modal" data-target="#editTeamModal"><span class="glyphicon glyphicon-edit"></span></a>
-                        <a href="#" data-toggle="modal" data-target="#deleteTeamModal"><span class="glyphicon glyphicon-remove"></span></a>
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <div id="solutionProjects" class="solutionContent">
+        <div class="panel panel-default">
+            <table id="projectsCrudTable" class="table table-striped">
+                <thead>
+                <tr>
+                    <th><input type="checkbox"/></th>
+                    <th>Projekt</th>
+                    <th>Opis</th>
+                    <th>Data utworzenia</th>
+                    <th>Ostatnia edycja</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tr ng-repeat="project in currentPage">
+                    <td><input type="checkbox"/></td>
+                    <td>{{project.name}}</td>
+                    <td>{{project.description}}</td>
+                    <td>{{project.creationDate}}</td>
+                    <td>{{project.lastEditionDate}}</td>
+                    <td>
+                        <div class="crudTableActionButtonsContainer">
+                            <a href="#" data-toggle="modal" data-target="#editTeamModal"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#" data-toggle="modal" data-target="#deleteTeamModal"><span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
+        <div class="row crudButtonsContainer">
+            <div class="col-xs-6">
+                <div class="crudButtons">
+                    <button type="button" class="btn btn-primary crudButton">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Dodaj zespol
+                    </button>
+                    <button type="button" class="btn btn-danger crudButton">Usun zaznaczone</button>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="crudPagination">
+                   <ul id="solutionProjectsCrudPagination" class="pagination">
+                       <li><a href="#" ng-click="prevPage()">prev</a></li>
+                       <li ng-repeat="page in pagination" id="page{{page}}"><a href="#" ng-click="setPage(page)">{{page}}</a></li>
+                       <li><a href="#" ng-click="nextPage()">next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
