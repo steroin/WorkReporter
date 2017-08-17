@@ -39,12 +39,15 @@ module.controller('solutionController', function($scope, $http) {
         $http.get('solution/projects', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
             $scope.solutionProjects = data.data;
             $scope.activeContent('solutionProjects', 'solutionMenuProjects');
-            $scope.setUpPagination($scope.solutionProjects, 10, 5, 'solutionProjectsCrudPagination', 1);
+            $scope.setUpProjectPagination();
             finishLoading();
         });
     };
 
-    $scope.setUpPagination = function(content, itemsPerPage, maxVisiblePages, pagesContainerId, defaultPageId) {
+    $scope.setUpProjectPagination = function() {
+        $scope.initPagination($scope.solutionProjects, 10, 5, 'solutionProjectsCrudPagination', 1);
+    };
+    $scope.initPagination = function(content, itemsPerPage, maxVisiblePages, pagesContainerId, defaultPageId) {
         var totalPages = Math.ceil(content.length / itemsPerPage);
         if (maxVisiblePages > totalPages) {
             maxVisiblePages = totalPages;
@@ -138,6 +141,25 @@ module.controller('solutionController', function($scope, $http) {
                 finishLoading();
             });
         }
+    };
+
+    $scope.markProjectToDelete = function(i) {
+        $scope.projectToDelete = i;
+    };
+
+    $scope.deleteProject = function() {
+        /*$scope.solutionProjects = $scope.solutionProjects.filter(function(obj) {
+            return obj['id'] != $scope.projectToDelete;
+        });*/
+        $("#deleteProjectModal").modal("hide");
+        startLoading();
+        $http.delete('solution/projects/'+$scope.projectToDelete, {params: {'solutionid' : $scope.currentSolution.id}}).then(function(data) {
+            $scope.solutionProjects = $scope.solutionProjects.filter(function(obj) {
+                return obj['id'] != $scope.projectToDelete;
+            });
+            $scope.setUpProjectPagination();
+            finishLoading();
+        });
     };
     $scope.init();
 });

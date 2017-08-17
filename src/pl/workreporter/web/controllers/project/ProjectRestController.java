@@ -27,6 +27,6 @@ public class ProjectRestController {
 
     @RequestMapping(value = "/solution/projects/{id}", method = DELETE)
     public void removeProject(@RequestParam("solutionid") long solutionId, @PathVariable("id") long projectId) {
-
+        System.out.println("deleting: "+projectId+" in solution: "+solutionId);
     }
 }
