@@ -1,0 +1,37 @@
+﻿<div id="addProjectModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Dodaj projekt</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="addProject" action="#" method="post">
+                            <div clas="form-group">
+                                <label for="addProjectModalNameInput">Nazwa Projektu:</label>
+                                <input id="addProjectModalNameInput" type="text" class="form-control">
+                                <label for="addProjectModalDescInput">Opis projektu:</label>
+                                <textarea class="form-control vresize" rows="6" id="addProjectModalDescInput"></textarea>
+                            </div>
+                        </form>
+                        <div id="projectAddModalNameError" class="alert alert-danger modalError">
+                            Nieprawidłowa nazwa!
+                        </div>
+                        <div id="projectAddModalDescError" class="alert alert-danger modalError">
+                            Nieprawidłowy opis!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="modalButtonsContainer">
+                    <button id="addProjectModalSave" type="button" class="btn btn-default" ng-click="addProjectModalSave()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

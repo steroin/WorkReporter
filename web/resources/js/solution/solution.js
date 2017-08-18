@@ -148,6 +148,40 @@ module.controller('solutionController', function($scope, $http) {
         }
     };
 
+    $scope.addProjectModalOpen = function() {
+        $("#projectAddModalNameError").hide();
+        $("#projectAddModalDescError").hide();
+        $("#addProjectModalNameInput").val("");
+        $("#addProjectModalDescInput").val("");
+    };
+
+    $scope.addProjectModalSave = function() {
+        var name = $("#addProjectModalNameInput").val();
+        var desc = $("#addProjectModalDescInput").val();
+        if (name.length === 0) {
+            $("#projectAddModalNameError").show();
+            return;
+        } else $("#projectAddModalNameError").hide();
+
+        if (desc.length ===0) {
+            $("#projectAddModalDescError").show();
+            return;
+        } else $("#projectAddModalDescError").hide();
+
+        $("#addProjectModal").modal("hide");
+        startLoading();
+        var objectToAdd = {
+            'solutionid' : $scope.currentSolution.id,
+            'name' : name,
+            'description' : desc
+        };
+        $http.post('solution/projects', objectToAdd).then(function(data) {
+            $scope.solutionProjects.push(data.data);
+            $scope.setUpProjectPagination();
+            finishLoading();
+        });
+    };
+
     $scope.editProjectModalOpen = function() {
         $("#projectEditModalNameError").hide();
         $("#projectEditModalDescError").hide();
