@@ -60,6 +60,26 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    public Project addProject(long solutionId, String name, String desc) {
+        String query = "select projectseq.nextval from dual";
+        Map<String, Object> result = jdbcTemplate.queryForMap(query);
+        long id = Long.parseLong(result.get("nextval").toString());
+
+        query = "insert into project(id, solutionid, name, description, creation_date, last_edition_date) values (?, ?, ?, ?, sysdate, sysdate)";
+        jdbcTemplate.update(query, id, solutionId, name, desc);
+        query = "select * from project where id = ?";
+        result = jdbcTemplate.queryForMap(query, id);
+        Project project = new Project();
+        project.setId(Long.parseLong(result.get("id").toString()));
+        project.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
+        project.setName(result.get("name").toString());
+        project.setDescription(result.get("description").toString());
+        project.setCreationDate(result.get("creation_date").toString());
+        project.setLastEditionDate(result.get("last_edition_date").toString());
+        return project;
+    }
+
+    @Override
     public void removeProject(long solutionId, long projectId) {
         String query = "delete from project where id="+projectId+" and solutionid="+solutionId;
         jdbcTemplate.execute(query);

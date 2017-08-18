@@ -6,10 +6,9 @@ import pl.workreporter.web.beans.entities.project.Project;
 import pl.workreporter.web.beans.entities.project.ProjectDao;
 
 import java.util.List;
+import java.util.Map;
 
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * Created by Sergiusz on 15.08.2017.
@@ -34,5 +33,10 @@ public class ProjectRestController {
     @RequestMapping(value = "/solution/projects/{id}", method = PATCH)
     public void updateProject(@PathVariable("id") long projectId, @RequestBody Project project) {
         projectDao.updateProject(project);
+    }
+
+    @RequestMapping(value="/solution/projects", method = POST)
+    public Project addProject(@RequestBody Map<String, String> project) {
+        return projectDao.addProject(Long.parseLong(project.get("solutionid")), project.get("name"), project.get("description"));
     }
 }

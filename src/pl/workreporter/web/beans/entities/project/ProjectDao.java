@@ -8,6 +8,7 @@ import java.util.List;
 public interface ProjectDao {
     Project getProjectById(long id);
     List<Project> getAllProjectsInSolution(long solutionId);
+    Project addProject(long solutionId, String name, String desc);
     void removeProject(long solutionId, long projectId);
     void updateProject(Project project);
 }
