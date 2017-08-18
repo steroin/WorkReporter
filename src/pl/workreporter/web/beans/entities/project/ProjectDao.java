@@ -9,4 +9,5 @@ public interface ProjectDao {
     Project getProjectById(long id);
     List<Project> getAllProjectsInSolution(long solutionId);
     void removeProject(long solutionId, long projectId);
+    void updateProject(Project project);
 }

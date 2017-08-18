@@ -64,4 +64,13 @@ public class ProjectDaoImpl implements ProjectDao {
         String query = "delete from project where id="+projectId+" and solutionid="+solutionId;
         jdbcTemplate.execute(query);
     }
+
+    @Override
+    public void updateProject(Project project) {
+        String query = "update project " +
+                "set solutionid = ?, name = ?, description = ?, creation_date = ?, last_edition_date = ? " +
+                "where id= ?";
+        jdbcTemplate.update(query, project.getSolutionId(), project.getName(), project.getDescription(), project.getCreationDate(),
+                project.getLastEditionDate(), project.getId());
+    }
 }

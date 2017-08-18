@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 
 /**
  * Created by Sergiusz on 15.08.2017.
@@ -28,5 +29,10 @@ public class ProjectRestController {
     @RequestMapping(value = "/solution/projects/{id}", method = DELETE)
     public void removeProject(@RequestParam("solutionid") long solutionId, @PathVariable("id") long projectId) {
         System.out.println("deleting: "+projectId+" in solution: "+solutionId);
+    }
+
+    @RequestMapping(value = "/solution/projects/{id}", method = PATCH)
+    public void updateProject(@PathVariable("id") long projectId, Project project) {
+        projectDao.updateProject(project);
     }
 }
