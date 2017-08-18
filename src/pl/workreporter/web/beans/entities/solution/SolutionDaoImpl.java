@@ -112,6 +112,6 @@ public class SolutionDaoImpl implements SolutionDao {
         String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String creationDate = solution.getCreationDate();
         String query = "update solution set name = ?, creation_date = to_timestamp(?, ?), last_edition_date = sysdate where id = ?";
-        jdbcTemplate.update(query, solution.getName(), creationDate, dateFormat,  solution.getId());
+        jdbcTemplate.update(query, solution.getName(), creationDate, dateFormat, solution.getId());
     }
 }

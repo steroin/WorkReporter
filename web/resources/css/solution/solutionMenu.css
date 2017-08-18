@@ -42,3 +42,7 @@
 .solutionContent {
     display: none;
 }
+
+.vresize {
+    resize: vertical;
+}

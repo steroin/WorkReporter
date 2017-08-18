@@ -67,10 +67,11 @@ public class ProjectDaoImpl implements ProjectDao {
 
     @Override
     public void updateProject(Project project) {
+        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String query = "update project " +
-                "set solutionid = ?, name = ?, description = ?, creation_date = ?, last_edition_date = ? " +
+                "set solutionid = ?, name = ?, description = ?, creation_date = to_timestamp(?, ?), last_edition_date = sysdate " +
                 "where id= ?";
         jdbcTemplate.update(query, project.getSolutionId(), project.getName(), project.getDescription(), project.getCreationDate(),
-                project.getLastEditionDate(), project.getId());
+                dateFormat, project.getId());
     }
 }

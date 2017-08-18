@@ -32,7 +32,7 @@ public class ProjectRestController {
     }
 
     @RequestMapping(value = "/solution/projects/{id}", method = PATCH)
-    public void updateProject(@PathVariable("id") long projectId, Project project) {
+    public void updateProject(@PathVariable("id") long projectId, @RequestBody Project project) {
         projectDao.updateProject(project);
     }
 }

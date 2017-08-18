@@ -148,19 +148,50 @@ module.controller('solutionController', function($scope, $http) {
         }
     };
 
-    $scope.markProjectToDelete = function(i) {
-        $scope.projectToDelete = i;
+    $scope.editProjectModalOpen = function() {
+        $("#projectEditModalNameError").hide();
+        $("#projectEditModalDescError").hide();
+        $("#editProjectModalNameInput").val($scope.currentProject.name);
+        $("#editProjectModalDescInput").val($scope.currentProject.description);
+    };
+
+    $scope.editProjectModalSave = function() {
+        var name = $("#editProjectModalNameInput").val();
+        var desc = $("#editProjectModalDescInput").val();
+        if (name.length === 0) {
+            $("#projectEditModalNameError").show();
+            return;
+        } else $("#projectEditModalNameError").hide();
+
+        if (desc.length ===0) {
+            $("#projectEditModalDescError").show();
+            return;
+        } else $("#projectEditModalDescError").hide();
+
+        $("#editProjectModal").modal("hide");
+        startLoading();
+        $scope.currentProject.name = name;
+        $scope.currentProject.description = desc;
+        $http.patch('solution/projects/'+$scope.currentProject.id, $scope.currentProject).then(function(data) {
+            finishLoading();
+        });
+    };
+
+    $scope.setCurrentProject = function(id) {
+        for (var i = 0; i < $scope.solutionProjects.length; i++) {
+            if ($scope.solutionProjects[i].id == id) {
+                $scope.currentProject = $scope.solutionProjects[i];
+                return;
+            }
+        }
     };
 
     $scope.deleteProject = function() {
-        /*$scope.solutionProjects = $scope.solutionProjects.filter(function(obj) {
-            return obj['id'] != $scope.projectToDelete;
-        });*/
         $("#deleteProjectModal").modal("hide");
         startLoading();
-        $http.delete('solution/projects/'+$scope.projectToDelete, {params: {'solutionid' : $scope.currentSolution.id}}).then(function(data) {
+        $http.delete('solution/projects/'+$scope.currentProject.id, {params: {'solutionid' : $scope.currentSolution.id}}).then(function(data) {
             $scope.solutionProjects = $scope.solutionProjects.filter(function(obj) {
-                return obj['id'] != $scope.projectToDelete;
+                return obj['id'] != $scope.currentProject.id;
             });
             $scope.setUpProjectPagination();
             finishLoading();
