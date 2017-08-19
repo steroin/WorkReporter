@@ -29,7 +29,7 @@ function initSolutionEmployeesManagement($scope, $http) {
         $("#addEmployeeModalLastNameInput").val("");
         $("#addEmployeeModalEmailInput").val("");
         $("#addEmployeeModalLoginInput").val("");
-        $("#addEmployeeModalTeamInput").val("0");
+        $("#addEmployeeModalTeamInput").val("");
         $("#addEmployeeModalPositionInput").val($("#addEmployeeModalPositionInput option:first").val());
         $("#addEmployeeModalWorkingTimeInput").val("");
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
@@ -76,7 +76,7 @@ function initSolutionEmployeesManagement($scope, $http) {
             return;
         } else $("#employeeAddModalWorkingTimeError").hide();
 
-        var team = $("addEmployeeModalTeamInput").val();
+        var team = $("#addEmployeeModalTeamInput").val();
         var birthday = $("#addEmployeeModalBirthDayInput").val();
         var phone = $("#addEmployeeModalPhoneInput").val();
         $("#addEmployeeModal").modal("hide");
