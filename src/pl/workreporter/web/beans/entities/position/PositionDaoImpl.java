@@ -2,6 +2,7 @@ package pl.workreporter.web.beans.entities.position;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.util.Map;
 /**
  * Created by Sergiusz on 19.08.2017.
  */
+@Repository
 public class PositionDaoImpl implements PositionDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
