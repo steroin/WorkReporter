@@ -16,7 +16,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 public class ProjectRestController {
     @Autowired
-    ProjectDao projectDao;
+    private ProjectDao projectDao;
 
     @RequestMapping(value = "/solution/projects", method = GET)
     public @ResponseBody

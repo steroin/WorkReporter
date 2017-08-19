@@ -18,7 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 public class PositionRestController {
     @Autowired
-    PositionDao positionDao;
+    private PositionDao positionDao;
 
     @RequestMapping(value = "/solution/positions", method = GET)
     public @ResponseBody

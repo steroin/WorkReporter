@@ -21,7 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 public class SolutionRestController {
 
     @Autowired
-    SolutionDao solutionDao;
+    private SolutionDao solutionDao;
 
     @RequestMapping(value = "/solution/solutions", method = GET)
     public Map<String, Object> getManagedSolutions() {
