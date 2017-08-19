@@ -23,6 +23,7 @@ module.controller('solutionController', function($scope, $http) {
         startLoading();
         $scope.getSolutionRequest(id).then(function(data) {
             $scope.currentSolution = data.data;
+            $scope.currentPage = {};
             $scope.activeSolutionInfoContent();
             finishLoading();
         });
@@ -39,39 +40,36 @@ module.controller('solutionController', function($scope, $http) {
         $http.get('solution/projects', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
             $scope.solutionProjects = data.data;
             $scope.activeContent('solutionProjects', 'solutionMenuProjects');
-            $scope.setUpProjectPagination();
+            $scope.setUpProjectPagination(1);
             finishLoading();
         });
     };
 
-    $scope.setUpProjectPagination = function() {
-        $scope.initPagination($scope.solutionProjects, 10, 5, 'solutionProjectsCrudPagination', 1);
+    $scope.setUpProjectPagination = function(defaultPage) {
+        $scope.initPagination($scope.solutionProjects, 10, 5, 'solutionProjectsCrudPagination', defaultPage);
     };
     $scope.initPagination = function(content, itemsPerPage, maxVisiblePages, pagesContainerId, defaultPageId) {
-        var totalPages = Math.ceil(content.length / itemsPerPage);
-        if (totalPages < 2) {
+        $scope.totalPages = Math.ceil(content.length / itemsPerPage);
+        if ($scope.totalPages < 2) {
             $("#"+pagesContainerId).hide();
         } else {
             $("#"+pagesContainerId).show();
         }
-        if (maxVisiblePages > totalPages) {
-            maxVisiblePages = totalPages;
+        if (maxVisiblePages > $scope.totalPages) {
+            maxVisiblePages = $scope.totalPages;
         }
         $scope.setPage = function(i) {
-
+            if (i < 1 || i > $scope.totalPages) return;
             if (i == 1) {
                 $("#prevPage").addClass("disabled");
             } else {
                 $("#prevPage").removeClass("disabled");
             }
-            if (i < 1 || i > totalPages) return;
-            if (i == totalPages) {
+            if (i == $scope.totalPages) {
                 $("#nextPage").addClass("disabled");
             } else {
                 $("#nextPage").removeClass("disabled");
             }
-            $("#"+pagesContainerId+" .active").removeClass("active");
-            $("#page"+i).addClass("active");
             $scope.currentPageId = i;
             $scope.currentPage = content.slice(($scope.currentPageId - 1) * itemsPerPage, $scope.currentPageId * itemsPerPage);
             var currentPages = [];
@@ -81,14 +79,16 @@ module.controller('solutionController', function($scope, $http) {
                 end = end - start + 1;
                 start = 1;
             }
-            if (end > totalPages) {
-                start = start - end + totalPages;
-                end = totalPages;
+            if (end > $scope.totalPages) {
+                start = start - end + $scope.totalPages;
+                end = $scope.totalPages;
             }
             for (var n = start; n <= end; n++) {
                 currentPages.push(n);
             }
             $scope.pagination = currentPages;
+            $("#"+pagesContainerId+" .active").removeClass("active");
+            $("#page"+i).addClass("active");
         };
         $scope.nextPage = function() {
             $scope.setPage($scope.currentPageId + 1);
@@ -127,6 +127,28 @@ module.controller('solutionController', function($scope, $http) {
         $(".solutionMenuItemActive").removeClass("solutionMenuItemActive");
         $("#"+menuItemId).addClass("solutionMenuItemActive");
         $("#"+contentId).show();
+    };
+
+    $scope.isMarked = function(id) { return $scope.markedItems.indexOf(id) > -1 };
+    $scope.markedItems = [];
+
+    $scope.markItem = function(id) {
+        if (!$scope.markedItems.indexOf(id) > -1) {
+            $scope.markedItems.push(id);
+        }
+    };
+    $scope.unmarkItem = function(id) {
+        if ($scope.markedItems.indexOf(id) > -1) {
+            $scope.markedItems.splice($scope.markedItems.indexOf(id), 1);
+        }
+    };
+
+    $scope.crudItemCheckboxAction = function(id) {
+        if ($scope.isMarked(id)) {
+            $scope.unmarkItem(id);
+        } else {
+            $scope.markItem(id);
+        }
     };
 
     $scope.editSolutionNameModalOpen = function() {
@@ -177,7 +199,7 @@ module.controller('solutionController', function($scope, $http) {
         };
         $http.post('solution/projects', objectToAdd).then(function(data) {
             $scope.solutionProjects.push(data.data);
-            $scope.setUpProjectPagination();
+            $scope.setUpProjectPagination($scope.totalPages);
             finishLoading();
         });
     };
@@ -227,9 +249,19 @@ module.controller('solutionController', function($scope, $http) {
             $scope.solutionProjects = $scope.solutionProjects.filter(function(obj) {
                 return obj['id'] != $scope.currentProject.id;
             });
-            $scope.setUpProjectPagination();
+            $scope.setUpProjectPagination($scope.currentPageId);
             finishLoading();
         });
+    };
+
+    $scope.deleteSelectedProjectsModalOpen = function() {
+        if ($scope.markedItems.length > 0) {
+            $("#deleteSelectedProjectsModal").modal("show");
+        }
+    };
+
+    $scope.deleteSelectedProjects = function() {
+
     };
     $scope.init();
 });

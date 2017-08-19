@@ -4,7 +4,7 @@
             <table id="projectsCrudTable" class="table table-striped">
                 <thead>
                 <tr>
-                    <th><input type="checkbox"/></th>
+                    <th></th>
                     <th>Projekt</th>
                     <th>Opis</th>
                     <th>Data utworzenia</th>
@@ -13,7 +13,7 @@
                 </tr>
                 </thead>
                 <tr ng-repeat="project in currentPage">
-                    <td><input type="checkbox"/></td>
+                    <td><input type="checkbox" ng-checked="isMarked(project.id)" ng-click="crudItemCheckboxAction(project.id)"/></td>
                     <td>{{project.name}}</td>
                     <td>{{project.description}}</td>
                     <td>{{project.creationDate}}</td>
@@ -35,7 +35,7 @@
                         <span class="glyphicon glyphicon-plus"></span>
                         Dodaj zespol
                     </button>
-                    <button type="button" class="btn btn-danger crudButton">Usun zaznaczone</button>
+                    <button id="deleteSelected" type="button" class="btn btn-danger crudButton" data-target="#deleteSelectedProjectsModal" ng-click="deleteSelectedProjectsModalOpen()">Usun zaznaczone</button>
                 </div>
             </div>
             <div class="col-xs-6">
