@@ -1,4 +1,4 @@
-package pl.workreporter.service.pwdgen;
+package pl.workreporter.web.service.pwdgen;
 
 import org.springframework.stereotype.Service;
 
