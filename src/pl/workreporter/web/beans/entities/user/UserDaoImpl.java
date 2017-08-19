@@ -25,22 +25,18 @@ public class UserDaoImpl implements UserDao {
                 "join account ac on au.accountid=ac.id " +
                 "where au.id="+id;
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
-        String team = result.get("teamid").toString();
-        if (team.isEmpty()) {
-            team = "0";
-        }
         User user = new User();
         user.setId(Long.parseLong(result.get("id").toString()));
         user.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
-        user.setTeamId(Long.parseLong(team));
+        user.setTeamId(result.get("teamid") == null ? null : Long.parseLong(result.get("teamid").toString()));
         user.setAccountId(Long.parseLong(result.get("accountid").toString()));
         user.setPositionId(Long.parseLong(result.get("positionid").toString()));
         user.setPersonalDataId(Long.parseLong(result.get("personaldataid").toString()));
         user.setWorkingTime(Double.parseDouble(result.get("working_time").toString()));
         user.setFirstName(result.get("firstname").toString());
         user.setLastName(result.get("lastname").toString());
-        user.setBirthday(result.get("birthday").toString());
-        user.setPhone(result.get("phone").toString());
+        user.setBirthday(result.get("birthday") == null ? null : result.get("birthday").toString());
+        user.setPhone(result.get("phone") == null ? null : result.get("phone").toString());
         user.setLogin(result.get("login").toString());
         user.setEmail(result.get("email").toString());
         user.setAccountStatus(Integer.parseInt(result.get("status").toString()));
@@ -60,23 +56,18 @@ public class UserDaoImpl implements UserDao {
         List<User> usersList = new ArrayList<>();
 
         for (Map<String, Object> map : result) {
-            String team = map.get("teamid").toString();
-            if (team.isEmpty()) {
-                team = "0";
-            }
-
             User user = new User();
             user.setId(Long.parseLong(map.get("id").toString()));
             user.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
-            user.setTeamId(Long.parseLong(team));
+            user.setTeamId(map.get("accountid") == null ? null : Long.parseLong(map.get("accountid").toString()));
             user.setAccountId(Long.parseLong(map.get("accountid").toString()));
             user.setPositionId(Long.parseLong(map.get("positionid").toString()));
             user.setPersonalDataId(Long.parseLong(map.get("personaldataid").toString()));
             user.setWorkingTime(Double.parseDouble(map.get("working_time").toString()));
             user.setFirstName(map.get("firstname").toString());
             user.setLastName(map.get("lastname").toString());
-            user.setBirthday(map.get("birthday").toString());
-            user.setPhone(map.get("phone").toString());
+            user.setBirthday(map.get("birthday") == null ? null : map.get("birthday").toString());
+            user.setPhone(map.get("phone") == null ? null : map.get("phone").toString());
             user.setLogin(map.get("login").toString());
             user.setEmail(map.get("email").toString());
             user.setAccountStatus(Integer.parseInt(map.get("status").toString()));
@@ -97,9 +88,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User addUser(long solutionId, long teamId, long positionId, double workingTime, String firstName,
+    public User addUser(long solutionId, Long teamId, long positionId, double workingTime, String firstName,
                         String lastName, String birthday, String phone, String login, String password, String email) {
-        String query = "select appuserseq.nextval as usernextval, accountseq.nextval as accountnextval, personaldataseq.nextval as pdnextval";
+        String query = "select appuserseq.nextval as usernextval, accountseq.nextval as accountnextval, personaldataseq.nextval as pdnextval from dual";
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         long userId = Long.parseLong(result.get("usernextval").toString());
         long accountId = Long.parseLong(result.get("accountnextval").toString());
@@ -113,7 +104,7 @@ public class UserDaoImpl implements UserDao {
 
         query = "insert into appuser(id, solutionid, teamid, accountid, positionid, personaldataid, working_time, creation_date, last_edition_date) " +
                 "values(?, ?, ?, ?, ?, ?, ?, sysdate, sysdate)";
-        jdbcTemplate.update(query, userId, solutionId, teamId == 0 ? "null" : teamId, accountId, positionId, personalDataId, workingTime);
+        jdbcTemplate.update(query, userId, solutionId, teamId, accountId, positionId, personalDataId, workingTime);
         return getUserById(userId);
     }
 
@@ -149,12 +140,8 @@ public class UserDaoImpl implements UserDao {
 
         query = "update appuser set solutionid=?, teamid=?, accountid=?, positionid=?, personaldataid=?, working_time=?, " +
                 "creation_date=to_timestamp(?, ?), last_edition_date=sysdate where id=?";
-        String team = user.getTeamId()+"";
-        if ("0".equals(team)) {
-            team = "null";
-        }
 
-        jdbcTemplate.update(query, user.getSolutionId(), team, user.getAccountId(), user.getPositionId(),
+        jdbcTemplate.update(query, user.getSolutionId(), user.getTeamId(), user.getAccountId(), user.getPositionId(),
                 user.getPersonalDataId(), user.getWorkingTime(), user.getCreationDate(), dateFormat, user.getId());
     }
 

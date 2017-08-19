@@ -6,7 +6,7 @@ package pl.workreporter.web.beans.entities.user;
 public class User {
     private long id;
     private long solutionId;
-    private long teamId;
+    private Long teamId;
     private long accountId;
     private long positionId;
     private long personalDataId;
@@ -37,11 +37,11 @@ public class User {
         this.solutionId = solutionId;
     }
 
-    public long getTeamId() {
+    public Long getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(long teamId) {
+    public void setTeamId(Long teamId) {
         this.teamId = teamId;
     }
 

@@ -49,11 +49,14 @@ public class EmployeeRestController {
     @RequestMapping(value="/solution/employees", method = POST)
     public User addEmployee(@RequestBody Map<String, String> employee) {
         String password = passwordGenerator.generate(12);
-        notificator.sendInitialMessage(employee.get("login"), password, employee.get("email"));
-        System.out.println(employee.get("solutionid")+"_"+employee.get("teamid"));
-        return userDao.addUser(Long.parseLong(employee.get("solutionid")), Long.parseLong(employee.get("teamid")),
+        Long teamId = employee.get("teamid").isEmpty() ? null : Long.parseLong(employee.get("teamid"));
+        String birthday = employee.get("birthday").isEmpty() ? null : employee.get("birthday");
+        String phone = employee.get("phone").isEmpty() ? null : employee.get("phone");
+        User user = userDao.addUser(Long.parseLong(employee.get("solutionid")), teamId,
                 Long.parseLong(employee.get("positionid")), Double.parseDouble(employee.get("workingtime")),
-                employee.get("firstname"), employee.get("lastname"), employee.get("birthday"), employee.get("phone"),
+                employee.get("firstname"), employee.get("lastname"), birthday, phone,
                 employee.get("login"), password, employee.get("email"));
+        notificator.sendInitialMessage(employee.get("login"), password, employee.get("email"));
+        return user;
     }
 }
