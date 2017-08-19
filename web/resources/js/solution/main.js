@@ -10,6 +10,7 @@ module.controller('solutionController', function($scope, $http) {
     $scope.init = function() {
         startLoading();
         initSolutionProjectsManagement($scope, $http);
+        initSolutionPositionsManagement($scope, $http);
         $http.get("solution/solutions").then(function(data) {
             $scope.solutionChooserData = data.data;
             return $scope.getSolutionRequest($scope.solutionChooserData.firstSolutionId);
@@ -50,14 +51,14 @@ module.controller('solutionController', function($scope, $http) {
         $scope.setPage = function(i) {
             if (i < 1 || i > $scope.totalPages) return;
             if (i == 1) {
-                $("#prevPage").addClass("disabled");
+                $("#"+pagesContainerId+" #prevPage").addClass("disabled");
             } else {
-                $("#prevPage").removeClass("disabled");
+                $("#"+pagesContainerId+" #prevPage").removeClass("disabled");
             }
             if (i == $scope.totalPages) {
-                $("#nextPage").addClass("disabled");
+                $("#"+pagesContainerId+" #nextPage").addClass("disabled");
             } else {
-                $("#nextPage").removeClass("disabled");
+                $("#"+pagesContainerId+" #nextPage").removeClass("disabled");
             }
             $scope.currentPageId = i;
             $scope.currentPage = content.slice(($scope.currentPageId - 1) * itemsPerPage, $scope.currentPageId * itemsPerPage);
@@ -77,7 +78,7 @@ module.controller('solutionController', function($scope, $http) {
             }
             $scope.pagination = currentPages;
             $("#"+pagesContainerId+" .active").removeClass("active");
-            $("#page"+i).addClass("active");
+            $("#"+pagesContainerId+" #page"+i).addClass("active");
         };
         $scope.nextPage = function() {
             $scope.setPage($scope.currentPageId + 1);
@@ -85,15 +86,13 @@ module.controller('solutionController', function($scope, $http) {
         $scope.prevPage = function() {
             $scope.setPage($scope.currentPageId - 1);
         };
+        if (defaultPageId < 1) defaultPageId = 1;
+        else if (defaultPageId > $scope.totalPages) defaultPageId = $scope.totalPages;
         $scope.setPage(defaultPageId);
-        $(document).ready(function() {$("#page"+defaultPageId).addClass("active");});
+        $(document).ready(function() {$("#"+pagesContainerId+" #page"+defaultPageId).addClass("active");});
     };
 
-    $scope.activeSolutionPositionsContent = function() {
-        startLoading();
-        $scope.activeContent('solutionPositions', 'solutionMenuPositions');
-        finishLoading();
-    };
+
 
     $scope.activeSolutionTeamsContent = function() {
         startLoading();

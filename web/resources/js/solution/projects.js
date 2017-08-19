@@ -13,6 +13,7 @@ function initSolutionProjectsManagement($scope, $http) {
             finishLoading();
         });
     };
+
     $scope.setUpProjectPagination = function(defaultPage) {
         $scope.initPagination($scope.solutionProjects, 10, 5, 'solutionProjectsCrudPagination', defaultPage);
     };

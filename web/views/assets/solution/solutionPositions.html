@@ -1,0 +1,50 @@
+<div class="col-sm-9">
+    <div id="solutionPositions" class="solutionContent">
+        <div class="panel panel-default">
+            <table id="positionsCrudTable" class="table table-striped">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Stanowisko</th>
+                    <th>Data utworzenia</th>
+                    <th>Ostatnia edycja</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tr ng-repeat="position in currentPage">
+                    <td><input type="checkbox" ng-checked="isMarked(position.id)" ng-click="crudItemCheckboxAction(position.id)"/></td>
+                    <td>{{position.name}}</td>
+                    <td>{{position.creationDate}}</td>
+                    <td>{{position.lastEditionDate}}</td>
+                    <td>
+                        <div class="crudTableActionButtonsContainer">
+                            <a href="#" data-toggle="modal" data-target="#editPositionModal" ng-click="setCurrentPosition(position.id); editPositionModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#" data-toggle="modal" data-target="#deletePositionModal" ng-click="setCurrentPosition(position.id)"><span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row crudButtonsContainer">
+            <div class="col-xs-6">
+                <div class="crudButtons">
+                    <button type="button" class="btn btn-primary crudButton" data-toggle="modal" data-target="#addPositionModal" ng-click="addPositionModalOpen()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Dodaj zespol
+                    </button>
+                    <button id="deleteSelected" type="button" class="btn btn-danger crudButton" data-target="#deleteSelectedPositionsModal" ng-click="deleteSelectedPositionsModalOpen()">Usun zaznaczone</button>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="crudPagination">
+                    <ul id="solutionPositionsCrudPagination" class="pagination">
+                        <li id="prevPage"><a href="#" ng-click="prevPage()">prev</a></li>
+                        <li ng-repeat="page in pagination" id="page{{page}}"><a href="#" ng-click="setPage(page)">{{page}}</a></li>
+                        <li id="nextPage"><a href="#" ng-click="nextPage()">next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

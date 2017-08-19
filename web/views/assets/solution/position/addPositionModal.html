@@ -1,0 +1,32 @@
+<div id="addPositionModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Dodaj stanowisko</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="addPosition" action="#" method="post">
+                            <div class="form-group">
+                                <label for="addPositionModalNameInput">Nazwa stanowiska:</label>
+                                <input id="addPositionModalNameInput" type="text" class="form-control">
+                            </div>
+                        </form>
+                        <div id="positionAddModalNameError" class="alert alert-danger modalError">
+                            Nieprawidłowa nazwa!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="modalButtonsContainer">
+                    <button id="addPositionModalSave" type="button" class="btn btn-default" ng-click="addPositionModalSave()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
