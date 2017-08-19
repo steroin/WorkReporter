@@ -17,6 +17,7 @@ module.controller('solutionController', function($scope, $http) {
             $scope.activeContent('solutionInfo', 'solutionMenuInfo');
             finishLoading();
         });
+
     };
     
     $scope.setCurrentSolution = function(id) {
@@ -41,6 +42,7 @@ module.controller('solutionController', function($scope, $http) {
             $scope.solutionProjects = data.data;
             $scope.activeContent('solutionProjects', 'solutionMenuProjects');
             $scope.setUpProjectPagination(1);
+            $scope.markedItems = [];
             finishLoading();
         });
     };
@@ -130,7 +132,6 @@ module.controller('solutionController', function($scope, $http) {
     };
 
     $scope.isMarked = function(id) { return $scope.markedItems.indexOf(id) > -1 };
-    $scope.markedItems = [];
 
     $scope.markItem = function(id) {
         if (!$scope.markedItems.indexOf(id) > -1) {
@@ -261,7 +262,19 @@ module.controller('solutionController', function($scope, $http) {
     };
 
     $scope.deleteSelectedProjects = function() {
-
+        $("#deleteSelectedProjectsModal").modal("hide");
+        startLoading();
+        $http.delete('solution/projects', {params: {
+            'solutionid' : $scope.currentSolution.id,
+            'projects' : $scope.markedItems
+        }}).then(function(data) {
+            $scope.solutionProjects = $scope.solutionProjects.filter(function(obj) {
+                return $scope.markedItems.indexOf(obj['id']) == -1;
+            });
+            $scope.markedItems = [];
+            $scope.setUpProjectPagination($scope.currentPageId);
+            finishLoading();
+        });
     };
     $scope.init();
 });

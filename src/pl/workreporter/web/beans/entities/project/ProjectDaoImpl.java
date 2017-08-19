@@ -86,6 +86,21 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    public void removeProjects(long solutionId, List<Long> projectIds) {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("delete from project where solutionid="+solutionId);
+        queryBuilder.append(" and (");
+        for (int i = 0; i < projectIds.size(); i++) {
+            queryBuilder.append("id="+projectIds.get(i));
+            if (i < projectIds.size() - 1) {
+                queryBuilder.append(" or ");
+            }
+        }
+        queryBuilder.append(")");
+        jdbcTemplate.execute(queryBuilder.toString());
+    }
+
+    @Override
     public void updateProject(Project project) {
         String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String query = "update project " +

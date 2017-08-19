@@ -27,7 +27,12 @@ public class ProjectRestController {
 
     @RequestMapping(value = "/solution/projects/{id}", method = DELETE)
     public void removeProject(@RequestParam("solutionid") long solutionId, @PathVariable("id") long projectId) {
-        System.out.println("deleting: "+projectId+" in solution: "+solutionId);
+        projectDao.removeProject(solutionId, projectId);
+    }
+
+    @RequestMapping(value = "/solution/projects", method = DELETE)
+    public void removeSelectedProjects(@RequestParam("solutionid") long solutionId, @RequestParam("projects") List<Long> projects) {
+        projectDao.removeProjects(solutionId, projects);
     }
 
     @RequestMapping(value = "/solution/projects/{id}", method = PATCH)

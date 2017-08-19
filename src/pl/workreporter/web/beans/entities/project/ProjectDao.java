@@ -10,5 +10,6 @@ public interface ProjectDao {
     List<Project> getAllProjectsInSolution(long solutionId);
     Project addProject(long solutionId, String name, String desc);
     void removeProject(long solutionId, long projectId);
+    void removeProjects(long solutionId, List<Long> projectIds);
     void updateProject(Project project);
 }
