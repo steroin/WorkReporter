@@ -1,2 +1,50 @@
-﻿<div id="solutionEmployees" class="panel panel-default solutionContent">
+﻿<div class="col-sm-9">
+    <div id="solutionEmployees" class="solutionContent">
+        <div class="panel panel-default">
+            <table id="employeesCrudTable" class="table table-striped">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Imię i nazwisko</th>
+                    <th>Login</th>
+                    <th>Data utworzenia</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tr ng-repeat="employee in currentPage">
+                    <td><input type="checkbox" ng-checked="isMarked(employee.id)" ng-click="crudItemCheckboxAction(employee.id)"/></td>
+                    <td>{{employee.firstName}} {{employee.lastName}}</td>
+                    <td>{{employee.login}}</td>
+                    <td>{{employee.creationDate}}</td>
+                    <td>
+                        <div class="crudTableActionButtonsContainer">
+                            <a href="#" data-toggle="modal" data-target="#editEmployeeModal" ng-click="setCurrentEmployee(employee.id); editEmployeeModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#" data-toggle="modal" data-target="#deleteEmployeeModal" ng-click="setCurrentEmployee(employee.id)"><span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row crudButtonsContainer">
+            <div class="col-xs-6">
+                <div class="crudButtons">
+                    <button type="button" class="btn btn-primary crudButton" data-target="#addEmployeeModal" ng-click="addEmployeeModalOpen()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Dodaj zespol
+                    </button>
+                    <button id="deleteSelected" type="button" class="btn btn-danger crudButton" data-target="#deleteSelectedEmployeesModal" ng-click="deleteSelectedEmployeesModalOpen()">Usun zaznaczone</button>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="crudPagination">
+                    <ul id="solutionEmployeesCrudPagination" class="pagination">
+                        <li id="prevPage"><a href="#" ng-click="prevPage()">prev</a></li>
+                        <li ng-repeat="page in pagination" id="page{{page}}"><a href="#" ng-click="setPage(page)">{{page}}</a></li>
+                        <li id="nextPage"><a href="#" ng-click="nextPage()">next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

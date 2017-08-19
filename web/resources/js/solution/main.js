@@ -11,6 +11,7 @@ module.controller('solutionController', function($scope, $http) {
         startLoading();
         initSolutionProjectsManagement($scope, $http);
         initSolutionPositionsManagement($scope, $http);
+        initSolutionEmployeesManagement($scope, $http);
         $http.get("solution/solutions").then(function(data) {
             $scope.solutionChooserData = data.data;
             return $scope.getSolutionRequest($scope.solutionChooserData.firstSolutionId);

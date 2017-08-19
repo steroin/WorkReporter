@@ -1,0 +1,73 @@
+﻿<div id="addEmployeeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Dodaj pracownika</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="addEmployee" action="#" method="post">
+                            <div class="form-group">
+                                <label for="addEmployeeModalFirstNameInput">Imię:</label>
+                                <input id="addEmployeeModalFirstNameInput" type="text" class="form-control">
+                                <label for="addEmployeeModalLastNameInput">Nazwisko:</label>
+                                <input id="addEmployeeModalLastNameInput" type="text" class="form-control">
+                                <label for="addEmployeeModalEmailInput">Email:</label>
+                                <input id="addEmployeeModalEmailInput" type="text" class="form-control">
+                                <label for="addEmployeeModalLoginInput">Login:</label>
+                                <input id="addEmployeeModalLoginInput" type="text" class="form-control">
+
+                                <label for="addEmployeeModalPositionInput">Stanowisko:</label>
+                                <select id="addEmployeeModalPositionInput" class="form-control">
+                                    <option ng-repeat="position in solutionPositions" value="{{position.id}}">{{position.name}}</option>
+                                </select>
+
+                                <label for="addEmployeeModalWorkingTimeInput">Wymiar czasu pracy:</label>
+                                <input id="addEmployeeModalWorkingTimeInput" type="text" class="form-control">
+
+                                <label for="addEmployeeModalTeamInput">Zespół:</label>
+                                <select id="addEmployeeModalTeamInput" class="form-control">
+                                    <option value="0">(brak)</option>
+                                    <!--<option ng-repeat="position in solutionPositions" value="{{position.id}}">{{position.name}}</option>-->
+                                </select>
+
+                                <label for="addEmployeeModalBirthDayInput">Data urodzenia:</label>
+                                <input id="addEmployeeModalBirthDayInput" type="text" class="form-control">
+
+                                <label for="addEmployeeModalPhoneInput">Nr telefonu:</label>
+                                <input id="addEmployeeModalPhoneInput" type="text" class="form-control">
+                            </div>
+                        </form>
+                        <div id="employeeAddModalFirstNameError" class="alert alert-danger modalError">
+                            Nieprawidłowe imię!
+                        </div>
+                        <div id="employeeAddModalLastNameError" class="alert alert-danger modalError">
+                            Nieprawidłowe nazwisko!
+                        </div>
+                        <div id="employeeAddModalEmailError" class="alert alert-danger modalError">
+                            Nieprawidłowy email!
+                        </div>
+                        <div id="employeeAddModalLoginError" class="alert alert-danger modalError">
+                            Nieprawidłowy login!
+                        </div>
+                        <div id="employeeAddModalPositionError" class="alert alert-danger modalError">
+                            Nieprawidłowe stanowisko!
+                        </div>
+                        <div id="employeeAddModalWorkingTimeError" class="alert alert-danger modalError">
+                            Nieprawidłowy wymiar czasu pracy!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="modalButtonsContainer">
+                    <button id="addPositionModalSave" type="button" class="btn btn-default" ng-click="addEmployeeModalSave()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
