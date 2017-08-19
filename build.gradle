@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     compile group: 'com.github.noraui', name: 'ojdbc7', version: '12.1.0.2'
+    compile group: 'javax.mail', name: 'mail', version: '1.4.7'
     compile 'org.springframework:spring-webmvc:4.3.10.RELEASE'
     compile 'org.springframework.security:spring-security-web:4.2.3.RELEASE'
     compile 'org.springframework.security:spring-security-config:4.2.3.RELEASE'
