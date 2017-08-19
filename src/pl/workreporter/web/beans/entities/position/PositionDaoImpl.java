@@ -21,19 +21,13 @@ public class PositionDaoImpl implements PositionDao {
     @Override
     public Position getPositionById(long id) {
         String query = "select * from position where id="+id;
-        SimpleDateFormat srcSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
-        SimpleDateFormat destSdf = new SimpleDateFormat("dd.MM.yyyy");
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         Position position = new Position();
         position.setId(Long.parseLong(result.get("id").toString()));
         position.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         position.setName(result.get("name").toString());
-        try {
-            position.setCreationDate(destSdf.format(srcSdf.parse(result.get("creation_date").toString())));
-            position.setLastEditionDate(destSdf.format(srcSdf.parse(result.get("last_edition_date").toString())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        position.setCreationDate(result.get("creation_date").toString());
+        position.setLastEditionDate(result.get("last_edition_date").toString());
         return position;
     }
 

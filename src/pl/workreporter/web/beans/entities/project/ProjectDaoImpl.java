@@ -23,20 +23,14 @@ public class ProjectDaoImpl implements ProjectDao {
     @Override
     public Project getProjectById(long id) {
         String query = "select * from project where id="+id;
-        SimpleDateFormat srcSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
-        SimpleDateFormat destSdf = new SimpleDateFormat("dd.MM.yyyy");
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         Project project = new Project();
         project.setId(Long.parseLong(result.get("id").toString()));
         project.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         project.setName(result.get("name").toString());
         project.setDescription(result.get("description") == null ? "" : result.get("description").toString());
-        try {
-            project.setCreationDate(destSdf.format(srcSdf.parse(result.get("creation_date").toString())));
-            project.setLastEditionDate(destSdf.format(srcSdf.parse(result.get("last_edition_date").toString())));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        project.setCreationDate(result.get("creation_date").toString());
+        project.setLastEditionDate(result.get("last_edition_date").toString());
         return project;
     }
 
@@ -67,16 +61,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
         query = "insert into project(id, solutionid, name, description, creation_date, last_edition_date) values (?, ?, ?, ?, sysdate, sysdate)";
         jdbcTemplate.update(query, id, solutionId, name, desc);
-        query = "select * from project where id = ?";
-        result = jdbcTemplate.queryForMap(query, id);
-        Project project = new Project();
-        project.setId(Long.parseLong(result.get("id").toString()));
-        project.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
-        project.setName(result.get("name").toString());
-        project.setDescription(result.get("description").toString());
-        project.setCreationDate(result.get("creation_date").toString());
-        project.setLastEditionDate(result.get("last_edition_date").toString());
-        return project;
+        return getProjectById(id);
     }
 
     @Override
