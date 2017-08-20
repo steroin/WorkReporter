@@ -34,6 +34,9 @@ function initSolutionEmployeesManagement($scope, $http) {
         $("#addEmployeeModalWorkingTimeInput").val("");
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
             $scope.solutionPositions = data.data;
+            return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
+        }).then(function(data) {
+            $scope.solutionTeams = data.data;
             $("#addEmployeeModal").modal("show");
             finishLoading();
         });
