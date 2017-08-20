@@ -93,7 +93,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User addUser(long solutionId, Long teamId, long positionId, double workingTime, String firstName,
                         String lastName, String birthday, String phone, String login, String password, String email) {
-        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String query = "select appuserseq.nextval as usernextval, accountseq.nextval as accountnextval, personaldataseq.nextval as pdnextval from dual";
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         long userId = Long.parseLong(result.get("usernextval").toString());
@@ -105,8 +104,7 @@ public class UserDaoImpl implements UserDao {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("BEGIN \n");
         queryBuilder.append("insert into personal_data(id, firstname, lastname, birthday, phone) " +
-                "values("+personalDataId+", '"+firstName+"', '"+lastName+"', to_timestamp('"+dateFormat+"', "+
-                dateParser.parseToDatabaseTimestamp(birthday)+"), '"+phone+"');\n");
+                "values("+personalDataId+", '"+firstName+"', '"+lastName+"', "+dateParser.parseToDatabaseTimestamp(birthday)+", '"+phone+"');\n");
         queryBuilder.append("insert into account(id, login, password, email, status) " +
                 "values("+accountId+", '"+login+"', '"+hashedPassword+"', '"+email+"', 1);\n");
 
@@ -142,11 +140,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void updateUser(User user) {
-        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("BEGIN \n");
         queryBuilder.append("update personal_data set firstname='"+user.getFirstName()+"', lastname='"+user.getLastName()+"', " +
-                "birthday=to_timestamp('"+dateFormat+"', '"+user.getBirthday()+"'), phone='"+user.getPhone()+"' " +
+                "birthday="+dateParser.parseToDatabaseTimestamp(user.getBirthday())+", phone='"+user.getPhone()+"' " +
                 "where id="+user.getPersonalDataId()+"; \n");
 
         queryBuilder.append("update account set login='"+user.getLogin()+"', email='"+user.getEmail()+"', " +

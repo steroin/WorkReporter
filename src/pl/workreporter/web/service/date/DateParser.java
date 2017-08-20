@@ -13,18 +13,22 @@ public class DateParser {
         if (readableFormatDate == null) {
             return "null";
         }
-        String stringDate = readableFormatDate.toString();
+        String stringDate = readableFormatDate.toString().trim();
         if (stringDate.isEmpty()) {
             return "null";
         }
 
         String[] split = stringDate.split(" ");
         String[] dateSplit = split[0].split("-");
-        String[] timeSplit = split[1].split(":");
+        String time = "00:00:00.0";
+        if (split.length > 1) {
+            String[] timeSplit = split[1].split(":");
+            time = timeSplit[0]+":"+timeSplit[1]+":"+timeSplit[2]+".0";
+        }
         String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
-        String timestamp = "to_timestamp('"+dateFormat+"', '"+dateSplit[2]+"-"+dateSplit[1]+"-"+dateSplit[0]+" "+
-                timeSplit[0]+":"+timeSplit[1]+":"+timeSplit[2]+".0')";
-        return timestamp;
+
+        String date = dateSplit[2]+"-"+dateSplit[1]+"-"+dateSplit[0];
+        return "to_timestamp('"+date+" "+time+"', '"+dateFormat+"')";
     }
 
     public String parseToReadableDate(Object databaseTimestamp) {
