@@ -50,7 +50,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     private List<User> getAllUsersWithAttribute(String attribute, String value) {
-        String query = "select * " +
+        String query = "select au.id as userid, solutionid, accountid, positionid, personaldataid, working_time, firstname, lastname, \n" +
+                "birthday, phone, login, email, status, creation_date, last_edition_date " +
                 "from appuser au " +
                 "join personal_data pd on au.personaldataid=pd.id " +
                 "join account ac on au.accountid=ac.id " +
@@ -60,7 +61,8 @@ public class UserDaoImpl implements UserDao {
 
         for (Map<String, Object> map : result) {
             User user = new User();
-            user.setId(Long.parseLong(map.get("id").toString()));
+            System.out.println(map.get("userid").toString());
+            user.setId(Long.parseLong(map.get("userid").toString()));
             user.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             user.setTeamId(map.get("accountid") == null ? null : Long.parseLong(map.get("accountid").toString()));
             user.setAccountId(Long.parseLong(map.get("accountid").toString()));
