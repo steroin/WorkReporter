@@ -39,7 +39,7 @@ public class DateParser {
         String[] dateSplit = split[0].split("-");
         String[] timeSplit = split[1].split(":");
         String[] secondsSplit = timeSplit[2].split("\\.");
-        String timestamp = dateSplit[2]+"-"+dateSplit[1]+"-"+dateSplit[2]+" "+timeSplit[0]+":"+timeSplit[1]+":"+secondsSplit[0];
+        String timestamp = dateSplit[2]+"-"+dateSplit[1]+"-"+dateSplit[0]+" "+timeSplit[0]+":"+timeSplit[1]+":"+secondsSplit[0];
         return timestamp;
     }
 }

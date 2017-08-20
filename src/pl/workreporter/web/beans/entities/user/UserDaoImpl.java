@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
+import pl.workreporter.web.service.date.DateParser;
 import pl.workreporter.web.service.mail.MailNotificator;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.Map;
 public class UserDaoImpl implements UserDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DateParser dateParser;
 
     @Override
     public User getUserById(long id) {
@@ -35,13 +38,13 @@ public class UserDaoImpl implements UserDao {
         user.setWorkingTime(Double.parseDouble(result.get("working_time").toString()));
         user.setFirstName(result.get("firstname").toString());
         user.setLastName(result.get("lastname").toString());
-        user.setBirthday(result.get("birthday") == null ? null : result.get("birthday").toString());
+        user.setBirthday(dateParser.parseToReadableDate(result.get("birthday")));
         user.setPhone(result.get("phone") == null ? null : result.get("phone").toString());
         user.setLogin(result.get("login").toString());
         user.setEmail(result.get("email").toString());
         user.setAccountStatus(Integer.parseInt(result.get("status").toString()));
-        user.setCreationDate(result.get("creation_date").toString());
-        user.setLastEditionDate(result.get("last_edition_date").toString());
+        user.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date")));
+        user.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date")));
 
         return user;
     }
@@ -66,13 +69,13 @@ public class UserDaoImpl implements UserDao {
             user.setWorkingTime(Double.parseDouble(map.get("working_time").toString()));
             user.setFirstName(map.get("firstname").toString());
             user.setLastName(map.get("lastname").toString());
-            user.setBirthday(map.get("birthday") == null ? null : map.get("birthday").toString());
+            user.setBirthday(dateParser.parseToReadableDate(map.get("birthday")));
             user.setPhone(map.get("phone") == null ? null : map.get("phone").toString());
             user.setLogin(map.get("login").toString());
             user.setEmail(map.get("email").toString());
             user.setAccountStatus(Integer.parseInt(map.get("status").toString()));
-            user.setCreationDate(map.get("creation_date").toString());
-            user.setLastEditionDate(map.get("last_edition_date").toString());
+            user.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date")));
+            user.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date")));
             usersList.add(user);
         }
         return usersList;
@@ -90,21 +93,29 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User addUser(long solutionId, Long teamId, long positionId, double workingTime, String firstName,
                         String lastName, String birthday, String phone, String login, String password, String email) {
+        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String query = "select appuserseq.nextval as usernextval, accountseq.nextval as accountnextval, personaldataseq.nextval as pdnextval from dual";
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         long userId = Long.parseLong(result.get("usernextval").toString());
         long accountId = Long.parseLong(result.get("accountnextval").toString());
         long personalDataId = Long.parseLong(result.get("pdnextval").toString());
-        query = "insert into personal_data(id, firstname, lastname, birthday, phone) values(?, ?, ?, ?, ?)";
-        jdbcTemplate.update(query, personalDataId, firstName, lastName, birthday, phone);
 
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(16));
-        query = "insert into account(id, login, password, email, status) values(?, ?, ?, ?, ?)";
-        jdbcTemplate.update(query, accountId, login, hashedPassword, email, 1);
 
-        query = "insert into appuser(id, solutionid, teamid, accountid, positionid, personaldataid, working_time, creation_date, last_edition_date) " +
-                "values(?, ?, ?, ?, ?, ?, ?, sysdate, sysdate)";
-        jdbcTemplate.update(query, userId, solutionId, teamId, accountId, positionId, personalDataId, workingTime);
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("BEGIN \n");
+        queryBuilder.append("insert into personal_data(id, firstname, lastname, birthday, phone) " +
+                "values("+personalDataId+", '"+firstName+"', '"+lastName+"', to_timestamp('"+dateFormat+"', "+
+                dateParser.parseToDatabaseTimestamp(birthday)+"), '"+phone+"');\n");
+        queryBuilder.append("insert into account(id, login, password, email, status) " +
+                "values("+accountId+", '"+login+"', '"+hashedPassword+"', '"+email+"', 1);\n");
+
+        queryBuilder.append("insert into appuser(id, solutionid, teamid, accountid, positionid, personaldataid, " +
+                "working_time, creation_date, last_edition_date) " +
+                "values("+userId+", "+solutionId+", "+teamId+", "+accountId+", "+positionId+", "+personalDataId+", " +
+                ""+workingTime+", sysdate, sysdate);\n");
+        queryBuilder.append("END;");
+        jdbcTemplate.execute(queryBuilder.toString());
         return getUserById(userId);
     }
 
@@ -132,17 +143,21 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void updateUser(User user) {
         String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
-        String query = "update personal_data set firstname=?, lastname=?, birthday=?, phone=? where id=?";
-        jdbcTemplate.update(query, user.getFirstName(), user.getLastName(), user.getBirthday(), user.getPhone(), user.getPersonalDataId());
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("BEGIN \n");
+        queryBuilder.append("update personal_data set firstname='"+user.getFirstName()+"', lastname='"+user.getLastName()+"', " +
+                "birthday=to_timestamp('"+dateFormat+"', '"+user.getBirthday()+"'), phone='"+user.getPhone()+"' " +
+                "where id="+user.getPersonalDataId()+"; \n");
 
-        query = "update account set login=?, email=?, status=? where id=?";
-        jdbcTemplate.update(query, user.getLogin(), user.getEmail(), user.getAccountStatus(), user.getTeamId());
+        queryBuilder.append("update account set login='"+user.getLogin()+"', email='"+user.getEmail()+"', " +
+                "status="+user.getAccountStatus()+" where id="+user.getAccountId()+"; \n");
 
-        query = "update appuser set solutionid=?, teamid=?, accountid=?, positionid=?, personaldataid=?, working_time=?, " +
-                "creation_date=to_timestamp(?, ?), last_edition_date=sysdate where id=?";
-
-        jdbcTemplate.update(query, user.getSolutionId(), user.getTeamId(), user.getAccountId(), user.getPositionId(),
-                user.getPersonalDataId(), user.getWorkingTime(), user.getCreationDate(), dateFormat, user.getId());
+        queryBuilder.append("update appuser set solutionid="+user.getSolutionId()+", teamid="+user.getTeamId()+", " +
+                "accountid="+user.getAccountId()+", positionid="+user.getPositionId()+", personaldataid="+user.getPersonalDataId()+", " +
+                "working_time="+user.getWorkingTime()+", creation_date="+dateParser.parseToDatabaseTimestamp(user.getCreationDate())+", " +
+                "last_edition_date=sysdate where id="+user.getId()+"; \n");
+        queryBuilder.append("END;");
+        jdbcTemplate.execute(queryBuilder.toString());
     }
 
     @Override
