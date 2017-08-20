@@ -9,11 +9,16 @@ import java.text.SimpleDateFormat;
  */
 @Service
 public class DateParser {
-    public String parseToDatabaseTimestamp(String readableFormatDate) {
-        if (readableFormatDate == null || readableFormatDate.isEmpty()) {
+    public String parseToDatabaseTimestamp(Object readableFormatDate) {
+        if (readableFormatDate == null) {
             return "null";
         }
-        String[] split = readableFormatDate.split(" ");
+        String stringDate = readableFormatDate.toString();
+        if (stringDate.isEmpty()) {
+            return "null";
+        }
+
+        String[] split = stringDate.split(" ");
         String[] dateSplit = split[0].split("-");
         String[] timeSplit = split[1].split(":");
         String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
@@ -22,11 +27,15 @@ public class DateParser {
         return timestamp;
     }
 
-    public String parseToReadableDate(String databaseTimestamp) {
-        if (databaseTimestamp == null || databaseTimestamp.isEmpty()) {
+    public String parseToReadableDate(Object databaseTimestamp) {
+        if (databaseTimestamp == null) {
             return "";
         }
-        String[] split = databaseTimestamp.split(" ");
+        String stringDate = databaseTimestamp.toString();
+        if (stringDate.isEmpty()) {
+            return "";
+        }
+        String[] split = stringDate.split(" ");
         String[] dateSplit = split[0].split("-");
         String[] timeSplit = split[1].split(":");
         String[] secondsSplit = timeSplit[2].split("\\.");
