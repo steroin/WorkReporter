@@ -31,14 +31,20 @@ public class EmployeeRestController {
         return result;
     }
 
-    @RequestMapping(value = "/solution/employees/{id}", method = DELETE)
-    public void removeEmployee(@RequestParam("solutionid") long solutionId, @PathVariable("id") long employeeId) {
-        userDao.removeUser(solutionId, employeeId);
+    @RequestMapping(value = "/solution/employees/{userid}", method = DELETE)
+    public void removeEmployee(@RequestParam("solutionid") long solutionId,
+                               @RequestParam("personaldataid") long personalDataId,
+                               @RequestParam("accountid") long accountId,
+                               @PathVariable("userid") long employeeId) {
+        userDao.removeUser(solutionId, employeeId, personalDataId, accountId);
     }
 
     @RequestMapping(value = "/solution/employees", method = DELETE)
-    public void removeSelectedEmployees(@RequestParam("solutionid") long solutionId, @RequestParam("employees") List<Long> employees) {
-        userDao.removeUsers(solutionId, employees);
+    public void removeSelectedEmployees(@RequestParam("solutionid") long solutionId,
+                                        @RequestParam("employees") List<Long> employees,
+                                        @RequestParam("personaldatas") List<Long> personalDatas,
+                                        @RequestParam("accoutns") List<Long> accounts) {
+        userDao.removeUsers(solutionId, employees, personalDatas, accounts);
     }
 
     @RequestMapping(value = "/solution/employees/{id}", method = PATCH)

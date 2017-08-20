@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 import pl.workreporter.web.service.date.DateParser;
-import pl.workreporter.web.service.mail.MailNotificator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +60,6 @@ public class UserDaoImpl implements UserDao {
 
         for (Map<String, Object> map : result) {
             User user = new User();
-            System.out.println(map.get("userid").toString());
             user.setId(Long.parseLong(map.get("userid").toString()));
             user.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             user.setTeamId(map.get("accountid") == null ? null : Long.parseLong(map.get("accountid").toString()));
@@ -120,23 +118,45 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void removeUser(long solutionId, long id) {
-        String query = "delete from appuser where id="+id;
+    public void removeUser(long solutionId, long userId, long personalDataId, long accountId) {
+        String query = "begin\n" +
+                "  delete from personal_data where id = "+personalDataId+";\n" +
+                "  delete from account where id = "+accountId+";\n" +
+                "  delete from appuser where id = "+userId+";\n" +
+                "end;";
         jdbcTemplate.execute(query);
     }
 
     @Override
-    public void removeUsers(long solutionId, List<Long> ids) {
+    public void removeUsers(long solutionId, List<Long> userIds, List<Long> personalDataIds, List<Long> accountIds) {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("delete from appuser where solutionid="+solutionId);
-        queryBuilder.append(" and (");
-        for (int i = 0; i < ids.size(); i++) {
-            queryBuilder.append("id="+ids.get(i));
-            if (i < ids.size() - 1) {
+        queryBuilder.append("begin \n");
+        queryBuilder.append("delete from personal_data where ");
+        for (int i = 0; i < personalDataIds.size(); i++) {
+            queryBuilder.append("id="+personalDataIds.get(i));
+            if (i < personalDataIds.size() - 1) {
                 queryBuilder.append(" or ");
             }
         }
-        queryBuilder.append(")");
+        queryBuilder.append("); \n");
+        queryBuilder.append("delete from account where ");
+        for (int i = 0; i < accountIds.size(); i++) {
+            queryBuilder.append("id="+accountIds.get(i));
+            if (i < accountIds.size() - 1) {
+                queryBuilder.append(" or ");
+            }
+        }
+        queryBuilder.append("); \n");
+        queryBuilder.append("delete from appuser where solutionid="+solutionId);
+        queryBuilder.append(" and (");
+        for (int i = 0; i < userIds.size(); i++) {
+            queryBuilder.append("id="+userIds.get(i));
+            if (i < userIds.size() - 1) {
+                queryBuilder.append(" or ");
+            }
+        }
+        queryBuilder.append("); \n");
+        queryBuilder.append("end;");
         jdbcTemplate.execute(queryBuilder.toString());
     }
 

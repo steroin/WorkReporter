@@ -112,4 +112,51 @@ function initSolutionEmployeesManagement($scope, $http) {
             }
         }
     };
+
+    $scope.deleteEmployeeModalOpen = function() {
+        if ($scope.currentSolution.administrators.indexOf($scope.currentEmployee.id) > -1) {
+            $("#errorEmployeeModal").modal("show");
+            $("#employeeErrorModalDeleteSolutionAdmin").show();
+        } else {
+            $("#deleteEmployeeModal").modal("show");
+        }
+    };
+
+    $scope.deleteEmployee = function() {
+        $("#deleteEmployeeModal").modal("hide");
+        startLoading();
+        $http.delete('solution/employees/'+$scope.currentEmployee.id, {params: {
+            'solutionid' : $scope.currentSolution.id,
+            'personaldataid' : $scope.currentEmployee.personalDataId,
+            'accountid' : $scope.currentEmployee.accountId
+        }}).then(function(data) {
+            $scope.solutionEmployees = $scope.solutionEmployees.filter(function(obj) {
+                return obj['id'] != $scope.currentEmployee.id;
+            });
+            $scope.setUpEmployeesPagination($scope.currentPageId);
+            finishLoading();
+        });
+    };
+
+   /* $scope.deleteSelectedPositionsModalOpen = function() {
+        if ($scope.markedItems.length > 0) {
+            $("#deleteSelectedPositionsModal").modal("show");
+        }
+    };
+
+    $scope.deleteSelectedPositions = function() {
+        $("#deleteSelectedPositionsModal").modal("hide");
+        startLoading();
+        $http.delete('solution/positions', {params: {
+            'solutionid' : $scope.currentSolution.id,
+            'positions' : $scope.markedItems
+        }}).then(function(data) {
+            $scope.solutionPositions = $scope.solutionPositions.filter(function(obj) {
+                return $scope.markedItems.indexOf(obj['id']) == -1;
+            });
+            $scope.markedItems = [];
+            $scope.setUpPositionPagination($scope.currentPageId);
+            finishLoading();
+        });
+    };*/
 }
