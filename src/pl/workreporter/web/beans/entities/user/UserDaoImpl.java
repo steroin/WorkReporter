@@ -62,7 +62,7 @@ public class UserDaoImpl implements UserDao {
             User user = new User();
             user.setId(Long.parseLong(map.get("userid").toString()));
             user.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
-            user.setTeamId(map.get("accountid") == null ? null : Long.parseLong(map.get("accountid").toString()));
+            user.setTeamId(map.get("teamid") == null ? null : Long.parseLong(map.get("teamid").toString()));
             user.setAccountId(Long.parseLong(map.get("accountid").toString()));
             user.setPositionId(Long.parseLong(map.get("positionid").toString()));
             user.setPersonalDataId(Long.parseLong(map.get("personaldataid").toString()));
