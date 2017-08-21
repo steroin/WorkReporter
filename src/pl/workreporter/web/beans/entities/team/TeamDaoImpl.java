@@ -19,12 +19,22 @@ public class TeamDaoImpl implements TeamDao{
 
     @Override
     public Team getTeamById(long id) {
-        String query = "select * from team where id="+id;
+        String query = "select t.id, t.name, t.solutionid, t.leaderid, t.creation_date, t.last_edition_date, pd.firstname, pd.lastname, ac.login\n" +
+                "from team t \n" +
+                "  left join appuser au on t.leaderid = au.id \n" +
+                "  left join personal_data pd on au.personaldataid=pd.id\n" +
+                "  left join account ac on au.accountid = ac.id " +
+                "where t.id="+id;
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
+        String leaderName = "";
+        if (result.get("firstname") != null && result.get("lastname") != null && result.get("login") != null) {
+            leaderName = result.get("firstname").toString()+" "+result.get("lastname").toString()+" ("+result.get("login").toString()+")";
+        }
         Team team = new Team();
         team.setId(Long.parseLong(result.get("id").toString()));
         team.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         team.setLeaderId(result.get("leaderid") == null ? null : Long.parseLong(result.get("leaderid").toString()));
+        team.setLeaderName(leaderName);
         team.setName(result.get("name").toString());
         team.setCreationDate(result.get("creation_date").toString());
         team.setLastEditionDate(result.get("last_edition_date").toString());
@@ -33,16 +43,26 @@ public class TeamDaoImpl implements TeamDao{
 
     @Override
     public List<Team> getAllTeamsInSolution(long solutionId) {
-        String query = "select * from team where solutionid="+solutionId;
+        String query = "select t.id, t.name, t.solutionid, t.leaderid, t.creation_date, t.last_edition_date, pd.firstname, pd.lastname, ac.login\n" +
+                "from team t \n" +
+                "  left join appuser au on t.leaderid = au.id \n" +
+                "  left join personal_data pd on au.personaldataid=pd.id\n" +
+                "  left join account ac on au.accountid = ac.id " +
+                "where t.solutionid="+solutionId;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         List<Team> teams = new ArrayList<>();
 
         for (Map<String, Object> map : result) {
+            String leaderName = "";
+            if (map.get("firstname") != null && map.get("lastname") != null && map.get("login") != null) {
+                leaderName = map.get("firstname").toString()+" "+map.get("lastname").toString()+" ("+map.get("login").toString()+")";
+            }
             Team team = new Team();
             long id = Long.parseLong(map.get("id").toString());
             team.setId(id);
             team.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             team.setLeaderId(map.get("leaderid") == null ? null : Long.parseLong(map.get("leaderid").toString()));
+            team.setLeaderName(leaderName);
             team.setName(map.get("name").toString());
             team.setCreationDate(map.get("creation_date").toString());
             team.setLastEditionDate(map.get("last_edition_date").toString());

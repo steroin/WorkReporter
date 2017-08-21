@@ -9,6 +9,7 @@ public class Team {
     private String name;
     private String creationDate;
     private String lastEditionDate;
+    private String leaderName;
     private Long leaderId;
 
     public long getId() {
@@ -57,5 +58,13 @@ public class Team {
 
     public void setLeaderId(Long leaderId) {
         this.leaderId = leaderId;
+    }
+
+    public String getLeaderName() {
+        return leaderName;
+    }
+
+    public void setLeaderName(String leaderName) {
+        this.leaderName = leaderName;
     }
 }
