@@ -51,4 +51,36 @@ function initSolutionTeamsManagement($scope, $http) {
             finishLoading();
         });
     };
+
+    $scope.editTeamModalOpen = function() {
+        $("#teamEditModalNameError").hide();
+        $("#editTeamModalNameInput").val($scope.currentTeam.name);
+        $http.get('solution/employees', {params : {'teamid' : $scope.currentTeam.id}}).then(function(data) {
+            $scope.currentTeamMembers = data.data;
+            return $http.get('solution/teams_empty');
+        }).then(function(data) {
+            $("#editTeamModalLeaderInput").val($scope.currentTeam.leaderId);
+            $("#editTeamModal").modal("show");
+            finishLoading();
+        });
+    };
+
+    $scope.editTeamModalSave = function() {
+        var name = $("#editTeamModalNameInput").val();
+        if (name.length === 0) {
+            $("#teamEditModalNameError").show();
+            return;
+        } else $("#teamEditModalNameError").hide();
+        var leader = $("#editTeamModalLeaderInput").val();
+
+        $("#editTeamModal").modal("hide");
+        startLoading();
+        $scope.currentTeam.name = name;
+        $scope.currentTeam.leaderId = leader;
+        var leaderObject = $scope.currentTeamMembers.filter(function(item) {return item.id == leader})[0];
+        $scope.currentTeam.leaderName = leader.length == 0 ? "" : leaderObject.firstName+" "+leaderObject.lastName+" ("+leaderObject.login+")";
+        $http.patch('solution/teams/'+$scope.currentTeam.id, $scope.currentTeam).then(function(data) {
+            finishLoading();
+        });
+    };
 }

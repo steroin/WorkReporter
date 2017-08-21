@@ -1,0 +1,38 @@
+﻿<div id="editTeamModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edytuj zespół</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="editTeam" action="#" method="post">
+                            <div class="form-group">
+                                <label for="editTeamModalNameInput">Nazwa zespołu:</label>
+                                <input id="editTeamModalNameInput" type="text" class="form-control">
+                                <label for="editTeamModalLeaderInput">Lider:</label>
+                                <select id="editTeamModalLeaderInput" class="form-control">
+                                    <option value="">(brak)</option>
+                                    <option ng-repeat="member in currentTeamMembers" value="{{member.id}}">{{member.firstName}} {{member.lastName}} ({{member.login}})</option>
+                                </select>
+                            </div>
+
+                        </form>
+                        <div id="teamEditModalNameError" class="alert alert-danger modalError">
+                            Nieprawidłowa nazwa!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="modalButtonsContainer">
+                    <button id="editTeamModalSave" type="button" class="btn btn-default" ng-click="editTeamModalSave()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
