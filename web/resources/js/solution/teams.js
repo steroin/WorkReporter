@@ -97,4 +97,26 @@ function initSolutionTeamsManagement($scope, $http) {
             finishLoading();
         });
     };
+
+    $scope.deleteSelectedTeamsModalOpen = function() {
+        if ($scope.markedItems.length > 0) {
+            $("#deleteSelectedTeamsModal").modal("show");
+        }
+    };
+
+    $scope.deleteSelectedTeams = function() {
+        $("#deleteSelectedTeamsModal").modal("hide");
+        startLoading();
+        $http.delete('solution/teams', {params: {
+            'solutionid' : $scope.currentSolution.id,
+            'teams' : $scope.markedItems
+        }}).then(function(data) {
+            $scope.solutionTeams = $scope.solutionTeams.filter(function(obj) {
+                return $scope.markedItems.indexOf(obj['id']) == -1;
+            });
+            $scope.markedItems = [];
+            $scope.setUpTeamPagination($scope.currentPageId);
+            finishLoading();
+        });
+    };
 }
