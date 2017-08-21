@@ -83,4 +83,18 @@ function initSolutionTeamsManagement($scope, $http) {
             finishLoading();
         });
     };
+
+    $scope.deleteTeam = function() {
+        $("#deleteTeamModal").modal("hide");
+        startLoading();
+        $http.delete('solution/teams/'+$scope.currentTeam.id, {params: {
+            'solutionid' : $scope.currentSolution.id
+        }}).then(function(data) {
+            $scope.solutionTeams = $scope.solutionTeams.filter(function(obj) {
+                return obj['id'] != $scope.currentTeam.id;
+            });
+            $scope.setUpTeamPagination($scope.currentPageId);
+            finishLoading();
+        });
+    };
 }
