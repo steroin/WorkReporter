@@ -186,6 +186,7 @@ public class UserDaoImpl implements UserDao {
                 "accountid="+user.getAccountId()+", positionid="+user.getPositionId()+", personaldataid="+user.getPersonalDataId()+", " +
                 "working_time="+user.getWorkingTime()+", creation_date="+dateParser.parseToDatabaseTimestamp(user.getCreationDate())+", " +
                 "last_edition_date=sysdate where id="+user.getId()+"; \n");
+        queryBuilder.append("update team set leaderid=null where leaderid="+user.getId()+" and id!="+user.getTeamId()+"; \n");
         queryBuilder.append("END;");
         jdbcTemplate.execute(queryBuilder.toString());
     }
