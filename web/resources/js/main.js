@@ -32,7 +32,7 @@ module.controller('mainController', function($scope, $http) {
 
         $scope.days = [];
         var maxDays = $scope.currentYear >= today.getFullYear() && $scope.currentMonth >= today.getMonth()+1 ?
-            new Date($scope.currentYear, $scope.currentMonth, 0).getDate() : today.getDate();
+            today.getDate() : new Date($scope.currentYear, $scope.currentMonth, 0).getDate();
         var minDays = $scope.currentYear <= $scope.initialYear && $scope.currentMonth <= $scope.initialMonth ?
             $scope.initialDay : 1;
         for (var i = minDays; i <= maxDays ; i++) {
@@ -40,11 +40,13 @@ module.controller('mainController', function($scope, $http) {
         }
     };
     $scope.setCurrentDate = function(year, month, day) {
+        startLoading();
         $scope.currentYear = year;
         $scope.currentMonth = month;
         $scope.currentDay = day;
         $scope.validateDate();
         $scope.reloadCalendar();
+        finishLoading();
     };
 
     $scope.validateDate = function() {
