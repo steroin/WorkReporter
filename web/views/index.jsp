@@ -26,6 +26,7 @@
     <%@ include file="assets/navbar.html"%>
     <div class="container">
         <%@ include file="assets/dateChooser.html"%>
+        <%@ include file="assets/reportingCrud.html"%>
     </div>
 
 </body>

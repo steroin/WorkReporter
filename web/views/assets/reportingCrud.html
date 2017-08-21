@@ -1,0 +1,50 @@
+﻿<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <div id="reportingCrud" class="">
+            <div class="panel panel-default">
+                <table id="reportingCrudTable" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Godzina rozpoczęcia</th>
+                        <th>Liczba godzin</th>
+                        <th>Rodzaj pracy</th>
+                        <th>Projekt</th>
+                        <th>Status</th>
+                        <th>Data dodania</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <!--<tr ng-repeat="position in currentPage">
+                        <td><input type="checkbox" ng-checked="isMarked(position.id)" ng-click="crudItemCheckboxAction(position.id)"/></td>
+                        <td>{{position.name}}</td>
+                        <td>{{parseDateTimestamp(position.creationDate)}}</td>
+                        <td>{{parseDateTimestamp(position.lastEditionDate)}}</td>
+                        <td>
+                            <div class="crudTableActionButtonsContainer">
+                                <a href="#" data-toggle="modal" data-target="#editPositionModal" ng-click="setCurrentPosition(position.id); editPositionModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
+                                <a href="#" data-toggle="modal" data-target="#deletePositionModal" ng-click="setCurrentPosition(position.id)"><span class="glyphicon glyphicon-remove"></span></a>
+                            </div>
+                        </td>
+                    </tr>-->
+                </table>
+            </div>
+
+            <div class="row crudButtonsContainer">
+                <div class="col-xs-6">
+                    <div class="crudButtons">
+                        <button type="button" class="btn btn-primary crudButton" data-toggle="modal" data-target="#addLogEntryModal">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Dodaj zespol
+                        </button>
+                        <button id="deleteSelected" type="button" class="btn btn-danger crudButton" data-target="#deleteSelectedLogEntriesModal" ng-click="deleteSelectedLogEntriesModalOpen()">Usun zaznaczone</button>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
