@@ -2,19 +2,19 @@
  * Created by Sergiusz on 19.08.2017.
  */
 function disableAllAssets() {
-    $(".solutionContent").addClass('contentDisabled');
+    $(".pageContent").addClass('contentDisabled');
 }
 
 function enableAllAssets() {
-    $(".solutionContent").removeClass('contentDisabled');
+    $(".pageContent").removeClass('contentDisabled');
 }
 
 function hideLoader() {
-    $("#solutionChooserLoader").hide();
+    $("#pageLoader").hide();
 }
 
 function showLoader() {
-    $("#solutionChooserLoader").show();
+    $("#pageLoader").show();
 }
 
 function startLoading() {

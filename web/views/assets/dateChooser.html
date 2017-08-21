@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="row">
-        <div id="dateChooserLoader" class="loaderContainer">
+        <div id="pageLoader" class="loaderContainer">
             <div class="wrLoader"></div>
         </div>
     </div>
@@ -16,7 +16,7 @@
                 <button class="btn btn-primary dropdown-toggle chooseDateButton" type="button" data-toggle="dropdown">Wybierz dzień
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu dateChooserDropdownScrollPane">
                     <li ng-repeat="day in days">
                         <a href="#" ng-click="setCurrentDate(currentYear, currentMonth, day)">{{day}}</a>
                     </li>

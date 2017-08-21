@@ -113,7 +113,7 @@ module.controller('solutionController', function($scope, $http) {
     };
 
     $scope.activeContent = function(contentId, menuItemId) {
-        $(".solutionContent").hide();
+        $(".pageContent").hide();
         $(".solutionMenuItemActive").removeClass("solutionMenuItemActive");
         $("#"+menuItemId).addClass("solutionMenuItemActive");
         $("#"+contentId).show();

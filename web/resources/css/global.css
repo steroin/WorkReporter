@@ -46,6 +46,10 @@
     }
 }
 
+.pageContent {
+    display: none;
+}
+
 .contentDisabled {
     pointer-events: none;
     opacity: 0.4;

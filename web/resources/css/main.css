@@ -14,3 +14,8 @@
 .dateChooser {
     margin-bottom: 30px;
 }
+
+.dateChooserDropdownScrollPane {
+    height: 300px;
+    overflow-y: scroll;
+}
