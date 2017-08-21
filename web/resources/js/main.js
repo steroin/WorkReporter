@@ -15,6 +15,20 @@ module.controller('mainController', function($scope, $http) {
         $scope.initialMonth = 1;
         $scope.initialDay = 1;
         $scope.setCurrentDate(today.getFullYear(), today.getMonth()+1, today.getDate());
+        $(".pageContent").show();
+        startLoading();
+        $http.get('auth').then(function(data){
+            $scope.authentication = data.data;
+            return $http.get('entries', {params : {
+                'userid' : $scope.authentication.principal.userId,
+                'year' : $scope.currentYear,
+                'month' : $scope.currentMonth,
+                'day' : $scope.currentDay
+            }});
+        }).then(function(data) {
+            $scope.currentEntries = data.data;
+            finishLoading();
+        });
     };
     $scope.reloadCalendar = function() {
         var today = new Date();
