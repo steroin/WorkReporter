@@ -49,7 +49,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     private List<User> getAllUsersWithAttribute(String attribute, String value) {
-        String query = "select au.id as userid, solutionid, accountid, positionid, personaldataid, working_time, firstname, lastname, \n" +
+        String query = "select au.id as userid, solutionid, accountid, teamid, positionid, personaldataid, working_time, firstname, lastname, \n" +
                 "birthday, phone, login, email, status, creation_date, last_edition_date " +
                 "from appuser au " +
                 "join personal_data pd on au.personaldataid=pd.id " +

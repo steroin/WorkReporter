@@ -41,9 +41,7 @@ public class TeamDaoImpl implements TeamDao{
 
     @Override
     public List<Team> getAllTeamsInSolution(long solutionId) {
-        String query = "select * from team where solutionid="+solutionId;
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-        query = "select ta.userid as userid, ta.teamid as teamid from team_administrator ta join appuser au on ta.userid=au.id where au.solutionid="+solutionId;
+        String query = "select ta.userid as userid, ta.teamid as teamid from team_administrator ta join appuser au on ta.userid=au.id where au.solutionid="+solutionId;
         List<Map<String, Object>> adminsResult = jdbcTemplate.queryForList(query);
         Map<Long, List<Long>> adminsByTeam = new HashMap<Long, List<Long>>();
 
@@ -57,6 +55,9 @@ public class TeamDaoImpl implements TeamDao{
             adminsByTeam.get(teamId).add(userId);
         }
         List<Team> teams = new ArrayList<>();
+
+        query = "select * from team where solutionid="+solutionId;
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
 
         for (Map<String, Object> map : result) {
             Team team = new Team();

@@ -6,6 +6,7 @@ import pl.workreporter.web.beans.entities.position.Position;
 import pl.workreporter.web.beans.entities.team.Team;
 import pl.workreporter.web.beans.entities.team.TeamDao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +45,11 @@ public class TeamRestController {
     @RequestMapping(value="/solution/team", method = POST)
     public Team addTeam(@RequestBody Team team) {
         return teamDao.addTeam(team.getSolutionId(), team.getName(), team.getTeamAdministrators());
+    }
+
+    @RequestMapping(value = "/solution/teams_empty", method = GET)
+    public @ResponseBody
+    List<Long> emptyRequest() {
+        return new ArrayList<>();
     }
 }

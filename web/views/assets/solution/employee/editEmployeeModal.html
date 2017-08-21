@@ -1,0 +1,73 @@
+﻿<div id="editEmployeeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edytuj pracownika</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="editEmployee" action="#" method="post">
+                            <div class="form-group">
+                                <label for="editEmployeeModalFirstNameInput">Imię:</label>
+                                <input id="editEmployeeModalFirstNameInput" type="text" class="form-control" value="{{currentEmployee.firstName}}">
+                                <label for="editEmployeeModalLastNameInput">Nazwisko:</label>
+                                <input id="editEmployeeModalLastNameInput" type="text" class="form-control" value="{{currentEmployee.lastName}}">
+                                <label for="editEmployeeModalEmailInput">Email:</label>
+                                <input id="editEmployeeModalEmailInput" type="text" class="form-control" value="{{currentEmployee.email}}">
+                                <label for="editEmployeeModalLoginInput">Login:</label>
+                                <input id="editEmployeeModalLoginInput" type="text" class="form-control" value="{{currentEmployee.login}}">
+
+                                <label for="editEmployeeModalPositionInput">Stanowisko:</label>
+                                <select id="editEmployeeModalPositionInput" class="form-control">
+                                    <option ng-repeat="position in solutionPositions" value="{{position.id}}">{{position.name}}</option>
+                                </select>
+
+                                <label for="editEmployeeModalWorkingTimeInput">Wymiar czasu pracy:</label>
+                                <input id="editEmployeeModalWorkingTimeInput" type="text" class="form-control" value="{{currentEmployee.workingTime}}">
+
+                                <label for="editEmployeeModalTeamInput">Zespół:</label>
+                                <select id="editEmployeeModalTeamInput" class="form-control">
+                                    <option value="">(brak)</option>
+                                    <option ng-repeat="team in solutionTeams" value="{{team.id}}" id="teamOpt{{team.id}}">{{team.name}}</option>
+                                </select>
+
+                                <label for="editEmployeeModalBirthDayInput">Data urodzenia:</label>
+                                <input id="editEmployeeModalBirthDayInput" type="text" class="form-control" value="{{currentEmployee.birthday}}">
+
+                                <label for="editEmployeeModalPhoneInput">Nr telefonu:</label>
+                                <input id="editEmployeeModalPhoneInput" type="text" class="form-control" value="{{currentEmployee.phone}}">
+                            </div>
+                        </form>
+                        <div id="employeeEditModalFirstNameError" class="alert alert-danger modalError">
+                            Nieprawidłowe imię!
+                        </div>
+                        <div id="employeeEditModalLastNameError" class="alert alert-danger modalError">
+                            Nieprawidłowe nazwisko!
+                        </div>
+                        <div id="employeeEditModalEmailError" class="alert alert-danger modalError">
+                            Nieprawidłowy email!
+                        </div>
+                        <div id="employeeEditModalLoginError" class="alert alert-danger modalError">
+                            Nieprawidłowy login!
+                        </div>
+                        <div id="employeeEditModalPositionError" class="alert alert-danger modalError">
+                            Nieprawidłowe stanowisko!
+                        </div>
+                        <div id="employeeEditModalWorkingTimeError" class="alert alert-danger modalError">
+                            Nieprawidłowy wymiar czasu pracy!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="modalButtonsContainer">
+                    <button id="editPositionModalSave" type="button" class="btn btn-default" ng-click="editEmployeeModalSave()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
