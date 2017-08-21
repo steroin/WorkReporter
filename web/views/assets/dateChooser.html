@@ -1,0 +1,52 @@
+﻿<div class="dateChooser">
+    <div class="row">
+        <div class="dateTitle">
+            <h2>{{currentDay+' '+stringifyMonth(currentMonth)+' '+currentYear}}</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div id="dateChooserLoader" class="loaderContainer">
+            <div class="wrLoader"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-2">
+            <div class="dropdown dateChooserDropdown">
+                <button class="btn btn-primary dropdown-toggle chooseDateButton" type="button" data-toggle="dropdown">Wybierz dzień
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="day in days">
+                        <a href="#" ng-click="setCurrentDate(currentYear, currentMonth, day)">{{day}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="dropdown dateChooserDropdown">
+                <button class="btn btn-primary dropdown-toggle chooseDateButton" type="button" data-toggle="dropdown">Wybierz miesiac
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="month in months">
+                        <a href="#" ng-click="setCurrentDate(currentYear, month, currentDay)">{{stringifyMonth(month)}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="dropdown dateChooserDropdown">
+                <button class="btn btn-primary dropdown-toggle chooseDateButton" type="button" data-toggle="dropdown">Wybierz rok
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="year in years">
+                        <a href="#" ng-click="setCurrentDate(year, currentMonth, currentDay)">{{year}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
