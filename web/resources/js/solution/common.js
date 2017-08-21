@@ -28,5 +28,8 @@ function finishLoading() {
 }
 
 function parseDateTimestamp(date) {
+    if (date == null || typeof date == 'undefined' || date.length == 0) {
+        return "";
+    }
     return date.split(" ")[0];
 }

@@ -43,7 +43,7 @@ public class EmployeeRestController {
     public void removeSelectedEmployees(@RequestParam("solutionid") long solutionId,
                                         @RequestParam("employees") List<Long> employees,
                                         @RequestParam("personaldatas") List<Long> personalDatas,
-                                        @RequestParam("accoutns") List<Long> accounts) {
+                                        @RequestParam("accounts") List<Long> accounts) {
         userDao.removeUsers(solutionId, employees, personalDatas, accounts);
     }
 

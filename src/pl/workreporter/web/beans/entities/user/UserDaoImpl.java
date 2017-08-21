@@ -143,7 +143,7 @@ public class UserDaoImpl implements UserDao {
                 queryBuilder.append(" or ");
             }
         }
-        queryBuilder.append("); \n");
+        queryBuilder.append("; \n");
         queryBuilder.append("delete from account where ");
         for (int i = 0; i < accountIds.size(); i++) {
             queryBuilder.append("id="+accountIds.get(i));
@@ -151,7 +151,7 @@ public class UserDaoImpl implements UserDao {
                 queryBuilder.append(" or ");
             }
         }
-        queryBuilder.append("); \n");
+        queryBuilder.append("; \n");
         queryBuilder.append("delete from appuser where solutionid="+solutionId);
         queryBuilder.append(" and (");
         for (int i = 0; i < userIds.size(); i++) {
