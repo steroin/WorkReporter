@@ -77,8 +77,10 @@ public class TeamDaoImpl implements TeamDao{
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         long id = Long.parseLong(result.get("nextval").toString());
 
-        query = "insert into team(id, solutionid, leaderid, name, creation_date, last_edition_date) values(?, ?, ?, ?, sysdate, sydate)";
-        jdbcTemplate.update(query, id, solutionId, leaderId, name);
+        query = "insert into team(id, solutionid, leaderid, name, creation_date, last_edition_date) " +
+                "values("+id+", "+solutionId+", "+leaderId+", '"+name+"', sysdate, sysdate)";
+
+        jdbcTemplate.execute(query);
         return getTeamById(id);
     }
 

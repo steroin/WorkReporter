@@ -24,10 +24,17 @@ public class EmployeeRestController {
     @Autowired
     private MailNotificator notificator;
 
-    @RequestMapping(value = "/solution/employees", method = GET)
+    @RequestMapping(value = "/solution/employees", params = "id",  method = GET)
     public @ResponseBody
     List<User> getAllEmployees(@RequestParam("id") long solutionId) {
         List<User> result = userDao.getAllUsersInSolution(solutionId);
+        return result;
+    }
+
+    @RequestMapping(value = "/solution/employees", params = "teamid", method = GET)
+    public @ResponseBody
+    List<User> getAllEmployeesInTeam(@RequestParam("teamid") long teamId) {
+        List<User> result = userDao.getAllUsersInTeam(teamId);
         return result;
     }
 

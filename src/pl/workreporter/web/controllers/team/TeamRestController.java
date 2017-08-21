@@ -42,7 +42,7 @@ public class TeamRestController {
         teamDao.updateTeam(team);
     }
 
-    @RequestMapping(value="/solution/team", method = POST)
+    @RequestMapping(value="/solution/teams", method = POST)
     public Team addTeam(@RequestBody Team team) {
         return teamDao.addTeam(team.getSolutionId(), team.getName(), team.getLeaderId());
     }
