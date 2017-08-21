@@ -1,7 +1,5 @@
 package pl.workreporter.web.beans.entities.team;
 
-import java.util.List;
-
 /**
  * Created by Sergiusz on 19.08.2017.
  */
@@ -11,7 +9,7 @@ public class Team {
     private String name;
     private String creationDate;
     private String lastEditionDate;
-    private List<Long> teamAdministrators;
+    private Long leaderId;
 
     public long getId() {
         return id;
@@ -53,11 +51,11 @@ public class Team {
         this.lastEditionDate = lastEditionDate;
     }
 
-    public List<Long> getTeamAdministrators() {
-        return teamAdministrators;
+    public Long getLeaderId() {
+        return leaderId;
     }
 
-    public void setTeamAdministrators(List<Long> teamAdministrators) {
-        this.teamAdministrators = teamAdministrators;
+    public void setLeaderId(Long leaderId) {
+        this.leaderId = leaderId;
     }
 }

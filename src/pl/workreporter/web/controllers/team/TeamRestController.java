@@ -44,7 +44,7 @@ public class TeamRestController {
 
     @RequestMapping(value="/solution/team", method = POST)
     public Team addTeam(@RequestBody Team team) {
-        return teamDao.addTeam(team.getSolutionId(), team.getName(), team.getTeamAdministrators());
+        return teamDao.addTeam(team.getSolutionId(), team.getName(), team.getLeaderId());
     }
 
     @RequestMapping(value = "/solution/teams_empty", method = GET)

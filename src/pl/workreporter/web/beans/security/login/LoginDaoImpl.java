@@ -168,7 +168,7 @@ public class LoginDaoImpl implements LoginDao {
     }
 
     private List<Long> getManagedTeams(String keyAttribute, Object value) {
-        String query = "select ta.teamid from team_administrator ta inner join appuser au on ta.userid=au.id " +
+        String query = "select t.id as teamid from team t inner join appuser au on t.leaderid=au.id " +
                 "inner join account ac on au.accountid=ac.id where "+keyAttribute+"="+value.toString();
 
         List<Long> managedTeams = new ArrayList<>();

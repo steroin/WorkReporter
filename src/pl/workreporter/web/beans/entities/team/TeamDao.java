@@ -9,7 +9,7 @@ import java.util.List;
 public interface TeamDao {
     Team getTeamById(long id);
     List<Team> getAllTeamsInSolution(long solutionId);
-    Team addTeam(long solutionId, String name, List<Long> admins);
+    Team addTeam(long solutionId, String name, Long leaderId);
     void removeTeam(long solutionId, long teamId);
     void removeTeams(long solutionId, List<Long> teamIds);
     void updateTeam(Team team);
