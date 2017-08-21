@@ -14,8 +14,8 @@
                 <tr ng-repeat="position in currentPage">
                     <td><input type="checkbox" ng-checked="isMarked(position.id)" ng-click="crudItemCheckboxAction(position.id)"/></td>
                     <td>{{position.name}}</td>
-                    <td>{{position.creationDate}}</td>
-                    <td>{{position.lastEditionDate}}</td>
+                    <td>{{parseDateTimestamp(position.creationDate)}}</td>
+                    <td>{{parseDateTimestamp(position.lastEditionDate)}}</td>
                     <td>
                         <div class="crudTableActionButtonsContainer">
                             <a href="#" data-toggle="modal" data-target="#editPositionModal" ng-click="setCurrentPosition(position.id); editPositionModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>

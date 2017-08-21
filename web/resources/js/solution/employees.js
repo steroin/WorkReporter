@@ -32,6 +32,8 @@ function initSolutionEmployeesManagement($scope, $http) {
         $("#addEmployeeModalTeamInput").val("");
         $("#addEmployeeModalPositionInput").val($("#addEmployeeModalPositionInput option:first").val());
         $("#addEmployeeModalWorkingTimeInput").val("");
+        $("#addEmployeeModalBirthDayInput").val("");
+        $("#addEmployeeModalPhoneInput").val("");
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
             $scope.solutionPositions = data.data;
             return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
@@ -117,6 +119,8 @@ function initSolutionEmployeesManagement($scope, $http) {
         $("#editEmployeeModalEmailInput").val($scope.currentEmployee.email);
         $("#editEmployeeModalLoginInput").val($scope.currentEmployee.login);
         $("#editEmployeeModalWorkingTimeInput").val($scope.currentEmployee.workingTime);
+        $("#editEmployeeModalBirthDayInput").val(parseDateTimestamp($scope.currentEmployee.birthday));
+        $("#editEmployeeModalPhoneInput").val($scope.currentEmployee.phone);
 
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
             $scope.solutionPositions = data.data;

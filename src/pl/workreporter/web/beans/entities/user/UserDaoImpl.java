@@ -38,7 +38,7 @@ public class UserDaoImpl implements UserDao {
         user.setFirstName(result.get("firstname").toString());
         user.setLastName(result.get("lastname").toString());
         user.setBirthday(dateParser.parseToReadableDate(result.get("birthday")));
-        user.setPhone(result.get("phone") == null ? null : result.get("phone").toString());
+        user.setPhone(result.get("phone") == null ? "" : result.get("phone").toString());
         user.setLogin(result.get("login").toString());
         user.setEmail(result.get("email").toString());
         user.setAccountStatus(Integer.parseInt(result.get("status").toString()));
@@ -70,7 +70,7 @@ public class UserDaoImpl implements UserDao {
             user.setFirstName(map.get("firstname").toString());
             user.setLastName(map.get("lastname").toString());
             user.setBirthday(dateParser.parseToReadableDate(map.get("birthday")));
-            user.setPhone(map.get("phone") == null ? null : map.get("phone").toString());
+            user.setPhone(map.get("phone") == null ? "" : map.get("phone").toString());
             user.setLogin(map.get("login").toString());
             user.setEmail(map.get("email").toString());
             user.setAccountStatus(Integer.parseInt(map.get("status").toString()));
@@ -103,8 +103,13 @@ public class UserDaoImpl implements UserDao {
 
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("BEGIN \n");
+        if (phone == null || phone.isEmpty()) {
+            phone = "null";
+        } else {
+            phone = "'"+phone+"'";
+        }
         queryBuilder.append("insert into personal_data(id, firstname, lastname, birthday, phone) " +
-                "values("+personalDataId+", '"+firstName+"', '"+lastName+"', "+dateParser.parseToDatabaseTimestamp(birthday)+", '"+phone+"');\n");
+                "values("+personalDataId+", '"+firstName+"', '"+lastName+"', "+dateParser.parseToDatabaseTimestamp(birthday)+", "+phone+");\n");
         queryBuilder.append("insert into account(id, login, password, email, status) " +
                 "values("+accountId+", '"+login+"', '"+hashedPassword+"', '"+email+"', 1);\n");
 
@@ -164,8 +169,14 @@ public class UserDaoImpl implements UserDao {
     public void updateUser(User user) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("BEGIN \n");
+        String phone = user.getPhone();
+        if (phone == null || phone.isEmpty()) {
+            phone = "null";
+        } else {
+            phone = "'"+phone+"'";
+        }
         queryBuilder.append("update personal_data set firstname='"+user.getFirstName()+"', lastname='"+user.getLastName()+"', " +
-                "birthday="+dateParser.parseToDatabaseTimestamp(user.getBirthday())+", phone='"+user.getPhone()+"' " +
+                "birthday="+dateParser.parseToDatabaseTimestamp(user.getBirthday())+", phone="+phone+" " +
                 "where id="+user.getPersonalDataId()+"; \n");
 
         queryBuilder.append("update account set login='"+user.getLogin()+"', email='"+user.getEmail()+"', " +

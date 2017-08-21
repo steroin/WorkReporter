@@ -35,7 +35,7 @@
                                 </select>
 
                                 <label for="editEmployeeModalBirthDayInput">Data urodzenia:</label>
-                                <input id="editEmployeeModalBirthDayInput" type="text" class="form-control" value="{{currentEmployee.birthday}}">
+                                <input id="editEmployeeModalBirthDayInput" type="text" class="form-control" value="{{parseDateTimestamp(currentEmployee.birthday)}}">
 
                                 <label for="editEmployeeModalPhoneInput">Nr telefonu:</label>
                                 <input id="editEmployeeModalPhoneInput" type="text" class="form-control" value="{{currentEmployee.phone}}">

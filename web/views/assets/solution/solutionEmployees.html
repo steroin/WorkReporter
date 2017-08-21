@@ -15,7 +15,7 @@
                     <td><input type="checkbox" ng-checked="isMarked(employee.id)" ng-click="crudItemCheckboxAction(employee.id)"/></td>
                     <td>{{employee.firstName}} {{employee.lastName}}</td>
                     <td>{{employee.login}}</td>
-                    <td>{{employee.creationDate}}</td>
+                    <td>{{parseDateTimestamp(employee.creationDate)}}</td>
                     <td>
                         <div class="crudTableActionButtonsContainer">
                             <a href="#" data-target="#editEmployeeModal" ng-click="setCurrentEmployee(employee.id); editEmployeeModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>

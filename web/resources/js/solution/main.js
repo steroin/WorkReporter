@@ -157,6 +157,7 @@ module.controller('solutionController', function($scope, $http) {
             });
         }
     };
+    $scope.parseDateTimestamp = parseDateTimestamp;
     $scope.init();
 });
 

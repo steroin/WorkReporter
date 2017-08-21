@@ -26,3 +26,7 @@ function finishLoading() {
     hideLoader();
     enableAllAssets();
 }
+
+function parseDateTimestamp(date) {
+    return date.split(" ")[0];
+}
