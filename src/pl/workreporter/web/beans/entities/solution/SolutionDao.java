@@ -9,6 +9,7 @@ import java.util.Map;
 public interface SolutionDao {
     Solution loadSolution(long id);
     List<Long> getSolutionProjects(long id);
+    List<Long> getSolutionPositions(long id);
     List<Long> getSolutionTeams(long id);
     List<Long> getSolutionAdministrators(long id);
     List<Long> getSolutionEmployees(long id);

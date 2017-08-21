@@ -30,6 +30,7 @@ public class SolutionDaoImpl implements SolutionDao {
         solution.setCreationDate(result.get("creation_date").toString());
         solution.setLastEditionDate(result.get("last_edition_date").toString());
         solution.setProjects(getSolutionProjects(id));
+        solution.setPositions(getSolutionPositions(id));
         solution.setTeams(getSolutionTeams(id));
         solution.setAdministrators(getSolutionAdministrators(id));
         solution.setEmployees(getSolutionEmployees(id));
@@ -47,6 +48,19 @@ public class SolutionDaoImpl implements SolutionDao {
             projects.add(Long.parseLong(team.get("id").toString()));
         }
         return projects;
+    }
+
+    @Override
+    public List<Long> getSolutionPositions(long id) {
+        List<Long> positions = new ArrayList<>();
+        String query = "select id from position where solutionid="+id;
+
+        List<Map<String, Object>> positionsResult = jdbcTemplate.queryForList(query);
+
+        for (Map<String, Object> team : positionsResult) {
+            positions.add(Long.parseLong(team.get("id").toString()));
+        }
+        return positions;
     }
 
     @Override

@@ -14,6 +14,7 @@ public class Solution {
     private String lastEditionDate;
     private List<Long> administrators;
     private List<Long> projects;
+    private List<Long> positions;
     private List<Long> teams;
     private List<Long> employees;
 
@@ -63,6 +64,14 @@ public class Solution {
 
     public void setProjects(List<Long> projects) {
         this.projects = projects;
+    }
+
+    public List<Long> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<Long> positions) {
+        this.positions = positions;
     }
 
     public List<Long> getTeams() {
