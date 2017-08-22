@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="resources/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="resources/css/global.css">
     <link rel="stylesheet" href="resources/css/main.css">
 
