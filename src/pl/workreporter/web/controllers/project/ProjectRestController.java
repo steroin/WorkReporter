@@ -54,4 +54,10 @@ public class ProjectRestController {
         List<Map<String, String>> result = projectAssociationDao.getTeamsProjects(teamId);
         return result;
     }
+
+    @RequestMapping(value = "/solution/projectsteams/{projectid}", method = PATCH)
+    public void updateAssociatedProjectsState(@PathVariable("projectid") long teamId,
+                                              @RequestBody Map<String, List<Long>> teams) {
+        projectAssociationDao.updateProjectsTeamsState(teamId, teams.get("teamsToAdd"), teams.get("teamsToRemove"));
+    }
 }

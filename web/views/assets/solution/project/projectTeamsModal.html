@@ -1,0 +1,47 @@
+﻿<div id="projectTeamsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Zespoły przypisane do{{currentTeam.name}}</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="projectTeams" action="#" method="post">
+                            <div class="form-group">
+                                <label for="currentTeams">Zespoły:</label>
+                                <div id="currentTeams" class="panel panel-default modalList">
+                                    <div class="alert alert-info modalListItem" ng-repeat="team in currentProjectTeams">
+                                        <div class="col-xs-11 modalListItemText">
+                                            <span>{{team.name}}</span>
+                                        </div>
+                                        <div class="col-xs-1">
+                                            <a href="#" ng-click="removeTeamFromProject(team.id)"><span class="glyphicon glyphicon-remove"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="projectTeamsModalTeamInput">Wybierz zespół:</label>
+                                <select id="projectTeamsModalTeamInput" class="form-control">
+                                    <option ng-repeat="team in currentProjectAvailableTeams" value="{{team.id}}">{{team.name}}</option>
+                                </select>
+                            </div>
+                            <div class="modalButtonsContainer">
+                                <button type="button" class="btn btn-default" ng-click="addTeamToProject()">Dodaj</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="modalButtonsContainer">
+                    <button id="projectTeamsModalSave" type="button" class="btn btn-default" ng-click="projectTeamsModalSave()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

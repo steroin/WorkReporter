@@ -10,4 +10,5 @@ public interface ProjectAssociationDao {
     List<Map<String, String>> getProjectsTeams(long projectId);
     List<Map<String, String>> getTeamsProjects(long teamId);
     void updateTeamsProjectsState(long teamId, List<Long> projectsToAdd, List<Long> projectsToRemove);
+    void updateProjectsTeamsState(long projectId, List<Long> teamsToAdd, List<Long> teamsToRemove);
 }

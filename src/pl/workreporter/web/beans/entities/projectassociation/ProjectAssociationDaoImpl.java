@@ -78,4 +78,32 @@ public class ProjectAssociationDaoImpl implements ProjectAssociationDao {
         queryBuilder.append("end;");
         jdbcTemplate.execute(queryBuilder.toString());
     }
+
+    @Override
+    public void updateProjectsTeamsState(long projectId, List<Long> teamsToAdd, List<Long> teamsToRemove) {
+        if (teamsToAdd.isEmpty() && teamsToRemove.isEmpty()) return;
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("begin \n");
+        if (!teamsToRemove.isEmpty()) {
+            queryBuilder.append("delete from project_association where projectid = " + projectId + " and teamid in (");
+            int i = 0;
+            for (long id : teamsToRemove) {
+                i++;
+                queryBuilder.append(id + "");
+
+                if (i < teamsToRemove.size()) {
+                    queryBuilder.append(", ");
+                }
+            }
+            queryBuilder.append("); \n");
+        }
+
+        if (!teamsToAdd.isEmpty()) {
+            for (long id : teamsToAdd) {
+                queryBuilder.append("insert into project_association(id, teamid, projectid) values (projectassociationseq.nextval, " + id + ", " + projectId + "); \n");
+            }
+        }
+        queryBuilder.append("end;");
+        jdbcTemplate.execute(queryBuilder.toString());
+    }
 }

@@ -123,4 +123,61 @@ function initSolutionProjectsManagement($scope, $http) {
             finishLoading();
         });
     };
+
+
+
+    $scope.projectTeamsModalOpen = function() {
+        startLoading();
+        $http.get('solution/teams', {params: {'projectid' : $scope.currentProject.id}}).then(function(data) {
+            $scope.currentProjectTeams = data.data;
+            return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
+        }).then(function(data) {
+            var currentProjectTeamIds = $scope.currentProjectTeams.map(function(obj) { return parseInt(obj.id); });
+            $scope.currentProjectAllTeams = data.data;
+            $scope.currentProjectAvailableTeams = $scope.currentProjectAllTeams.filter(function(obj) { return currentProjectTeamIds.indexOf(obj.id) == -1 });
+            $("#projectTeamsModal").modal("show");
+            $scope.teamsToAdd = [];
+            $scope.teamsToRemove = [];
+            finishLoading();
+        });
+    };
+
+    $scope.addTeamToProject = function() {
+        var id = $("#projectTeamsModalTeamInput").val();
+        if (id == null || id.length == 0) return;
+
+        if ($scope.teamsToRemove.indexOf(id) > -1) {
+            $scope.teamsToRemove.splice($scope.teamsToRemove.indexOf(id), 1);
+        } else {
+            $scope.teamsToAdd.push(id);
+        }
+
+        var team = $scope.currentProjectAvailableTeams.filter(function(obj){return obj.id == id;})[0];
+        $scope.currentProjectTeams.push({'id' : id, 'name' : team.name});
+        var index = $scope.currentProjectAvailableTeams.indexOf(team);
+        if (index > -1) {
+            $scope.currentProjectAvailableTeams.splice(index, 1);
+        }
+    };
+
+    $scope.removeTeamFromProject = function(id) {
+        if ($scope.teamsToAdd.indexOf(id) > -1) {
+            $scope.teamsToAdd.splice($scope.teamsToAdd.indexOf(id), 1);
+        } else {
+            $scope.teamsToRemove.push(id);
+        }
+        $scope.currentProjectTeams = $scope.currentProjectTeams.filter(function(obj) { return obj.id != id; });
+        $scope.currentProjectAvailableTeams.push($scope.currentProjectAllTeams.filter(function(obj) { return obj.id == id; })[0]);
+    };
+
+    $scope.projectTeamsModalSave = function() {
+        startLoading();
+        $("#projectTeamsModal").modal("hide");
+        $http.patch('solution/projectsteams/'+$scope.currentProject.id, {
+            'teamsToAdd': $scope.teamsToAdd,
+            'teamsToRemove': $scope.teamsToRemove
+        }).then(function(data) {
+            finishLoading();
+        });
+    };
 }
