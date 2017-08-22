@@ -3,6 +3,7 @@ package pl.workreporter.web.controllers.team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.beans.entities.position.Position;
+import pl.workreporter.web.beans.entities.projectassociation.ProjectAssociationDao;
 import pl.workreporter.web.beans.entities.team.Team;
 import pl.workreporter.web.beans.entities.team.TeamDao;
 
@@ -18,9 +19,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 public class TeamRestController {
     @Autowired
-    TeamDao teamDao;
+    private TeamDao teamDao;
+    @Autowired
+    private ProjectAssociationDao projectAssociationDao;
 
-    @RequestMapping(value = "/solution/teams", method = GET)
+    @RequestMapping(value = "/solution/teams", params = "id", method = GET)
     public @ResponseBody
     List<Team> getAllTeams(@RequestParam("id") long solutionId) {
         List<Team> result = teamDao.getAllTeamsInSolution(solutionId);
@@ -51,5 +54,18 @@ public class TeamRestController {
     public @ResponseBody
     List<Long> emptyRequest() {
         return new ArrayList<>();
+    }
+
+    @RequestMapping(value = "/solution/teams", params = "projectid", method = GET)
+    public @ResponseBody
+    List<Map<String, String>> getAllTeamsWithProject(@RequestParam("projectid") long projectid) {
+        List<Map<String, String>> result = projectAssociationDao.getProjectsTeams(projectid);
+        return result;
+    }
+
+    @RequestMapping(value = "/solution/teamsprojects/{teamid}", method = PATCH)
+    public void updateAssociatedProjectsState(@PathVariable("teamid") long teamId,
+                                              @RequestBody Map<String, List<Long>> projects) {
+        projectAssociationDao.updateTeamsProjectsState(teamId, projects.get("projectsToAdd"), projects.get("projectsToRemove"));
     }
 }

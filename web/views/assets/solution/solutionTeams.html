@@ -5,21 +5,22 @@
                 <thead>
                 <tr>
                     <th style="width: 5%"></th>
-                    <th style="width: 30%">Zespół</th>
+                    <th style="width: 29%">Zespół</th>
                     <th style="width: 30%">Lider</th>
                     <th style="width: 14%">Data utworzenia</th>
                     <th style="width: 14%">Ostatnia edycja</th>
-                    <th style="width: 7%"></th>
+                    <th style="width: 8%"></th>
                 </tr>
                 </thead>
                 <tr ng-repeat="team in currentPage">
                     <td style="width: 5%"><input type="checkbox" ng-checked="isMarked(team.id)" ng-click="crudItemCheckboxAction(team.id)"/></td>
-                    <td style="width: 30%">{{team.name}}</td>
+                    <td style="width: 29%">{{team.name}}</td>
                     <td style="width: 30%">{{team.leaderName}}</td>
                     <td style="width: 14%">{{parseDateTimestamp(team.creationDate)}}</td>
                     <td style="width: 14%">{{parseDateTimestamp(team.lastEditionDate)}}</td>
-                    <td style="width: 7%">
+                    <td style="width: 8%">
                         <div class="crudTableActionButtonsContainer">
+                            <a href="#" data-target="#teamProjectsModal" ng-click="setCurrentTeam(team.id); teamProjectsModalOpen()"><span class="glyphicon glyphicon-list-alt"></span></a>
                             <a href="#" data-toggle="modal" data-target="#editTeamModal" ng-click="setCurrentTeam(team.id); editTeamModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
                             <a href="#" data-toggle="modal" data-target="#deleteTeamModal" ng-click="setCurrentTeam(team.id)"><span class="glyphicon glyphicon-remove"></span></a>
                         </div>

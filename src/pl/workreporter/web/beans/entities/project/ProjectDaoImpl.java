@@ -54,6 +54,12 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    public List<Project> getAllUsersProject(long userId) {
+        String query = "select * from project p join team t on p.";
+        return null;
+    }
+
+    @Override
     public Project addProject(long solutionId, String name, String desc) {
         String query = "select projectseq.nextval from dual";
         Map<String, Object> result = jdbcTemplate.queryForMap(query);

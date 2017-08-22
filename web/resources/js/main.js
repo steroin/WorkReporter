@@ -103,6 +103,14 @@ module.controller('mainController', function($scope, $http) {
         if (date > new Date()) return;
         $scope.setCurrentDate(date.getFullYear(), date.getMonth()+1, date.getDate());
     };
+
+    $scope.addLogEntryModalOpen = function() {
+
+    };
+
+    $scope.addLogEntryModalSave = function() {
+
+    };
     $scope.getStatusName = getStatusName;
     $scope.getStatusClass = getStatusClass;
     $scope.parseDateTimestamp = parseDateTimestamp;

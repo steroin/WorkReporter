@@ -19,30 +19,63 @@ public class ProjectAssociationDaoImpl implements ProjectAssociationDao {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public Map<Long, String> getProjectsTeams(long projectId) {
-        String query = "select * from project_association pa " +
+    public List<Map<String, String>> getProjectsTeams(long projectId) {
+        String query = "select pa.teamid as id, t.name as name from project_association pa " +
                 "join team t on pa.teamid = t.id " +
                 "where pa.projectid = "+projectId;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-        Map<Long, String> teams = new HashMap<>();
-
+        List<Map<String, String>> ret = new ArrayList<>();
         for (Map<String, Object> map : result) {
-            teams.put(Long.parseLong(map.get("teamid").toString()), map.get("name").toString());
+            Map<String, String> element = new HashMap<>();
+            element.put("id", map.get("id").toString());
+            element.put("name", map.get("name").toString());
+            ret.add(element);
         }
-        return teams;
+        return ret;
     }
 
     @Override
-    public Map<Long, String> getTeamsProjects(long teamId) {
-        String query = "select * from project_association pa " +
+    public List<Map<String, String>> getTeamsProjects(long teamId) {
+        String query = "select pa.projectid as id, p.name as name from project_association pa " +
                 "join project p on pa.projectid = p.id " +
                 "where pa.teamid = "+teamId;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-        Map<Long, String> projects = new HashMap<>();
+        List<Map<String, String>> ret = new ArrayList<>();
 
         for (Map<String, Object> map : result) {
-            projects.put(Long.parseLong(map.get("projectid").toString()), map.get("name").toString());
+            Map<String, String> element = new HashMap<>();
+            element.put("id", map.get("id").toString());
+            element.put("name", map.get("name").toString());
+            ret.add(element);
         }
-        return projects;
+        return ret;
+    }
+
+    @Override
+    public void updateTeamsProjectsState(long teamId, List<Long> projectsToAdd, List<Long> projectsToRemove) {
+        if (projectsToAdd.isEmpty() && projectsToRemove.isEmpty()) return;
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("begin \n");
+        if (!projectsToRemove.isEmpty()) {
+            queryBuilder.append("delete from project_association where teamid = " + teamId + " and projectid in (");
+            int i = 0;
+            for (long id : projectsToRemove) {
+                i++;
+                queryBuilder.append(id + "");
+
+                if (i < projectsToRemove.size()) {
+                    queryBuilder.append(", ");
+                }
+            }
+            queryBuilder.append("); \n");
+        }
+
+        if (!projectsToAdd.isEmpty()) {
+            for (long id : projectsToAdd) {
+                queryBuilder.append("insert into project_association(id, teamid, projectid) values (projectassociationseq.nextval, " + teamId + ", " + id + "); \n");
+            }
+        }
+        queryBuilder.append("end;");
+        jdbcTemplate.execute(queryBuilder.toString());
     }
 }

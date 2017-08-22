@@ -7,6 +7,7 @@ import java.util.Map;
  * Created by Sergiusz on 22.08.2017.
  */
 public interface ProjectAssociationDao {
-    Map<Long, String> getProjectsTeams(long projectId);
-    Map<Long, String> getTeamsProjects(long teamId);
+    List<Map<String, String>> getProjectsTeams(long projectId);
+    List<Map<String, String>> getTeamsProjects(long teamId);
+    void updateTeamsProjectsState(long teamId, List<Long> projectsToAdd, List<Long> projectsToRemove);
 }

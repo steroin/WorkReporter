@@ -127,3 +127,20 @@
 .crudPagination ul {
     margin-top: 12px;
 }
+
+.modalList {
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.modalListItem {
+    margin: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 4px;
+}
+
+.modalListItemText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

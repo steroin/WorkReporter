@@ -1,12 +1,10 @@
 package pl.workreporter.web.controllers.logentry;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.beans.entities.logentry.LogEntry;
 import pl.workreporter.web.beans.entities.logentry.LogEntryDao;
+import pl.workreporter.web.beans.entities.project.Project;
 
 import java.util.List;
 
@@ -29,4 +27,11 @@ public class LogEntryRestController {
         List<LogEntry> result = logEntryDao.getDailyLogEntries(userId, year, month, day);
         return result;
     }
+
+    @RequestMapping(value = "/entries/projects/{id}", method = GET)
+    public @ResponseBody
+    List<Project> getAllUsersProjects(@PathVariable("id") long userId) {
+        return null;
+    }
+
 }

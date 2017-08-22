@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.beans.entities.project.Project;
 import pl.workreporter.web.beans.entities.project.ProjectDao;
+import pl.workreporter.web.beans.entities.projectassociation.ProjectAssociationDao;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class ProjectRestController {
     @Autowired
     private ProjectDao projectDao;
+    @Autowired
+    private ProjectAssociationDao projectAssociationDao;
 
     @RequestMapping(value = "/solution/projects", method = GET)
     public @ResponseBody
@@ -43,5 +46,12 @@ public class ProjectRestController {
     @RequestMapping(value="/solution/projects", method = POST)
     public Project addProject(@RequestBody Map<String, String> project) {
         return projectDao.addProject(Long.parseLong(project.get("solutionid")), project.get("name"), project.get("description"));
+    }
+
+    @RequestMapping(value = "/solution/projects", params = "teamid", method = GET)
+    public @ResponseBody
+    List<Map<String, String>> getAllProjectsInTeam(@RequestParam("teamid") long teamId) {
+        List<Map<String, String>> result = projectAssociationDao.getTeamsProjects(teamId);
+        return result;
     }
 }
