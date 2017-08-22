@@ -129,8 +129,8 @@
 }
 
 .modalList {
-    height: 400px;
-    overflow-y: scroll;
+    height: 260px;
+    overflow-y: auto;
 }
 
 .modalListItem {
