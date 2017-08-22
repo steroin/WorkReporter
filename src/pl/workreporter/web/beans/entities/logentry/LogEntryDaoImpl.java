@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Sergiusz on 21.08.2017.
- */
 @Repository
 public class LogEntryDaoImpl implements LogEntryDao {
 
@@ -32,9 +29,13 @@ public class LogEntryDaoImpl implements LogEntryDao {
 
     @Override
     public List<LogEntry> getDailyLogEntries(long userId, int year, int month, int day) {
-        String query = "select id, userid, teamid, logtypeid, projectid, loggedhours, to_char(day, 'hh24;mi') as parsedday, " +
-                "log_date, last_edition_date, status, acceptedby " +
-                "from log_entry where userid="+userId+" and to_date(day)=to_date('"+day+"-"+month+"-"+year+"', 'dd-mm-yyyy')";
+        String query = "select le.id, le.userid, le.teamid, le.logtypeid, le.projectid, le.loggedhours, to_char(le.day, 'hh24;mi') as parsedday, " +
+                "le.log_date, le.last_edition_date, le.status, le.acceptedby, to_char(le.starthour, 'hh24:mi') as parsedstarthour, " +
+                "p.name as projectname, lt.name as logtypename " +
+                "from log_entry le " +
+                "left join project p on le.projectid=p.id " +
+                "join log_type lt on le.logtypeid=lt.id " +
+                "where le.userid="+userId+" and to_date(le.day)=to_date('"+day+"-"+month+"-"+year+"', 'dd-mm-yyyy')";
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         List<LogEntry> entries = new ArrayList<>();
 
@@ -51,6 +52,9 @@ public class LogEntryDaoImpl implements LogEntryDao {
             logEntry.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date")));
             logEntry.setStatus(Integer.parseInt(map.get("status").toString()));
             logEntry.setAcceptedBy(map.get("acceptedby") == null ? null : Long.parseLong(map.get("acceptedby").toString()));
+            logEntry.setStartHour(map.get("parsedstarthour").toString());
+            logEntry.setProjectName(map.get("projectname") == null ? null : map.get("projectname").toString());
+            logEntry.setLogTypeName(map.get("logtypename") == null ? null : map.get("logtypename").toString());
             entries.add(logEntry);
         }
         return entries;

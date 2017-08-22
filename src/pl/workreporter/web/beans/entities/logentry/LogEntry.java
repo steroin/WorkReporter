@@ -8,7 +8,9 @@ public class LogEntry {
     private long userId;
     private long teamId;
     private long logTypeId;
+    private String logTypeName;
     private Long projectId;
+    private String projectName;
     private String startHour;
     private double loggedHours;
     private String day;
@@ -49,12 +51,28 @@ public class LogEntry {
         this.logTypeId = logTypeId;
     }
 
+    public String getLogTypeName() {
+        return logTypeName;
+    }
+
+    public void setLogTypeName(String logTypeName) {
+        this.logTypeName = logTypeName;
+    }
+
     public Long getProjectId() {
         return projectId;
     }
 
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public String getStartHour() {
