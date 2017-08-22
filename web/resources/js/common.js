@@ -49,3 +49,17 @@ function stringifyMonth(month) {
     else if (month == 12) return "grudzień";
     else return "";
 }
+
+function getStatusName(status) {
+    if (status == 1) return 'Oczekujące';
+    else if (status == 2) return 'Zatwierdzone';
+    else if (status == 3) return 'Odrzucone';
+    else return "";
+}
+
+function getStatusClass(status) {
+    if (status == 1) return 'label label-primary';
+    else if (status == 2) return 'label label-success';
+    else if (status == 3) return 'label label-danger';
+    else return "";
+}
