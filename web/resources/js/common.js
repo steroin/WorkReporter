@@ -10,11 +10,11 @@ function enableAllAssets() {
 }
 
 function hideLoader() {
-    $("#pageLoader").hide();
+    $(".pageLoader").hide();
 }
 
 function showLoader() {
-    $("#pageLoader").show();
+    $(".pageLoader").show();
 }
 
 function startLoading() {

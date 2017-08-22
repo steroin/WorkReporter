@@ -10,24 +10,16 @@ module.config(['$httpProvider', function($httpProvider) {
 
 module.controller('mainController', function($scope, $http) {
     $scope.init = function() {
+        startLoading();
         var today = new Date();
         $scope.initialYear = 2016;
         $scope.initialMonth = 1;
         $scope.initialDay = 1;
-        $scope.setCurrentDate(today.getFullYear(), today.getMonth()+1, today.getDate());
+
         $(".pageContent").show();
-        startLoading();
         $http.get('auth').then(function(data){
             $scope.authentication = data.data;
-            return $http.get('entries', {params : {
-                'userid' : $scope.authentication.principal.userId,
-                'year' : $scope.currentYear,
-                'month' : $scope.currentMonth,
-                'day' : $scope.currentDay
-            }});
-        }).then(function(data) {
-            $scope.currentEntries = data.data;
-            finishLoading();
+            $scope.setCurrentDate(today.getFullYear(), today.getMonth()+1, today.getDate());
         });
     };
     $scope.reloadCalendar = function() {
@@ -55,12 +47,28 @@ module.controller('mainController', function($scope, $http) {
     };
     $scope.setCurrentDate = function(year, month, day) {
         startLoading();
+        disableDateChanges();
         $scope.currentYear = year;
         $scope.currentMonth = month;
         $scope.currentDay = day;
         $scope.validateDate();
         $scope.reloadCalendar();
-        finishLoading();
+        $http.get('entries', {params : {
+            'userid' : $scope.authentication.principal.userId,
+            'year' : $scope.currentYear,
+            'month' : $scope.currentMonth,
+            'day' : $scope.currentDay
+        }}).then(function(data) {
+            $scope.currentEntries = data.data;
+            enableDateChange();
+            finishLoading();
+        });
+    };
+    var disableDateChanges = function() {
+        $scope.dataChangeDisabled = true;
+    };
+    var enableDateChange = function() {
+        $scope.dataChangeDisabled = false;
     };
 
     $scope.validateDate = function() {
@@ -73,7 +81,7 @@ module.controller('mainController', function($scope, $http) {
             $scope.currentDay = $scope.initialDay;
         } else if ($scope.currentYear > today.getFullYear() ||
             ($scope.currentYear == today.getFullYear() && $scope.currentMonth > today.getMonth()+1) ||
-            ($scope.currentYear == today.getFullYear() && $scope.currentMonth > today.getMonth()+1 && $scope.currentDay > today.getDate())) {
+            ($scope.currentYear == today.getFullYear() && $scope.currentMonth == today.getMonth()+1 && $scope.currentDay > today.getDate())) {
             $scope.currentYear = today.getFullYear();
             $scope.currentMonth = today.getMonth()+1;
             $scope.currentDay = today.getDate();
@@ -81,6 +89,21 @@ module.controller('mainController', function($scope, $http) {
             $scope.currentDay = new Date($scope.currentYear, $scope.currentMonth, 0).getDate();
         }
     };
+
+    $scope.prevDay = function() {
+        if ($scope.dataChangeDisabled) return;
+        var date = new Date($scope.currentYear, $scope.currentMonth-1, $scope.currentDay);
+        date.setDate(date.getDate() - 1); //tu sie zjebalo, bo nie zjedza do miesiaca poprzedniego
+        $scope.setCurrentDate(date.getFullYear(), date.getMonth()+1, date.getDate());
+    };
+    $scope.nextDay = function() {
+        if ($scope.dataChangeDisabled) return;
+        var date = new Date($scope.currentYear, $scope.currentMonth-1, $scope.currentDay);
+        date.setDate(date.getDate() + 1);
+        if (date > new Date()) return;
+        $scope.setCurrentDate(date.getFullYear(), date.getMonth()+1, date.getDate());
+    };
+    $scope.parseDateTimestamp = parseDateTimestamp;
     $scope.stringifyMonth = stringifyMonth;
     $scope.init();
 });

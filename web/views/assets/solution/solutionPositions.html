@@ -4,19 +4,19 @@
             <table id="positionsCrudTable" class="table table-striped">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th>Stanowisko</th>
-                    <th>Data utworzenia</th>
-                    <th>Ostatnia edycja</th>
-                    <th></th>
+                    <th style="width: 5%"></th>
+                    <th style="width: 38%">Stanowisko</th>
+                    <th style="width: 25%">Data utworzenia</th>
+                    <th style="width: 25%">Ostatnia edycja</th>
+                    <th style="width: 7%"></th>
                 </tr>
                 </thead>
                 <tr ng-repeat="position in currentPage">
-                    <td><input type="checkbox" ng-checked="isMarked(position.id)" ng-click="crudItemCheckboxAction(position.id)"/></td>
-                    <td>{{position.name}}</td>
-                    <td>{{parseDateTimestamp(position.creationDate)}}</td>
-                    <td>{{parseDateTimestamp(position.lastEditionDate)}}</td>
-                    <td>
+                    <td style="width: 5%"><input type="checkbox" ng-checked="isMarked(position.id)" ng-click="crudItemCheckboxAction(position.id)"/></td>
+                    <td style="width: 30%">{{position.name}}</td>
+                    <td style="width: 25%">{{parseDateTimestamp(position.creationDate)}}</td>
+                    <td style="width: 25%">{{parseDateTimestamp(position.lastEditionDate)}}</td>
+                    <td style="width: 7%">
                         <div class="crudTableActionButtonsContainer">
                             <a href="#" data-toggle="modal" data-target="#editPositionModal" ng-click="setCurrentPosition(position.id); editPositionModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
                             <a href="#" data-toggle="modal" data-target="#deletePositionModal" ng-click="setCurrentPosition(position.id)"><span class="glyphicon glyphicon-remove"></span></a>

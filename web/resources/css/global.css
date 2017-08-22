@@ -46,8 +46,31 @@
     }
 }
 
+.dateTitle h2 {
+    line-height: 100%;
+}
+
+.dateChooserArrow {
+    margin: 16px;
+    color: #222222;
+}
+.dateChooserArrow:hover {
+    color: #666666;
+}
+
 .pageContent {
     display: none;
+}
+
+.pageContent table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.pageContent table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .contentDisabled {

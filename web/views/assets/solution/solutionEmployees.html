@@ -4,19 +4,19 @@
             <table id="employeesCrudTable" class="table table-striped">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th>Imię i nazwisko</th>
-                    <th>Login</th>
-                    <th>Data utworzenia</th>
-                    <th></th>
+                    <th style="width: 5%"></th>
+                    <th style="width: 34%">Imię i nazwisko</th>
+                    <th style="width: 34%">Login</th>
+                    <th style="width: 20%">Data utworzenia</th>
+                    <th style="width: 7%"></th>
                 </tr>
                 </thead>
                 <tr ng-repeat="employee in currentPage">
-                    <td><input type="checkbox" ng-checked="isMarked(employee.id)" ng-click="crudItemCheckboxAction(employee.id)"/></td>
-                    <td>{{employee.firstName}} {{employee.lastName}}</td>
-                    <td>{{employee.login}}</td>
-                    <td>{{parseDateTimestamp(employee.creationDate)}}</td>
-                    <td>
+                    <td style="width: 5%"><input type="checkbox" ng-checked="isMarked(employee.id)" ng-click="crudItemCheckboxAction(employee.id)"/></td>
+                    <td style="width: 34%">{{employee.firstName}} {{employee.lastName}}</td>
+                    <td style="width: 34%">{{employee.login}}</td>
+                    <td style="width: 20%">{{parseDateTimestamp(employee.creationDate)}}</td>
+                    <td style="width: 7%">
                         <div class="crudTableActionButtonsContainer">
                             <a href="#" data-target="#editEmployeeModal" ng-click="setCurrentEmployee(employee.id); editEmployeeModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
                             <a href="#" data-target="#deleteEmployeeModal" ng-click="setCurrentEmployee(employee.id); deleteEmployeeModalOpen()"><span class="glyphicon glyphicon-remove"></span></a>

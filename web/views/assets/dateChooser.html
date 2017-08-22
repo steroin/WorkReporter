@@ -1,11 +1,15 @@
 ﻿<div class="dateChooser">
     <div class="row">
         <div class="dateTitle">
-            <h2>{{currentDay+' '+stringifyMonth(currentMonth)+' '+currentYear}}</h2>
+            <h2>
+                <a href="#" class="dateChooserArrow" ng-click="prevDay()"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                {{currentDay+' '+stringifyMonth(currentMonth)+' '+currentYear}}
+                <a href="#" class="dateChooserArrow" ng-click="nextDay()"><span class="glyphicon glyphicon-chevron-right"></span></a>
+            </h2>
         </div>
     </div>
     <div class="row">
-        <div id="pageLoader" class="loaderContainer">
+        <div class="loaderContainer pageLoader">
             <div class="wrLoader"></div>
         </div>
     </div>
