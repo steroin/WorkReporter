@@ -9,8 +9,8 @@
                         <th style="width: 5%"></th>
                         <th style="width: 15%">Godzina rozpoczęcia</th>
                         <th style="width: 10%">Liczba godzin</th>
-                        <th style="width: 10%">Rodzaj pracy</th>
-                        <th style="width: 40%">Projekt</th>
+                        <th style="width: 15%">Rodzaj pracy</th>
+                        <th style="width: 35%">Projekt</th>
                         <th style="width: 15%">Status</th>
                         <th style="width: 5%"></th>
                     </tr>
@@ -19,11 +19,11 @@
                         <td style="width: 5%"><input type="checkbox" ng-checked="isMarked(position.id)" ng-click="crudItemCheckboxAction(position.id)"/></td>
                         <td style="width: 15%">{{entry.startHour}}</td>
                         <td style="width: 10%">{{entry.loggedHours}}</td>
-                        <td style="width: 10%">{{entry.logTypeName}}</td>
-                        <td style="width: 40%">{{entry.projectName}}</td>
+                        <td style="width: 15%">{{entry.logTypeName}}</td>
+                        <td style="width: 35%">{{entry.projectName}}</td>
                         <td style="width: 15%"><span class="{{getStatusClass(entry.status)}}">{{getStatusName(entry.status)}}</span></td>
                         <td style="width: 5%">
-                            <div class="crudTableActionButtonsContainer">
+                            <div ng-show="entry.status == 1" class="crudTableActionButtonsContainer">
                                 <a href="#" data-toggle="modal" data-target="#editPositionModal" ng-click="setCurrentPosition(position.id); editPositionModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
                                 <a href="#" data-toggle="modal" data-target="#deletePositionModal" ng-click="setCurrentPosition(position.id)"><span class="glyphicon glyphicon-remove"></span></a>
                             </div>
