@@ -106,6 +106,11 @@ module.controller('mainController', function($scope, $http) {
 
     $scope.addLogEntryModalOpen = function() {
         startLoading();
+        $("#addLogEntryStartHour").val("");
+        $("#addLogEntryLoggedHours").val("");
+        $("#logEntryAddStartHourError").hide();
+        $("#logEntryAddStartLoggedHours").hide();
+        $("#logEntryAddEntryTypeError").hide();
         $http.get('entrytypes').then(function(data) {
             $scope.logEntryTypes = data.data;
             return $http.get('entries/projects', {params: {'userid' : $scope.authentication.principal.userId}});
@@ -151,6 +156,72 @@ module.controller('mainController', function($scope, $http) {
             finishLoading();
         });
 
+    };
+
+    $scope.setCurrentLogEntry = function(id) {
+        for (var i = 0; i < $scope.currentEntries.length; i++) {
+            if ($scope.currentEntries[i].id == id) {
+                $scope.currentEntry = $scope.currentEntries[i];
+                return;
+            }
+        }
+    };
+
+    $scope.editLogEntryModalOpen = function() {
+        if ($scope.currentEntry.status != 1) return;
+        startLoading();
+        $("#editLogEntryStartHour").val($scope.currentEntry.startHour);
+        $("#editLogEntryLoggedHours").val($scope.currentEntry.loggedHours);
+        $("#logEntryEditStartHourError").hide();
+        $("#logEntryEditStartLoggedHours").hide();
+        $("#logEntryEditEntryTypeError").hide();
+        $http.get('entrytypes').then(function(data) {
+            $scope.logEntryTypes = data.data;
+            return $http.get('entries/projects', {params: {'userid' : $scope.authentication.principal.userId}});
+        }).then(function(data) {
+            $scope.userAvailableProjects = data.data;
+            $("#editLogEntryEntryType").val($scope.currentEntry.logTypeId);
+            return $http.get('empty');
+        }).then(function() {
+            $("#editLogEntryProject").val($scope.currentEntry.projectId);
+            finishLoading();
+            $("#editLogEntryModal").modal("show");
+        });
+    };
+
+    $scope.editLogEntryModalSave = function() {
+        var startHour = $("#editLogEntryStartHour").val();
+        if (startHour.length === 0) {
+            $(".logEntryEditStartHourError").show();
+            return;
+        } else $(".logEntryEditStartHourError").hide();
+
+        var loggedHours = $("#editLogEntryLoggedHours").val();
+        if (loggedHours.length === 0) {
+            $(".logEntryEditStartLoggedHours").show();
+            return;
+        } else $(".logEntryEditStartLoggedHours").hide();
+
+        var logType = $("#editLogEntryEntryType").val();
+        if (logType.length === 0) {
+            $(".logEntryEditEntryTypeError").show();
+            return;
+        } else $(".logEntryEditEntryTypeError").hide();
+        var project = $("#editLogEntryProject").val();
+
+        $("#editLogEntryModal").modal("hide");
+        startLoading();
+
+        $scope.currentEntry.startHour = startHour;
+        $scope.currentEntry.loggedHours = loggedHours;
+        $scope.currentEntry.logTypeId = logType;
+        $scope.currentEntry.projectId = project;
+        $scope.currentEntry.logTypeName = $scope.logEntryTypes.filter(function(obj) { return obj.id == logType;})[0].name;
+        var newName = $scope.userAvailableProjects.filter(function(obj) {return obj.id == project});
+        $scope.currentEntry.projectName = newName.length == 0 ? "" : newName[0].name;
+        $http.patch('entries/'+$scope.currentEntry.id, $scope.currentEntry).then(function() {
+            finishLoading();
+        });
     };
 
     $scope.getStatusName = getStatusName;

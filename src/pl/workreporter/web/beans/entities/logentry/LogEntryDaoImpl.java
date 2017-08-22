@@ -19,7 +19,7 @@ public class LogEntryDaoImpl implements LogEntryDao {
 
     @Override
     public LogEntry getLogEntryById(long id) {
-        String query = "select le.id, le.userid, le.teamid, le.logtypeid, le.projectid, le.loggedhours, to_char(le.day, 'hh24;mi') as parsedday, " +
+        String query = "select le.id, le.userid, le.teamid, le.logtypeid, le.projectid, le.loggedhours, to_char(le.day, 'dd-mm-yyyy') as parsedday, " +
         "le.log_date, le.last_edition_date, le.status, le.acceptedby, to_char(le.starthour, 'hh24:mi') as parsedstarthour, " +
                 "p.name as projectname, lt.name as logtypename " +
                 "from log_entry le " +
@@ -64,7 +64,7 @@ public class LogEntryDaoImpl implements LogEntryDao {
 
     @Override
     public List<LogEntry> getDailyLogEntries(long userId, int year, int month, int day) {
-        String query = "select le.id, le.userid, le.teamid, le.logtypeid, le.projectid, le.loggedhours, to_char(le.day, 'hh24;mi') as parsedday, " +
+        String query = "select le.id, le.userid, le.teamid, le.logtypeid, le.projectid, le.loggedhours, to_char(le.day, 'dd-mm-yyyy') as parsedday, " +
                 "le.log_date, le.last_edition_date, le.status, le.acceptedby, to_char(le.starthour, 'hh24:mi') as parsedstarthour, " +
                 "p.name as projectname, lt.name as logtypename " +
                 "from log_entry le " +
@@ -109,5 +109,22 @@ public class LogEntryDaoImpl implements LogEntryDao {
             types.add(type);
         }
         return types;
+    }
+
+    @Override
+    public void updateLogEntry(LogEntry logEntry) {
+        String query = "update log_entry set " +
+                "userid="+logEntry.getUserId()+", " +
+                "teamid="+logEntry.getTeamId()+", "+
+                "logtypeid="+logEntry.getLogTypeId()+", "+
+                "projectid="+logEntry.getProjectId()+", "+
+                "loggedhours="+logEntry.getLoggedHours()+", "+
+                "day=to_timestamp('"+logEntry.getDay()+"', 'dd-mm-yyyy'), "+
+                "log_date="+dateParser.parseToDatabaseTimestamp(logEntry.getLogDate())+", "+
+                "last_edition_date=sysdate, "+
+                "status="+logEntry.getStatus()+", "+
+                "starthour=to_timestamp('"+logEntry.getStartHour()+"', 'hh24:mi') " +
+                "where id="+logEntry.getId();
+        jdbcTemplate.execute(query);
     }
 }

@@ -29,6 +29,7 @@
         <%@ include file="assets/dateChooser.html"%>
         <%@ include file="assets/reportingCrud.html"%>
         <%@ include file="assets/logentry/addLogEntryModal.html"%>
+        <%@ include file="assets/logentry/editLogEntryModal.html"%>
     </div>
 
 </body>

@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.beans.entities.logentry.LogEntry;
 import pl.workreporter.web.beans.entities.logentry.LogEntryDao;
 import pl.workreporter.web.beans.entities.logentry.LogType;
+import pl.workreporter.web.beans.entities.position.Position;
 import pl.workreporter.web.beans.entities.project.Project;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -46,5 +48,10 @@ public class LogEntryRestController {
                 Double.parseDouble(logEntry.get("loggedhours")),
                 Long.parseLong(logEntry.get("logtypeid")),
                 logEntry.get("projectid") == null || logEntry.get("projectid").isEmpty() ? null : Long.parseLong(logEntry.get("projectid")));
+    }
+
+    @RequestMapping(value = "/entries/{id}", method = PATCH)
+    public void updateLogEntry(@PathVariable("id") long entryId, @RequestBody LogEntry logEntry) {
+        logEntryDao.updateLogEntry(logEntry);
     }
 }

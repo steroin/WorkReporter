@@ -11,4 +11,5 @@ public interface LogEntryDao {
                     long logTypeId, Long projectId);
     List<LogEntry> getDailyLogEntries(long userId, int year, int month, int day);
     List<LogType> getAllLogTypes();
+    void updateLogEntry(LogEntry logEntry);
 }

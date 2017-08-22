@@ -24,8 +24,8 @@
                         <td style="width: 15%"><span class="{{getStatusClass(entry.status)}}">{{getStatusName(entry.status)}}</span></td>
                         <td style="width: 5%">
                             <div ng-show="entry.status == 1" class="crudTableActionButtonsContainer">
-                                <a href="#" data-toggle="modal" data-target="#editPositionModal" ng-click="setCurrentPosition(position.id); editPositionModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
-                                <a href="#" data-toggle="modal" data-target="#deletePositionModal" ng-click="setCurrentPosition(position.id)"><span class="glyphicon glyphicon-remove"></span></a>
+                                <a href="#" data-target="#editLogEntryModal" ng-click="setCurrentLogEntry(entry.id); editLogEntryModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>
+                                <a href="#" data-target="#deleteLogEntryModal" ng-click="setCurrentLogEntry(entry.id); deleteLogEntryModalOpen()"><span class="glyphicon glyphicon-remove"></span></a>
                             </div>
                         </td>
                     </tr>
