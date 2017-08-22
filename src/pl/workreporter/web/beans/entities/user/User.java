@@ -9,6 +9,7 @@ public class User {
     private Long teamId;
     private long accountId;
     private long positionId;
+    private String positionName;
     private long personalDataId;
     private double workingTime;
     private String firstName;
@@ -59,6 +60,14 @@ public class User {
 
     public void setPositionId(long positionId) {
         this.positionId = positionId;
+    }
+
+    public String getPositionName() {
+        return positionName;
+    }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
     }
 
     public long getPersonalDataId() {

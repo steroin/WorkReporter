@@ -21,10 +21,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserById(long id) {
-        String query = "select * " +
+        String query = "select au.id as userid, au.solutionid, accountid, teamid, positionid, personaldataid, working_time, firstname, lastname, " +
+        "birthday, phone, login, email, status, au.creation_date, au.last_edition_date, p.name as positionname " +
                 "from appuser au " +
                 "join personal_data pd on au.personaldataid=pd.id " +
                 "join account ac on au.accountid=ac.id " +
+                "join position p on au.positionid = p.id " +
                 "where au.id="+id;
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         User user = new User();
@@ -44,16 +46,17 @@ public class UserDaoImpl implements UserDao {
         user.setAccountStatus(Integer.parseInt(result.get("status").toString()));
         user.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date")));
         user.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date")));
-
+        user.setPositionName(result.get("positionname").toString());
         return user;
     }
 
     private List<User> getAllUsersWithAttribute(String attribute, String value) {
-        String query = "select au.id as userid, solutionid, accountid, teamid, positionid, personaldataid, working_time, firstname, lastname, \n" +
-                "birthday, phone, login, email, status, creation_date, last_edition_date " +
+        String query = "select au.id as userid, au.solutionid, accountid, teamid, positionid, personaldataid, working_time, firstname, lastname, \n" +
+                "birthday, phone, login, email, status, au.creation_date, au.last_edition_date, p.name as positionname " +
                 "from appuser au " +
                 "join personal_data pd on au.personaldataid=pd.id " +
                 "join account ac on au.accountid=ac.id " +
+                "join position p on au.positionid = p.id " +
                 "where "+attribute+"="+value;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         List<User> usersList = new ArrayList<>();
@@ -76,13 +79,14 @@ public class UserDaoImpl implements UserDao {
             user.setAccountStatus(Integer.parseInt(map.get("status").toString()));
             user.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date")));
             user.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date")));
+            user.setPositionName(map.get("positionname").toString());
             usersList.add(user);
         }
         return usersList;
     }
     @Override
     public List<User> getAllUsersInSolution(long solutionId) {
-        return getAllUsersWithAttribute("solutionid", solutionId+"");
+        return getAllUsersWithAttribute("au.solutionid", solutionId+"");
     }
 
     @Override
