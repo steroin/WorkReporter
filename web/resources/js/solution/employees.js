@@ -127,7 +127,7 @@ function initSolutionEmployeesManagement($scope, $http) {
             return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
         }).then(function(data) {
             $scope.solutionTeams = data.data;
-            return $http.get('solution/teams_empty')
+            return $http.get('empty')
         }).then(function(data) {
             $("#editEmployeeModalPositionInput").val($scope.currentEmployee.positionId);
             $("#editEmployeeModalTeamInput").val($scope.currentEmployee.teamId);

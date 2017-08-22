@@ -50,12 +50,6 @@ public class TeamRestController {
         return teamDao.addTeam(team.getSolutionId(), team.getName(), team.getLeaderId());
     }
 
-    @RequestMapping(value = "/solution/teams_empty", method = GET)
-    public @ResponseBody
-    List<Long> emptyRequest() {
-        return new ArrayList<>();
-    }
-
     @RequestMapping(value = "/solution/teams", params = "projectid", method = GET)
     public @ResponseBody
     List<Map<String, String>> getAllTeamsWithProject(@RequestParam("projectid") long projectid) {

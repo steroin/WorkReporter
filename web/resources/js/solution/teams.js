@@ -57,7 +57,7 @@ function initSolutionTeamsManagement($scope, $http) {
         $("#editTeamModalNameInput").val($scope.currentTeam.name);
         $http.get('solution/employees', {params : {'teamid' : $scope.currentTeam.id}}).then(function(data) {
             $scope.currentTeamMembers = data.data;
-            return $http.get('solution/teams_empty');
+            return $http.get('empty');
         }).then(function(data) {
             $("#editTeamModalLeaderInput").val($scope.currentTeam.leaderId);
             $("#editTeamModal").modal("show");

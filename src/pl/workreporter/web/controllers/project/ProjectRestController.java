@@ -28,7 +28,7 @@ public class ProjectRestController {
         return result;
     }
 
-    @RequestMapping(value = "/solution/projects/{id}", method = DELETE)
+    @RequestMapping(value = "/solution/projects/{id}", params="solutionid", method = DELETE)
     public void removeProject(@RequestParam("solutionid") long solutionId, @PathVariable("id") long projectId) {
         projectDao.removeProject(solutionId, projectId);
     }
@@ -59,5 +59,11 @@ public class ProjectRestController {
     public void updateAssociatedProjectsState(@PathVariable("projectid") long teamId,
                                               @RequestBody Map<String, List<Long>> teams) {
         projectAssociationDao.updateProjectsTeamsState(teamId, teams.get("teamsToAdd"), teams.get("teamsToRemove"));
+    }
+
+    @RequestMapping(value = "/entries/projects", params="userid", method = GET)
+    public @ResponseBody
+    List<Project> getAllUsersProjects(@RequestParam("userid") long userId) {
+        return projectDao.getAllUsersProject(userId);
     }
 }

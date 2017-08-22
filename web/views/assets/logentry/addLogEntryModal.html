@@ -33,13 +33,14 @@
                             <div class="form-group">
                                 <label for="addLogEntryEntryType">Rodzaj pracy:</label>
                                 <select id="addLogEntryEntryType" class="form-control">
-                                    <option value="">(brak)</option>
+                                    <option ng-repeat="type in logEntryTypes" value="{{type.id}}">{{type.name}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="addLogEntryProject">Projekt:</label>
                                 <select id="addLogEntryProject" class="form-control">
                                     <option value="">(brak)</option>
+                                    <option ng-repeat="project in userAvailableProjects" value="{{project.id}}">{{project.name}}</option>
                                 </select>
                             </div>
                         </form>

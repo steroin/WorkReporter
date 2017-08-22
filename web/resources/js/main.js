@@ -93,7 +93,7 @@ module.controller('mainController', function($scope, $http) {
     $scope.prevDay = function() {
         if ($scope.dataChangeDisabled) return;
         var date = new Date($scope.currentYear, $scope.currentMonth-1, $scope.currentDay);
-        date.setDate(date.getDate() - 1); //tu sie zjebalo, bo nie zjedza do miesiaca poprzedniego
+        date.setDate(date.getDate() - 1);
         $scope.setCurrentDate(date.getFullYear(), date.getMonth()+1, date.getDate());
     };
     $scope.nextDay = function() {
@@ -105,12 +105,54 @@ module.controller('mainController', function($scope, $http) {
     };
 
     $scope.addLogEntryModalOpen = function() {
-
+        startLoading();
+        $http.get('entrytypes').then(function(data) {
+            $scope.logEntryTypes = data.data;
+            return $http.get('entries/projects', {params: {'userid' : $scope.authentication.principal.userId}});
+        }).then(function(data) {
+            $scope.userAvailableProjects = data.data;
+            finishLoading();
+            $("#addLogEntryModal").modal("show");
+        });
     };
 
     $scope.addLogEntryModalSave = function() {
+        var startHour = $("#addLogEntryStartHour").val();
+        if (startHour.length === 0) {
+            $(".logEntryAddStartHourError").show();
+            return;
+        } else $(".logEntryAddStartHourError").hide();
+
+        var loggedHours = $("#addLogEntryLoggedHours").val();
+        if (loggedHours.length === 0) {
+            $(".logEntryAddStartLoggedHours").show();
+            return;
+        } else $(".logEntryAddStartLoggedHours").hide();
+
+        var logType = $("#addLogEntryEntryType").val();
+        if (logType.length === 0) {
+            $(".logEntryAddEntryTypeError").show();
+            return;
+        } else $(".logEntryAddEntryTypeError").hide();
+        var project = $("#addLogEntryProject").val();
+
+        $("#addLogEntryModal").modal("hide");
+        startLoading();
+        var objectToAdd = {
+            'userid' : $scope.authentication.principal.userId,
+            'day' : $scope.currentDay+"-"+$scope.currentMonth+"-"+$scope.currentYear,
+            'starthour' : startHour,
+            'loggedhours' : loggedHours,
+            'logtypeid' : logType,
+            'projectid' : project
+        };
+        $http.post('entries', objectToAdd).then(function(data) {
+            $scope.currentEntries.push(data.data);
+            finishLoading();
+        });
 
     };
+
     $scope.getStatusName = getStatusName;
     $scope.getStatusClass = getStatusClass;
     $scope.parseDateTimestamp = parseDateTimestamp;

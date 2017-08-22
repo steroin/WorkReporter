@@ -55,8 +55,24 @@ public class ProjectDaoImpl implements ProjectDao {
 
     @Override
     public List<Project> getAllUsersProject(long userId) {
-        String query = "select * from project p join team t on p.";
-        return null;
+        String query = "select p.id, p.solutionid, p.name, p.description, p.creation_date, p.last_edition_date from project p " +
+                "join project_association pa on p.id=pa.projectid " +
+                "join appuser au on au.teamid=pa.teamid " +
+                "where au.id = "+userId;
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
+        List<Project> projects = new ArrayList<>();
+
+        for (Map<String, Object> map : result) {
+            Project project = new Project();
+            project.setId(Long.parseLong(map.get("id").toString()));
+            project.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
+            project.setName(map.get("name").toString());
+            project.setDescription(map.get("description") == null ? "" : map.get("description").toString());
+            project.setCreationDate(map.get("creation_date").toString());
+            project.setLastEditionDate(map.get("last_edition_date").toString());
+            projects.add(project);
+        }
+        return projects;
     }
 
     @Override
