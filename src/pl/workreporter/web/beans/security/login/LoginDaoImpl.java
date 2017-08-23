@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
 import pl.workreporter.security.login.CompleteUserDetails;
 import pl.workreporter.security.login.UserRole;
@@ -58,7 +59,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public String getPasswordHash(long id) {
-        return getPasswordHash("id", id);
+        return getPasswordHash("au.id", id);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class LoginDaoImpl implements LoginDao {
     }
 
     private String getPasswordHash(String keyAttribute, Object value) {
-        String query = "select password from account where "+keyAttribute+"="+value.toString();
+        String query = "select password from account ac join appuser au on ac.id=au.accountid where "+keyAttribute+"="+value.toString();
         String password = jdbcTemplate.queryForObject(query, String.class);
         return password;
     }
@@ -165,6 +166,15 @@ public class LoginDaoImpl implements LoginDao {
     @Override
     public List<Long> getManagedTeamsByEmail(String email) {
         return getManagedTeams("email", "'"+email+"'");
+    }
+
+    @Override
+    public void changeUserPassword(long id, String hashedPassword) {
+        String query = "select accountid from appuser where id="+id;
+        Map<String, Object> result = jdbcTemplate.queryForMap(query);
+        long accountId = Long.parseLong(result.get("accountid").toString());
+        query = "update account set password=? where id=?";
+        jdbcTemplate.update(query, hashedPassword, accountId);
     }
 
     private List<Long> getManagedTeams(String keyAttribute, Object value) {

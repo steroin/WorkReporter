@@ -3,7 +3,7 @@ package pl.workreporter.web.controllers.employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.service.mail.MailNotificator;
-import pl.workreporter.web.service.pwdgen.PasswordGenerator;
+import pl.workreporter.web.service.password.generator.PasswordGenerator;
 import pl.workreporter.web.beans.entities.user.User;
 import pl.workreporter.web.beans.entities.user.UserDao;
 

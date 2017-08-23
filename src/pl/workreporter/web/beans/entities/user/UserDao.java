@@ -14,5 +14,4 @@ public interface UserDao {
     void removeUser(long solutionId, long userId, long personalDataId, long accountId);
     void removeUsers(long solutionId, List<Long> userIds, List<Long> personalDataIds, List<Long> accountIds);
     void updateUser(User user);
-    void changePassword(long id, String newPassword);
 }

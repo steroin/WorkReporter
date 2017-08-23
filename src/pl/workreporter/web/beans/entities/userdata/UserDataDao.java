@@ -5,4 +5,5 @@ package pl.workreporter.web.beans.entities.userdata;
  */
 public interface UserDataDao {
     UserData getUserData(long userId);
+    void updateUserData(UserData userData);
 }

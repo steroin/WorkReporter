@@ -1,4 +1,4 @@
-package pl.workreporter.web.service.pwdgen;
+package pl.workreporter.web.service.password.generator;
 
 import org.springframework.stereotype.Service;
 

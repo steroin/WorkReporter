@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.workreporter.security.login.CompleteUserDetails;
 import pl.workreporter.web.beans.entities.userdata.UserData;
 import pl.workreporter.web.beans.entities.userdata.UserDataDao;
+import pl.workreporter.web.service.password.changer.PasswordChangeResult;
+import pl.workreporter.web.service.password.changer.PasswordChanger;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 
 /**
  * Created by Sergiusz on 23.08.2017.
@@ -18,7 +21,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RestController
 public class UserDataRestController {
     @Autowired
-    UserDataDao userDataDao;
+    private UserDataDao userDataDao;
+    @Autowired
+    private PasswordChanger passwordChanger;
 
     @RequestMapping(value = "/users/{id}", method = GET)
     @ResponseBody
@@ -35,7 +40,18 @@ public class UserDataRestController {
             cud = (CompleteUserDetails) principal;
         }
         long userId = cud.getUserId();
-        System.out.println("userid: "+userId);
         return userDataDao.getUserData(userId);
+    }
+
+    @RequestMapping(value = "/pwd/{id}", method = PATCH)
+    @ResponseBody
+    public PasswordChangeResult changePassword(@PathVariable("id") long userId, String password, String passwordRepeat, String newPassword) {
+        return passwordChanger.changePassword(userId, password, passwordRepeat, newPassword);
+    }
+
+    @RequestMapping(value = "/users/{id}", method = PATCH)
+    @ResponseBody
+    public void updateUserData(@PathVariable("id") long userId, UserData userData) {
+        userDataDao.updateUserData(userData);
     }
 }

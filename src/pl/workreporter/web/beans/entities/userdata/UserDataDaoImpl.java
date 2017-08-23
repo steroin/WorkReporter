@@ -47,4 +47,26 @@ public class UserDataDaoImpl implements UserDataDao {
         userData.setWorkingTime(Double.parseDouble(result.get("working_time").toString()));
         return userData;
     }
+
+    @Override
+    public void updateUserData(UserData userData) {
+        String query = "select pd.id as personaldataid " +
+                "from appuser au " +
+                "join personal_data pd on au.personaldataid=pd.id " +
+                "where au.id="+userData.getUserId();
+        Map<String, Object> result = jdbcTemplate.queryForMap(query);
+        long personalDataId = Long.parseLong(result.get("personaldataid").toString());
+        String phone = userData.getPhone();
+        if (phone == null || phone.isEmpty()) {
+            phone = "null";
+        } else {
+            phone = "'"+phone+"'";
+        }
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("begin \n");
+        queryBuilder.append("update personal_data set phone="+phone+", birthday="+dateParser.parseToDatabaseTimestamp(userData.getBirthday())+" " +
+                "where id="+personalDataId+"; \n");
+        queryBuilder.append("end;");
+        jdbcTemplate.execute(queryBuilder.toString());
+    }
 }

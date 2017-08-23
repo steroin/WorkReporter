@@ -194,14 +194,4 @@ public class UserDaoImpl implements UserDao {
         queryBuilder.append("END;");
         jdbcTemplate.execute(queryBuilder.toString());
     }
-
-    @Override
-    public void changePassword(long id, String newPassword) {
-        String query = "select accountid from appuser where id="+id;
-        Map<String, Object> result = jdbcTemplate.queryForMap(query);
-        long accountId = Long.parseLong(result.get("accountid").toString());
-        String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt(16));
-        query = "update account set password=? where id=?";
-        jdbcTemplate.update(query, hashedPassword, accountId);
-    }
 }
