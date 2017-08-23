@@ -16,7 +16,7 @@
                     </tr>
                     </thead>
                     <tr ng-repeat="entry in currentEntries">
-                        <td style="width: 5%"><input type="checkbox" ng-checked="isMarked(position.id)" ng-click="crudItemCheckboxAction(position.id)"/></td>
+                        <td style="width: 5%"><input type="checkbox" ng-disabled="entry.status != 1" ng-checked="isMarked(entry.id)" ng-click="crudItemCheckboxAction(entry.id)"/></td>
                         <td style="width: 15%">{{entry.startHour}}</td>
                         <td style="width: 10%">{{entry.loggedHours}}</td>
                         <td style="width: 15%">{{entry.logTypeName}}</td>

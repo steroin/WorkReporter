@@ -60,6 +60,7 @@ module.controller('mainController', function($scope, $http) {
             'day' : $scope.currentDay
         }}).then(function(data) {
             $scope.currentEntries = data.data;
+            $scope.markedItems = [];
             enableDateChange();
             finishLoading();
         });
@@ -238,6 +239,47 @@ module.controller('mainController', function($scope, $http) {
             $scope.currentEntries = $scope.currentEntries.filter(function(obj) {return obj.id != $scope.currentEntry.id});
             finishLoading();
         });
+    };
+
+    $scope.deleteSelectedLogEntriesModalOpen = function() {
+        if ($scope.markedItems.length < 1 || $scope.currentEntries.filter(function(obj) {
+            return obj.status != 1 && $scope.markedItems.indexOf(obj.id) > -1;
+        }).length > 0) return;
+
+        $("#deleteSelectedLogEntriesModal").modal("show");
+    };
+
+    $scope.deleteSelectedLogEntries = function() {
+        $("#deleteSelectedLogEntriesModal").modal("hide");
+        startLoading();
+        $http.delete('entries', {params : {'entries' : $scope.markedItems}}).then(function(data) {
+            $scope.currentEntries = $scope.currentEntries.filter(function(obj) {
+                return $scope.markedItems.indexOf(obj['id']) == -1;
+            });
+            finishLoading();
+            $scope.markedItems = [];
+        });
+    };
+
+    $scope.isMarked = function(id) { return $scope.markedItems.indexOf(id) > -1 };
+
+    $scope.markItem = function(id) {
+        if (!$scope.markedItems.indexOf(id) > -1) {
+            $scope.markedItems.push(id);
+        }
+    };
+    $scope.unmarkItem = function(id) {
+        if ($scope.markedItems.indexOf(id) > -1) {
+            $scope.markedItems.splice($scope.markedItems.indexOf(id), 1);
+        }
+    };
+
+    $scope.crudItemCheckboxAction = function(id) {
+        if ($scope.isMarked(id)) {
+            $scope.unmarkItem(id);
+        } else {
+            $scope.markItem(id);
+        }
     };
 
     $scope.getStatusName = getStatusName;

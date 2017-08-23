@@ -31,6 +31,7 @@
         <%@ include file="assets/logentry/addLogEntryModal.html"%>
         <%@ include file="assets/logentry/editLogEntryModal.html"%>
         <%@ include file="assets/logentry/deleteLogEntryModal.html"%>
+        <%@ include file="assets/logentry/deleteSelectedLogEntriesModal.html"%>
     </div>
 
 </body>
