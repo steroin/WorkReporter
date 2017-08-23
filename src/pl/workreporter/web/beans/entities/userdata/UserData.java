@@ -5,9 +5,9 @@ package pl.workreporter.web.beans.entities.userdata;
  */
 public class UserData {
     private long userId;
-    private String firsName;
+    private String firstName;
     private String lastName;
-    private String birthDay;
+    private String birthday;
     private String phone;
     private String login;
     private String email;
@@ -24,12 +24,12 @@ public class UserData {
         this.userId = userId;
     }
 
-    public String getFirsName() {
-        return firsName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirsName(String firsName) {
-        this.firsName = firsName;
+    public void setFirstName(String firsName) {
+        this.firstName = firsName;
     }
 
     public String getLastName() {
@@ -40,12 +40,12 @@ public class UserData {
         this.lastName = lastName;
     }
 
-    public String getBirthDay() {
-        return birthDay;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setBirthDay(String birthDay) {
-        this.birthDay = birthDay;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public String getPhone() {

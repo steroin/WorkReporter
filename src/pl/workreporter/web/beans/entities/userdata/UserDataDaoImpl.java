@@ -20,7 +20,7 @@ public class UserDataDaoImpl implements UserDataDao {
 
     @Override
     public UserData getUserData(long userId) {
-        String query = "select pd.firstname, pd.lastname, pd.birthday, pd.phone " +
+        String query = "select pd.firstname, pd.lastname, pd.birthday, pd.phone, " +
                 "ac.login, ac.email, s.name as solutionname, t.name as teamname, " +
                 "p.name as positionname, au.working_time " +
                 "from appuser au " +
@@ -35,9 +35,9 @@ public class UserDataDaoImpl implements UserDataDao {
         UserData userData = new UserData();
 
         userData.setUserId(userId);
-        userData.setFirsName(result.get("firstname").toString());
+        userData.setFirstName(result.get("firstname").toString());
         userData.setLastName(result.get("lastname").toString());
-        userData.setBirthDay(dateParser.parseToReadableDate(result.get("birthday").toString()));
+        userData.setBirthday(dateParser.parseToReadableDate(result.get("birthday").toString()));
         userData.setPhone(result.get("phone") == null ? null : result.get("phone").toString());
         userData.setLogin(result.get("login").toString());
         userData.setEmail(result.get("email").toString());

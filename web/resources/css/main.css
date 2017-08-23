@@ -30,3 +30,8 @@
 .inputHint {
     margin: 6px;
 }
+
+.logEntryStatus {
+    display: inline-block;
+    width: 100px;
+}

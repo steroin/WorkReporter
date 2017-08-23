@@ -1,0 +1,139 @@
+﻿<div class="row">
+    <div class="userDataTitle">
+        <h2>Dane użytkownika</h2>
+    </div>
+</div>
+<div id="userData" class="row pageContent">
+    <div class="col-xs-3"></div>
+    <div class="col-xs-6">
+        <div class="panel panel-default">
+            <ul class="nav nav-tabs nav-justified userDataNavBar">
+                <li id="personalDataTab" class="dataTab"><a href="#" ng-click="activePersonalData()">Dane personalne</a></li>
+                <li id="accountDataTab" class="dataTab"><a href="#" ng-click="activeAccountData()">Dane logowania</a></li>
+                <li id="employmentDataTab" class="dataTab"><a href="#" ng-click="activeEmploymentData()">Dane pracownicze</a></li>
+            </ul>
+            <div id="userPersonalData" class="panel-body userData">
+                <form class="userDataForm" action="#" method="post">
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataFirstName">Imię</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <div id="userDataFirstName" class="userDataRowValueText">{{userData.firstName}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataLastName">Nazwisko</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <div id="userDataLastName" class="userDataRowValueText">{{userData.lastName}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataBirthday">Data urodzenia</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <input id="userDataBirthday" class="form-control userDataRowValueText" type="text" value="{{parseDateTimestamp(userData.birthday)}}">
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataPhone">Telefon</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <input id="userDataPhone" class="form-control userDataRowValueText" type="text" value="{{userData.phone}}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="userAccountData" class="panel-body userData">
+                <form class="userDataForm" action="#" method="post">
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataLogin">Login</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <div id="userDataLogin" class="userDataRowValueText">{{userData.login}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataEmail">Email</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <div id="userDataEmail" class="userDataRowValueText">{{userData.email}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataPassword">Obecne hasło</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <input id="userDataPassword" class="form-control userDataRowValueText" type="password">
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataNewPassword">Nowe hasło</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <input id="userDataNewPassword" class="form-control userDataRowValueText" type="password">
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataRepeatPassword">Powtórz hasło</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <input id="userDataRepeatPassword" class="form-control userDataRowValueText" type="password">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="userEmploymentData" class="panel-body userData">
+                <form class="userDataForm" action="#" method="post">
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataSolutionName">Nazwa firmy</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue" >
+                            <div id="userDataSolutionName" class="userDataRowValueText">{{userData.solutionName}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataTeamName">Nazwa zespołu</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue">
+                            <div id="userDataTeamName" class="userDataRowValueText">{{userData.teamName}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataPositionName">Nazwa stanowiska</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue">
+                            <div id="userDataPositionName" class="userDataRowValueText">{{userData.positionName}}</div>
+                        </div>
+                    </div>
+                    <div class="row form-group userDataRow">
+                        <div class="col-sm-4 userDataRowLabel">
+                            <label for="userDataWorkingTime">Wymiar etatu</label>
+                        </div>
+                        <div class="col-sm-8 userDataRowValue">
+                            <div id="userDataWorkingTime" class="userDataRowValueText">{{userData.workingTime}}</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-footer">
+                <div class="buttonsContainer">
+                    <button id="saveUserData" type="button" class="btn btn-default" ng-click="saveUserData()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-3"></div>
+</div>
