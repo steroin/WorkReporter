@@ -58,6 +58,9 @@ function initSolutionPositionsManagement($scope, $http) {
         startLoading();
         $scope.currentPosition.name = name;
         $http.patch('solution/positions/'+$scope.currentPosition.id, $scope.currentPosition).then(function(data) {
+            return $http.get('currentdate');
+        }).then(function(data) {
+            $scope.currentPosition.lastEditionDate = data.data;
             finishLoading();
         });
     };

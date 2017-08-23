@@ -3,6 +3,7 @@ package pl.workreporter.web.beans.entities.team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import pl.workreporter.web.service.date.DateParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,8 @@ import java.util.Map;
 public class TeamDaoImpl implements TeamDao{
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DateParser dateParser;
 
     @Override
     public Team getTeamById(long id) {
@@ -36,8 +39,8 @@ public class TeamDaoImpl implements TeamDao{
         team.setLeaderId(result.get("leaderid") == null ? null : Long.parseLong(result.get("leaderid").toString()));
         team.setLeaderName(leaderName);
         team.setName(result.get("name").toString());
-        team.setCreationDate(result.get("creation_date").toString());
-        team.setLastEditionDate(result.get("last_edition_date").toString());
+        team.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date").toString()));
+        team.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date").toString()));
         return team;
     }
 
@@ -64,8 +67,8 @@ public class TeamDaoImpl implements TeamDao{
             team.setLeaderId(map.get("leaderid") == null ? null : Long.parseLong(map.get("leaderid").toString()));
             team.setLeaderName(leaderName);
             team.setName(map.get("name").toString());
-            team.setCreationDate(map.get("creation_date").toString());
-            team.setLastEditionDate(map.get("last_edition_date").toString());
+            team.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
+            team.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
             teams.add(team);
         }
         return teams;
@@ -107,8 +110,12 @@ public class TeamDaoImpl implements TeamDao{
 
     @Override
     public void updateTeam(Team team) {
-        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
-        String query = "update team set solutionid=?, leaderid=?, name=?, creation_date=to_timestamp(?, ?), last_edition_date=sysdate where id=?";
-        jdbcTemplate.update(query, team.getSolutionId(), team.getLeaderId(), team.getName(), team.getCreationDate(), dateFormat, team.getId());
+        String query = "update team set solutionid="+team.getSolutionId()+", " +
+                "leaderid="+team.getLeaderId()+", " +
+                "name='"+team.getName()+"', " +
+                "creation_date="+dateParser.parseToDatabaseTimestamp(team.getCreationDate())+", " +
+                "last_edition_date=sysdate " +
+                "where id="+team.getId();
+        jdbcTemplate.execute(query);
     }
 }

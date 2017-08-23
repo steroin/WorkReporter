@@ -154,6 +154,9 @@ module.controller('solutionController', function($scope, $http) {
             startLoading();
             $scope.currentSolution.name = name;
             $http.patch('solution/solutions/'+$scope.currentSolution.id, $scope.currentSolution).then(function(data) {
+                return $http.get('currentdate');
+            }).then(function(data) {
+                $scope.currentSolution.lastEditionDate = data.data;
                 finishLoading();
             });
         }

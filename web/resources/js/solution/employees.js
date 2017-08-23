@@ -188,6 +188,9 @@ function initSolutionEmployeesManagement($scope, $http) {
         $scope.currentEmployee.birthday = birthday;
         $scope.currentEmployee.phone = phone;
         $http.patch('solution/employees/'+$scope.currentEmployee.id, $scope.currentEmployee).then(function(data) {
+            return $http.get('currentdate');
+        }).then(function(data) {
+            $scope.currentEmployee.lastEditionDate = data.data;
             finishLoading();
         });
     };

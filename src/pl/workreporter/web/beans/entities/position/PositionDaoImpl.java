@@ -3,6 +3,7 @@ package pl.workreporter.web.beans.entities.position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import pl.workreporter.web.service.date.DateParser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,8 @@ import java.util.Map;
 public class PositionDaoImpl implements PositionDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DateParser dateParser;
 
     @Override
     public Position getPositionById(long id) {
@@ -26,8 +29,8 @@ public class PositionDaoImpl implements PositionDao {
         position.setId(Long.parseLong(result.get("id").toString()));
         position.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         position.setName(result.get("name").toString());
-        position.setCreationDate(result.get("creation_date").toString());
-        position.setLastEditionDate(result.get("last_edition_date").toString());
+        position.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date").toString()));
+        position.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date").toString()));
         return position;
     }
 
@@ -42,8 +45,8 @@ public class PositionDaoImpl implements PositionDao {
             position.setId(Long.parseLong(map.get("id").toString()));
             position.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             position.setName(map.get("name").toString());
-            position.setCreationDate(map.get("creation_date").toString());
-            position.setLastEditionDate(map.get("last_edition_date").toString());
+            position.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
+            position.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
             positions.add(position);
         }
         return positions;
@@ -63,8 +66,8 @@ public class PositionDaoImpl implements PositionDao {
         position.setId(Long.parseLong(result.get("id").toString()));
         position.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         position.setName(result.get("name").toString());
-        position.setCreationDate(result.get("creation_date").toString());
-        position.setLastEditionDate(result.get("last_edition_date").toString());
+        position.setCreationDate(dateParser.parseToDatabaseTimestamp(result.get("creation_date").toString()));
+        position.setLastEditionDate(dateParser.parseToDatabaseTimestamp(result.get("last_edition_date").toString()));
         return position;
     }
 
@@ -91,11 +94,12 @@ public class PositionDaoImpl implements PositionDao {
 
     @Override
     public void updatePosition(Position position) {
-        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String query = "update position " +
-                "set solutionid = ?, name = ?, creation_date = to_timestamp(?, ?), last_edition_date = sysdate " +
-                "where id= ?";
-        jdbcTemplate.update(query, position.getSolutionId(), position.getName(), position.getCreationDate(),
-                dateFormat, position.getId());
+                "set solutionid = "+position.getSolutionId()+", " +
+                "name = '"+position.getName()+"', " +
+                "creation_date = "+dateParser.parseToDatabaseTimestamp(position.getCreationDate())+", " +
+                "last_edition_date = sysdate " +
+                "where id = "+position.getId();
+        jdbcTemplate.execute(query);
     }
 }

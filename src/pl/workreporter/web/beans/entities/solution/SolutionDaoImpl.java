@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import pl.workreporter.web.service.date.DateParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ public class SolutionDaoImpl implements SolutionDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DateParser dateParser;
 
     @Override
     public Solution loadSolution(long id) {
@@ -27,8 +30,8 @@ public class SolutionDaoImpl implements SolutionDao {
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         solution.setId(Integer.parseInt(result.get("id").toString()));
         solution.setName(result.get("name").toString());
-        solution.setCreationDate(result.get("creation_date").toString());
-        solution.setLastEditionDate(result.get("last_edition_date").toString());
+        solution.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date").toString()));
+        solution.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date").toString()));
         solution.setProjects(getSolutionProjects(id));
         solution.setPositions(getSolutionPositions(id));
         solution.setTeams(getSolutionTeams(id));
@@ -121,11 +124,11 @@ public class SolutionDaoImpl implements SolutionDao {
     }
 
     @Override
-    @Transactional
     public void updateSolution(Solution solution) {
-        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String creationDate = solution.getCreationDate();
-        String query = "update solution set name = ?, creation_date = to_timestamp(?, ?), last_edition_date = sysdate where id = ?";
-        jdbcTemplate.update(query, solution.getName(), creationDate, dateFormat, solution.getId());
+        String query = "update solution set name = '"+solution.getName()+"', " +
+                "creation_date = "+dateParser.parseToDatabaseTimestamp(creationDate)+", " +
+                "last_edition_date = sysdate where id = "+solution.getId();
+        jdbcTemplate.execute(query);
     }
 }

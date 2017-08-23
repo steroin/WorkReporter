@@ -3,6 +3,7 @@ package pl.workreporter.web.beans.entities.project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import pl.workreporter.web.service.date.DateParser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,6 +20,8 @@ public class ProjectDaoImpl implements ProjectDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DateParser dateParser;
 
     @Override
     public Project getProjectById(long id) {
@@ -29,8 +32,8 @@ public class ProjectDaoImpl implements ProjectDao {
         project.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         project.setName(result.get("name").toString());
         project.setDescription(result.get("description") == null ? "" : result.get("description").toString());
-        project.setCreationDate(result.get("creation_date").toString());
-        project.setLastEditionDate(result.get("last_edition_date").toString());
+        project.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date").toString()));
+        project.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date").toString()));
         return project;
     }
 
@@ -46,8 +49,8 @@ public class ProjectDaoImpl implements ProjectDao {
             project.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             project.setName(map.get("name").toString());
             project.setDescription(map.get("description") == null ? "" : map.get("description").toString());
-            project.setCreationDate(map.get("creation_date").toString());
-            project.setLastEditionDate(map.get("last_edition_date").toString());
+            project.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
+            project.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
             projects.add(project);
         }
         return projects;
@@ -68,8 +71,8 @@ public class ProjectDaoImpl implements ProjectDao {
             project.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
             project.setName(map.get("name").toString());
             project.setDescription(map.get("description") == null ? "" : map.get("description").toString());
-            project.setCreationDate(map.get("creation_date").toString());
-            project.setLastEditionDate(map.get("last_edition_date").toString());
+            project.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
+            project.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
             projects.add(project);
         }
         return projects;
@@ -109,11 +112,13 @@ public class ProjectDaoImpl implements ProjectDao {
 
     @Override
     public void updateProject(Project project) {
-        String dateFormat = "YYYY-MM-DD HH24:MI:SS.FF";
         String query = "update project " +
-                "set solutionid = ?, name = ?, description = ?, creation_date = to_timestamp(?, ?), last_edition_date = sysdate " +
-                "where id= ?";
-        jdbcTemplate.update(query, project.getSolutionId(), project.getName(), project.getDescription(), project.getCreationDate(),
-                dateFormat, project.getId());
+                "set solutionid = "+project.getSolutionId()+", " +
+                "name = '"+project.getName()+"', " +
+                "description = '"+project.getDescription()+"', " +
+                "creation_date = "+dateParser.parseToDatabaseTimestamp(project.getCreationDate())+", " +
+                "last_edition_date = sysdate " +
+                "where id = "+project.getId();
+        jdbcTemplate.execute(query);
     }
 }

@@ -77,6 +77,9 @@ function initSolutionProjectsManagement($scope, $http) {
         $scope.currentProject.name = name;
         $scope.currentProject.description = desc;
         $http.patch('solution/projects/'+$scope.currentProject.id, $scope.currentProject).then(function(data) {
+            return $http.get('currentdate');
+        }).then(function(data) {
+            $scope.currentProject.lastEditionDate = data.data;
             finishLoading();
         });
     };
