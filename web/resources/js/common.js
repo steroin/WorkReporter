@@ -63,3 +63,12 @@ function getStatusClass(status) {
     else if (status == 3) return 'label label-danger';
     else return "";
 }
+
+function glowInputWrong(obj) {
+    obj.addClass("inputWrong");
+    obj.keypress(function() {
+        if (obj.hasClass("inputWrong")) {
+            $(this).removeClass("inputWrong");
+        }
+    });
+}

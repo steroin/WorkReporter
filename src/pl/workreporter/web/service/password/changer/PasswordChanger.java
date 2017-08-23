@@ -16,8 +16,8 @@ public class PasswordChanger {
     @Autowired
     PasswordValidator validator;
 
-    public PasswordChangeResult changePassword(long userId, String existingPassword, String existingPasswordRepeat, String newPassword) {
-        if (!existingPassword.equals(existingPasswordRepeat)) {
+    public PasswordChangeResult changePassword(long userId, String existingPassword, String newPasswordRepeat, String newPassword) {
+        if (!newPassword.equals(newPasswordRepeat)) {
             return PasswordChangeResult.REPEAT_DOESNT_MATCH;
         }
         String hashedExistingPassword = loginDao.getPasswordHash(userId);

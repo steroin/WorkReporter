@@ -57,6 +57,7 @@ public class UserDataDaoImpl implements UserDataDao {
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         long personalDataId = Long.parseLong(result.get("personaldataid").toString());
         String phone = userData.getPhone();
+
         if (phone == null || phone.isEmpty()) {
             phone = "null";
         } else {

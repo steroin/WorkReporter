@@ -138,3 +138,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.inputOk {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #3c763d;
+}
+
+.inputWrong {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #a94442;
+}
