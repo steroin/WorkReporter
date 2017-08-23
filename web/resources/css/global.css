@@ -78,12 +78,6 @@
     opacity: 0.4;
 }
 
-.groupIcon {
-    background-image: url('../icons/groupicon.png');
-    width: 16px;
-    height: 16px;
-}
-
 .modalButtonsContainer {
     text-align: center;
 }
