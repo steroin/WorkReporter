@@ -1,5 +1,4 @@
-$ cat .gitattributes
-resources/angularjs/* linguist-vendored
-resources/bootstrap/* linguist-vendored
-resources/font-awesome-4.7.0/* linguist-vendored
-resources/jquery/* linguist-vendored
+web/resources/angularjs/* linguist-vendored
+web/resources/bootstrap/* linguist-vendored
+web/resources/font-awesome-4.7.0/* linguist-vendored
+web/resources/jquery/* linguist-vendored
