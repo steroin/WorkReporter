@@ -3,6 +3,7 @@ package pl.workreporter.web.beans.entities.userdata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import pl.workreporter.web.service.date.DateParser;
 
 import java.util.Map;
 
@@ -14,6 +15,8 @@ public class UserDataDaoImpl implements UserDataDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DateParser dateParser;
 
     @Override
     public UserData getUserData(long userId) {
@@ -34,7 +37,7 @@ public class UserDataDaoImpl implements UserDataDao {
         userData.setUserId(userId);
         userData.setFirsName(result.get("firstname").toString());
         userData.setLastName(result.get("lastname").toString());
-        userData.setBirthDay(result.get("birthday") == null ? null : result.get("birthday").toString());
+        userData.setBirthDay(dateParser.parseToReadableDate(result.get("birthday").toString()));
         userData.setPhone(result.get("phone") == null ? null : result.get("phone").toString());
         userData.setLogin(result.get("login").toString());
         userData.setEmail(result.get("email").toString());
