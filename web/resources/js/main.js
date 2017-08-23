@@ -60,6 +60,7 @@ module.controller('mainController', function($scope, $http) {
             'day' : $scope.currentDay
         }}).then(function(data) {
             $scope.currentEntries = data.data;
+            $scope.currentEntries.sort(function(a,b ) { return a.startHour > b.startHour});
             $scope.markedItems = [];
             enableDateChange();
             finishLoading();
@@ -154,6 +155,7 @@ module.controller('mainController', function($scope, $http) {
         };
         $http.post('entries', objectToAdd).then(function(data) {
             $scope.currentEntries.push(data.data);
+            $scope.currentEntries.sort(function(a,b ) { return a.startHour > b.startHour});
             finishLoading();
         });
 
@@ -219,6 +221,7 @@ module.controller('mainController', function($scope, $http) {
         $scope.currentEntry.logTypeId = logType;
         $scope.currentEntry.projectId = project;
         $scope.currentEntry.logTypeName = $scope.logEntryTypes.filter(function(obj) { return obj.id == logType;})[0].name;
+        $scope.currentEntries.sort(function(a,b ) { return a.startHour > b.startHour});
         var newName = $scope.userAvailableProjects.filter(function(obj) {return obj.id == project});
         $scope.currentEntry.projectName = newName.length == 0 ? "" : newName[0].name;
         $http.patch('entries/'+$scope.currentEntry.id, $scope.currentEntry).then(function() {
