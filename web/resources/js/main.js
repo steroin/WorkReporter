@@ -190,6 +190,7 @@ module.controller('mainController', function($scope, $http) {
     };
 
     $scope.editLogEntryModalSave = function() {
+        if ($scope.currentEntry.status != 1) return;
         var startHour = $("#editLogEntryStartHour").val();
         if (startHour.length === 0) {
             $(".logEntryEditStartHourError").show();
@@ -220,6 +221,21 @@ module.controller('mainController', function($scope, $http) {
         var newName = $scope.userAvailableProjects.filter(function(obj) {return obj.id == project});
         $scope.currentEntry.projectName = newName.length == 0 ? "" : newName[0].name;
         $http.patch('entries/'+$scope.currentEntry.id, $scope.currentEntry).then(function() {
+            finishLoading();
+        });
+    };
+
+    $scope.deleteLogEntryModalOpen = function() {
+        if ($scope.currentEntry.status != 1) return;
+        $("#deleteLogEntryModal").modal("show");
+    };
+
+    $scope.deleteLogEntry = function() {
+        if ($scope.currentEntry.status != 1) return;
+        startLoading();
+        $("#deleteLogEntryModal").modal("hide");
+        $http.delete('entries/'+$scope.currentEntry.id).then(function(data) {
+            $scope.currentEntries = $scope.currentEntries.filter(function(obj) {return obj.id != $scope.currentEntry.id});
             finishLoading();
         });
     };

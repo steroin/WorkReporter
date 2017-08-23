@@ -127,4 +127,27 @@ public class LogEntryDaoImpl implements LogEntryDao {
                 "where id="+logEntry.getId();
         jdbcTemplate.execute(query);
     }
+
+    @Override
+    public void removeLogEntry(long logEntryId) {
+        String query = "delete from log_entry where id="+logEntryId;
+        jdbcTemplate.execute(query);
+    }
+
+    @Override
+    public void removeLogEntries(List<Long> entries) {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("delete from log_entry where id in(");
+        int i = 0;
+
+        for (long id : entries) {
+            i++;
+            queryBuilder.append(id+"");
+            if (i < entries.size()) {
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(")");
+        jdbcTemplate.execute(queryBuilder.toString());
+    }
 }

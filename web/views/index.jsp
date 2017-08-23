@@ -30,6 +30,7 @@
         <%@ include file="assets/reportingCrud.html"%>
         <%@ include file="assets/logentry/addLogEntryModal.html"%>
         <%@ include file="assets/logentry/editLogEntryModal.html"%>
+        <%@ include file="assets/logentry/deleteLogEntryModal.html"%>
     </div>
 
 </body>

@@ -11,9 +11,7 @@ import pl.workreporter.web.beans.entities.project.Project;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * Created by Sergiusz on 21.08.2017.
@@ -53,5 +51,15 @@ public class LogEntryRestController {
     @RequestMapping(value = "/entries/{id}", method = PATCH)
     public void updateLogEntry(@PathVariable("id") long entryId, @RequestBody LogEntry logEntry) {
         logEntryDao.updateLogEntry(logEntry);
+    }
+
+    @RequestMapping(value = "/entries/{id}", method = DELETE)
+    public void removeLogEntry(@PathVariable long id) {
+        logEntryDao.removeLogEntry(id);
+    }
+
+    @RequestMapping(value = "/entries", method = DELETE)
+    public void removeLogEntries(@RequestParam List<Long> entries) {
+        logEntryDao.removeLogEntries(entries);
     }
 }
