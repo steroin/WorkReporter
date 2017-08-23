@@ -21,7 +21,7 @@
                         <td style="width: 10%">{{entry.loggedHours}}</td>
                         <td style="width: 15%">{{entry.logTypeName}}</td>
                         <td style="width: 35%">{{entry.projectName}}</td>
-                        <td style="width: 15%"><span class="{{getStatusClass(entry.status)}}">{{getStatusName(entry.status)}}</span></td>
+                        <td style="width: 15%"><div class="{{getStatusClass(entry.status)}} logEntryStatus">{{getStatusName(entry.status)}}</div></td>
                         <td style="width: 5%">
                             <div ng-show="entry.status == 1" class="crudTableActionButtonsContainer">
                                 <a href="#" data-target="#editLogEntryModal" ng-click="setCurrentLogEntry(entry.id); editLogEntryModalOpen()"><span class="glyphicon glyphicon-edit"></span></a>

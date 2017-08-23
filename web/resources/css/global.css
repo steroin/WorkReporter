@@ -144,3 +144,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.logEntryStatus {
+    display: inline-block;
+    width: 100px;
+}
