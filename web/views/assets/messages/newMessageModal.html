@@ -35,11 +35,20 @@
                             </div>
                             <div class="form-group">
                                 <label for="messageTitle">Tytuł:</label>
-                                <input id="messageTitle" type="text" class="form-control">
+                                <input id="messageTitle" type="text" class="form-control" value="{{responseTitle}}">
                                 <label for="messageContent">Treść:</label>
                                 <textarea class="form-control vresize" rows="4" id="messageContent"></textarea>
                             </div>
                         </form>
+                        <div id="newMessageModalInvalidTitleError" class="alert alert-danger modalError">
+                            Nieprawidłowy tytuł!
+                        </div>
+                        <div id="newMessageModalInvalidContentError" class="alert alert-danger modalError">
+                            Nieprawidłowa treść wiadomości!
+                        </div>
+                        <div id="newMessageModalNoReceiversError" class="alert alert-danger modalError">
+                            Musisz wybrać odbiorców wiadomości!
+                        </div>
                     </div>
                 </div>
 

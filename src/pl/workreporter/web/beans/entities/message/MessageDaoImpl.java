@@ -5,10 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import pl.workreporter.web.service.date.DateParser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Sergiusz on 24.08.2017.
@@ -122,5 +120,33 @@ public class MessageDaoImpl implements MessageDao {
             messagesList.add(entry.getValue());
         }
         return messagesList;
+    }
+
+    @Override
+    public SentMessage sendMessage(MessageParticipant sender, List<MessageParticipant> receivers, String title, String content) {
+        StringBuilder queryBuilder = new StringBuilder();
+        String query = "select messageseq.nextval as messageid from dual";
+        long messageId = Long.parseLong(jdbcTemplate.queryForMap(query).get("messageid").toString());
+        queryBuilder.append("begin \n");
+        queryBuilder.append("insert into message (id, senderid, content, title) " +
+                "values ("+messageId+", "+sender.getId()+", '"+content+"', '"+title+"'); \n");
+        for (MessageParticipant receiver : receivers) {
+            queryBuilder.append("insert into message_send (id, messageid, receiverid, senddate, status) " +
+                    "values(messagesendseq.nextval, "+messageId+", "+receiver.getId()+", sysdate, 1); \n");
+        }
+        queryBuilder.append("end;");
+        jdbcTemplate.execute(queryBuilder.toString());
+
+        SentMessage message = new SentMessage();
+        message.setId(messageId);
+        message.setSender(sender);
+        message.setTitle(title);
+        message.setContent(content);
+        message.setReceivers(receivers);
+        message.setStatus(1);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        message.setSendDate(sdf.format(new Date()));
+        return message;
     }
 }

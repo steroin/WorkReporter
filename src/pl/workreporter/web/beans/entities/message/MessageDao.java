@@ -8,4 +8,5 @@ import java.util.List;
 public interface MessageDao {
     List<ReceivedMessage> getUserReceivedMessages(long userId);
     List<SentMessage> getUserSentMessages(long userId);
+    SentMessage sendMessage(MessageParticipant senderId, List<MessageParticipant> receivers, String title, String content);
 }
