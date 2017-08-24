@@ -14,6 +14,7 @@ public class CompleteUserDetails implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
     private long accountId;
     private long userId;
+    private long solutionId;
     private String firstName;
     private String lastName;
     private String password;
@@ -50,6 +51,14 @@ public class CompleteUserDetails implements UserDetails {
 
     public void setUserId(long id) {
         userId = id;
+    }
+
+    public long getSolutionId() {
+        return solutionId;
+    }
+
+    public void setSolutionId(long solutionId) {
+        this.solutionId = solutionId;
     }
 
     public String getFirstName() {
