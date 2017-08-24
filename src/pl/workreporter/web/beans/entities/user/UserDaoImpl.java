@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
                 "where au.id="+id;
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
         User user = new User();
-        user.setId(Long.parseLong(result.get("id").toString()));
+        user.setId(Long.parseLong(result.get("userid").toString()));
         user.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
         user.setTeamId(result.get("teamid") == null ? null : Long.parseLong(result.get("teamid").toString()));
         user.setAccountId(Long.parseLong(result.get("accountid").toString()));

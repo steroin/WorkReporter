@@ -16,15 +16,40 @@ module.controller('messagesController', function($scope, $http) {
             return $http.get('messages/received', {params : {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
             $scope.receivedMessages = data.data;
+            return $http.get('messages/sent', {params : {'userid' : $scope.authentication.principal.userId}});
+        }).then(function(data) {
+            $scope.sentMessages = data.data;
             finishLoading();
-            $("#messagesPane").show();
+            $("#messagesMainContainer").show();
+            $scope.activeReceivedMessagesContent();
         });
     };
-    $scope.loadReceivedMessage = function() {
+    $scope.loadReceivedMessages = function() {
         $http.get('messages/received', {params : {'userid' : $scope.authentication.principal.userId}}).then(function(data) {
             $scope.receivedMessages = data.data;
         });
     };
+
+    $scope.loadSentMessages = function() {
+        $http.get('messages/sent', {params : {'userid' : $scope.authentication.principal.userId}}).then(function(data) {
+            $scope.sentMessages = data.data;
+        });
+    };
+
+    $scope.activeSentMessagesContent = function() {
+        $("#receivedMessages").hide();
+        $("#sentMessages").show();
+        $("#receivedMessagesTab").removeClass("active");
+        $("#sentMessagesTab").addClass("active");
+    };
+
+    $scope.activeReceivedMessagesContent = function() {
+        $("#sentMessages").hide();
+        $("#receivedMessages").show();
+        $("#sentMessagesTab").removeClass("active");
+        $("#receivedMessagesTab").addClass("active");
+    };
+
 
     $scope.parseDateTimestamp = parseDateTimestamp;
     $scope.init();

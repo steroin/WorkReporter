@@ -1,0 +1,33 @@
+﻿<div id="receivedMessages" class="row">
+    <div class="list-group message" ng-repeat="message in receivedMessages">
+        <div data-toggle="collapse" data-target="#receivedMessage{{message.id}}" class="list-group-item list-group-item-info">
+            <div class="messageHeader">
+                <div class="row messageHeaderContainer">
+                    <div class="col-xs-9">
+                        <div class="messageHeaderTitle">
+                            {{message.title}}
+                        </div>
+                        <div class="messageHeaderSender">
+                            Od: {{message.sender.firstName}} {{message.sender.lastName}} ({{message.sender.email}})
+                        </div>
+                    </div>
+                    <div class="col-xs-3 messageHeaderDateContainer">
+                        <div class="messageHeaderDate">
+                            {{message.sendDate}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="receivedMessage{{message.id}}" class="collapse messageBody">
+            <div class="panel panel-default">
+                <div class="messageText">
+                    {{message.content}}
+                </div>
+                <div class="panel-footer messageButtons">
+                    <button id="receivedMessage{{message.id}}Response" type="button" class="btn btn-default">Odpowiedz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
