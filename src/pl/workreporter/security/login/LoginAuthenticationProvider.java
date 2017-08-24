@@ -18,7 +18,7 @@ import java.security.Security;
  */
 public class LoginAuthenticationProvider implements AuthenticationProvider {
     @Autowired
-    LoginDao loginDao;
+    private LoginDao loginDao;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
