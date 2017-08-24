@@ -6,9 +6,10 @@ package pl.workreporter.web.beans.entities.message;
 public class ReceivedMessage {
 
     private long id;
-    private long senderId;
+    private MessageParticipant sender;
+    private String title;
     private String content;
-    private long receiverId;
+    private MessageParticipant receiver;
     private String sendDate;
     private int status;
 
@@ -20,12 +21,20 @@ public class ReceivedMessage {
         this.id = id;
     }
 
-    public long getSenderId() {
-        return senderId;
+    public MessageParticipant getSender() {
+        return sender;
     }
 
-    public void setSenderId(long senderId) {
-        this.senderId = senderId;
+    public void setSender(MessageParticipant sender) {
+        this.sender = sender;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {
@@ -36,12 +45,12 @@ public class ReceivedMessage {
         this.content = content;
     }
 
-    public long getReceiverId() {
-        return receiverId;
+    public MessageParticipant getReceiver() {
+        return receiver;
     }
 
-    public void setReceiverId(long receiverId) {
-        this.receiverId = receiverId;
+    public void setReceiver(MessageParticipant receiver) {
+        this.receiver = receiver;
     }
 
     public String getSendDate() {

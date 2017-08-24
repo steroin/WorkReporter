@@ -8,9 +8,10 @@ import java.util.List;
 public class SentMessage {
 
     private long id;
-    private long senderId;
+    private MessageParticipant sender;
+    private String title;
     private String content;
-    private List<Long> receivers;
+    private List<MessageParticipant> receivers;
     private String sendDate;
     private int status;
 
@@ -22,12 +23,20 @@ public class SentMessage {
         this.id = id;
     }
 
-    public long getSenderId() {
-        return senderId;
+    public MessageParticipant getSender() {
+        return sender;
     }
 
-    public void setSenderId(long senderId) {
-        this.senderId = senderId;
+    public void setSender(MessageParticipant sender) {
+        this.sender = sender;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {
@@ -38,11 +47,11 @@ public class SentMessage {
         this.content = content;
     }
 
-    public List<Long> getReceivers() {
+    public List<MessageParticipant> getReceivers() {
         return receivers;
     }
 
-    public void setReceivers(List<Long> receivers) {
+    public void setReceivers(List<MessageParticipant> receivers) {
         this.receivers = receivers;
     }
 
