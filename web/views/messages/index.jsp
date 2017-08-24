@@ -36,6 +36,7 @@
             </div>
         </div>
         <%@ include file="../assets/messages/messages.html"%>
+        <%@ include file="../assets/messages/newMessageModal.html"%>
     </div>
 
 </body>

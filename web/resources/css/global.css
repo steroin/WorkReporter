@@ -127,6 +127,15 @@
     overflow-y: auto;
 }
 
+.modalListSmall {
+    height: 130px;
+    overflow-y: auto;
+}
+
+.vresize {
+    resize: vertical;
+}
+
 .modalListItem {
     margin: 4px;
     overflow: hidden;

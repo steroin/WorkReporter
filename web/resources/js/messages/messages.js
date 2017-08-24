@@ -51,6 +51,36 @@ module.controller('messagesController', function($scope, $http) {
     };
 
 
+    $scope.newMessageModalOpen = function() {
+        startLoading();
+        $scope.receiversToAdd = [];
+        $scope.currentReceivers = [];
+        $http.get('solution/employees', {params: {'id' : $scope.authentication.principal.solutionId}}).then(function(data) {
+            $scope.allReceivers = data.data;
+            $scope.currentAvailableReceivers = $scope.allReceivers.filter(function(obj) {return obj.id != $scope.authentication.principal.userId;});
+            $("#newMessageModal").modal("show");
+            finishLoading();
+        })
+    };
+    $scope.addReceiver = function() {
+        var id = $("#newMessageModalReceiversInput").val();
+        if (id == null || id.length == 0) return;
+
+
+        $scope.receiversToAdd.push(id);
+        var receiver = $scope.currentAvailableReceivers.filter(function(obj){return obj.id == id;})[0];
+        $scope.currentReceivers.push({'id' : id, 'firstname' : receiver.firstName, 'lastname' : receiver.lastName, 'email' : receiver.email});
+        var index = $scope.currentAvailableReceivers.indexOf(receiver);
+        if (index > -1) {
+            $scope.currentAvailableReceivers.splice(index, 1);
+        }
+    };
+    $scope.removeReceiver = function(id) {
+        $scope.receiversToAdd.splice($scope.receiversToAdd.indexOf(id), 1);
+        $scope.currentReceivers = $scope.currentReceivers.filter(function(obj) { return obj.id != id; });
+        $scope.currentAvailableReceivers.push($scope.allReceivers.filter(function(obj) { return obj.id == id; })[0]);
+    };
+
     $scope.parseDateTimestamp = parseDateTimestamp;
     $scope.init();
 });
