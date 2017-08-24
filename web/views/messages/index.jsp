@@ -23,7 +23,20 @@
     <script type=" text/javascript" src="resources/js/messages/messages.js"></script>
 </head>
 <body ng-controller="messagesController" ng-cloak>
-<%@ include file="../assets/navbar.html"%>
+    <%@ include file="../assets/navbar.html"%>
+    <div class="container">
+        <div class="row">
+            <div class="messagesHeader">
+                <h2>Wiadomości</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="loaderContainer pageLoader">
+                <div class="wrLoader"></div>
+            </div>
+        </div>
+        <%@ include file="../assets/messages/messages.html"%>
+    </div>
 
 </body>
 </html>

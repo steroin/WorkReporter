@@ -1,0 +1,49 @@
+.message {
+    margin-bottom: 4px;
+}
+
+.messagesHeader {
+    text-align: center;
+}
+
+.messageBody {
+
+}
+
+.messageHeader {
+    cursor: pointer;
+}
+
+.messageHeaderTitle {
+    font-weight: bold;
+}
+
+.messageHeaderSender {
+    font-size: 11px;
+}
+
+.messageHeaderContainer {
+    height:30px;
+}
+
+.messageHeaderDateContainer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    text-align: right;
+}
+
+.messageHeaderDate {
+    font-weight: bold;
+    width: 100%;
+}
+
+.messageText {
+    padding: 30px;
+    white-space: initial;
+    word-wrap: break-word;
+}
+
+.messageButtons {
+    padding-left: 30px;
+}

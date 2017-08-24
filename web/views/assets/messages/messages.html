@@ -1,0 +1,46 @@
+﻿<div class="row">
+    <div id="messagesPane" class="pageContent">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="list-group message" ng-repeat="message in receivedMessages">
+                        <div data-toggle="collapse" data-target="#message{{message.id}}" class="list-group-item list-group-item-info">
+                            <div class="messageHeader">
+                                <div class="row messageHeaderContainer">
+                                    <div class="col-xs-6">
+                                        <div class="messageHeaderTitle">
+                                            {{message.title}}
+                                        </div>
+                                        <div class="messageHeaderSender">
+                                            Od: {{message.sender.firstName}} {{message.sender.lastName}} ({{message.sender.email}})
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 messageHeaderDateContainer">
+                                        <div class="messageHeaderDate">
+                                            {{parseDateTimestamp(message.sendDate)}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="message{{message.id}}" class="collapse messageBody">
+                            <div class="panel panel-default">
+                                <div class="messageText">
+                                    {{message.content}}
+                                </div>
+                                <div class="panel-footer messageButtons">
+                                    <button id="message{{message.id}}Response" type="button" class="btn btn-default">Odpowiedz</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer messagesButtons">
+                    <button id="newMessage" type="button" class="btn btn-default">Nowa wiadomość</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+</div>
