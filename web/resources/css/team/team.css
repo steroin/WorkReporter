@@ -1,0 +1,34 @@
+.teamChooserContainer {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.chooseHeaderContainer {
+    margin: auto;
+    text-align: center;
+    height: 40px;
+}
+
+.chooseSelect {
+    margin: auto;
+    width: 100%;
+}
+
+.chooseSelect {
+    margin: auto;
+    width: 200px;
+}
+
+.chooseButton {
+    width: 100%;
+}
+
+.chooserList {
+    width: 100%;
+    float: none;
+}
+
+.logEntryStatus {
+    display: inline-block;
+    width: 100px;
+}

@@ -1,0 +1,66 @@
+﻿<div class="row teamChooserContainer">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-2">
+        <div class="row">
+            <div class="chooseHeaderContainer">
+                <h2>{{currentTeam.name}}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="dropdown chooseSelect">
+                <button class="btn btn-primary dropdown-toggle chooseButton" type="button" data-toggle="dropdown">Wybierz zespół
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu chooserList">
+                    <li ng-repeat="team in allTeams">
+                        <a id="team{{team.id}}" href="#" ng-click="setCurrentTeam(team.id)">{{team.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-2">
+        <div class="row">
+            <div class="chooseHeaderContainer">
+                <h2>{{currentEmployee.firstName}} {{currentEmployee.lastName}}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="dropdown chooseSelect">
+                <button class="btn btn-primary dropdown-toggle chooseButton" type="button" data-toggle="dropdown">Wybierz członka zespołu
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu chooserList">
+                    <li ng-repeat="employee in currentEmployees">
+                        <a id="employee{{employee.id}}" href="#" ng-click="setCurrentEmployee(employee.id)">{{employee.firstName}} {{employee.lastName}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-2">
+        <div class="row">
+            <div class="chooseHeaderContainer">
+                <h2>{{getPeriodName(currentPeriod)}}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="dropdown chooseSelect">
+                <button class="btn btn-primary dropdown-toggle chooseButton" type="button" data-toggle="dropdown">Wybierz okres
+                    <span class="caret"></span></button>
+                <ul id="periodPicker" class="dropdown-menu chooserList">
+                    <li value="0">
+                        <a href="#" ng-click="setCurrentPeriod(0)">Ostatnie 7 dni</a>
+                    </li>
+                    <li value="1">
+                        <a href="#" ng-click="setCurrentPeriod(1)">Ostatni miesiąc</a>
+                    </li>
+                    <li  value="2">
+                        <a href="#" ng-click="setCurrentPeriod(2)">Ostatni rok</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2"></div>
+</div>

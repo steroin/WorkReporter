@@ -10,6 +10,7 @@ public interface LogEntryDao {
     LogEntry addLogEntry(long userId, String day, String startHour, double loggedHours,
                     long logTypeId, Long projectId);
     List<LogEntry> getDailyLogEntries(long userId, int year, int month, int day);
+    List<LogEntry> getLastLogEntries(long userId, int period);
     List<LogType> getAllLogTypes();
     void updateLogEntry(LogEntry logEntry);
     void removeLogEntry(long logEntryId);

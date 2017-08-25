@@ -9,6 +9,7 @@ import java.util.List;
 public interface TeamDao {
     Team getTeamById(long id);
     List<Team> getAllTeamsInSolution(long solutionId);
+    List<Team> getAllTeamsManagedBy(long userId);
     Team addTeam(long solutionId, String name, Long leaderId);
     void removeTeam(long solutionId, long teamId);
     void removeTeams(long solutionId, List<Long> teamIds);

@@ -75,6 +75,35 @@ public class TeamDaoImpl implements TeamDao{
     }
 
     @Override
+    public List<Team> getAllTeamsManagedBy(long userId) {String query = "select t.id, t.name, t.solutionid, t.leaderid, t.creation_date, t.last_edition_date, pd.firstname, pd.lastname, ac.login\n" +
+            "from team t \n" +
+            "  left join appuser au on t.leaderid = au.id \n" +
+            "  left join personal_data pd on au.personaldataid=pd.id\n" +
+            "  left join account ac on au.accountid = ac.id " +
+            "where t.leaderid="+userId;
+        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
+        List<Team> teams = new ArrayList<>();
+
+        for (Map<String, Object> map : result) {
+            String leaderName = "";
+            if (map.get("firstname") != null && map.get("lastname") != null && map.get("login") != null) {
+                leaderName = map.get("firstname").toString()+" "+map.get("lastname").toString()+" ("+map.get("login").toString()+")";
+            }
+            Team team = new Team();
+            long id = Long.parseLong(map.get("id").toString());
+            team.setId(id);
+            team.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
+            team.setLeaderId(map.get("leaderid") == null ? null : Long.parseLong(map.get("leaderid").toString()));
+            team.setLeaderName(leaderName);
+            team.setName(map.get("name").toString());
+            team.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
+            team.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
+            teams.add(team);
+        }
+        return teams;
+    }
+
+    @Override
     public Team addTeam(long solutionId, String name, Long leaderId) {
         String query = "select teamseq.nextval from dual";
         Map<String, Object> result = jdbcTemplate.queryForMap(query);
