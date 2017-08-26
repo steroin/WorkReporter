@@ -145,7 +145,7 @@ public class MessageDaoImpl implements MessageDao {
         message.setReceivers(receivers);
         message.setStatus(1);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         message.setSendDate(sdf.format(new Date()));
         return message;
     }

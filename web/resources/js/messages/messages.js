@@ -22,37 +22,46 @@ module.controller('messagesController', function($scope, $http) {
             finishLoading();
             $("#messagesMainContainer").show();
             $scope.activeReceivedMessagesContent();
+            $scope.setUpMessagesPagination(1);
         });
     };
     $scope.loadReceivedMessages = function() {
         $http.get('messages/received', {params : {'userid' : $scope.authentication.principal.userId}}).then(function(data) {
             $scope.receivedMessages = data.data;
+            $scope.currentMessages = $scope.receivedMessages;
         });
     };
 
     $scope.loadSentMessages = function() {
         $http.get('messages/sent', {params : {'userid' : $scope.authentication.principal.userId}}).then(function(data) {
             $scope.sentMessages = data.data;
+            $scope.currentMessages = $scope.sentMessages;
         });
     };
 
     $scope.activeSentMessagesContent = function() {
+        $scope.currentMessages = $scope.sentMessages;
         $("#receivedMessages").hide();
         $("#sentMessages").show();
         $("#receivedMessagesTab").removeClass("active");
         $("#sentMessagesTab").addClass("active");
+        $scope.setUpMessagesPagination(1);
     };
 
     $scope.activeReceivedMessagesContent = function() {
+        $scope.currentMessages = $scope.receivedMessages;
         $("#sentMessages").hide();
         $("#receivedMessages").show();
         $("#sentMessagesTab").removeClass("active");
         $("#receivedMessagesTab").addClass("active");
+        $scope.setUpMessagesPagination(1);
     };
 
 
     $scope.newMessageModalOpen = function() {
         startLoading();
+        $("#messageTitle").val("");
+        $("#messageContent").val("");
         $scope.receiversToAdd = [];
         $scope.currentReceivers = [];
         $scope.responseTitle = "";
@@ -66,6 +75,8 @@ module.controller('messagesController', function($scope, $http) {
 
     $scope.responseModalOpen = function(id) {
         startLoading();
+        $("#messageTitle").val("");
+        $("#messageContent").val("");
         $scope.receiversToAdd = [];
         $scope.currentReceivers = [];
         var receivedMessage = $scope.receivedMessages.filter(function(obj) {return obj.id == id})[0];
@@ -135,6 +146,67 @@ module.controller('messagesController', function($scope, $http) {
             $scope.sentMessages.push(data.data);
             finishLoading();
         });
+    };
+
+    $scope.initPagination = function(content, itemsPerPage, maxVisiblePages, pagesContainerId, defaultPageId) {
+        $scope.totalPages = Math.ceil(content.length / itemsPerPage);
+        if ($scope.totalPages < 2) {
+            $("#"+pagesContainerId).hide();
+        } else {
+            $("#"+pagesContainerId).show();
+        }
+        if (maxVisiblePages > $scope.totalPages) {
+            maxVisiblePages = $scope.totalPages;
+        }
+        $scope.setPage = function(i) {
+            if (i < 1 || i > $scope.totalPages) return;
+            if (i == 1) {
+                $("#"+pagesContainerId+" #prevPage").addClass("disabled");
+            } else {
+                $("#"+pagesContainerId+" #prevPage").removeClass("disabled");
+            }
+            if (i == $scope.totalPages) {
+                $("#"+pagesContainerId+" #nextPage").addClass("disabled");
+            } else {
+                $("#"+pagesContainerId+" #nextPage").removeClass("disabled");
+            }
+            $scope.currentPageId = i;
+            $scope.currentPage = content.slice(($scope.currentPageId - 1) * itemsPerPage, $scope.currentPageId * itemsPerPage);
+            var currentPages = [];
+            var start = $scope.currentPageId - Math.floor(maxVisiblePages  / 2) + (maxVisiblePages + 1) % 2;
+            var end = $scope.currentPageId + Math.floor(maxVisiblePages / 2);
+            if (start < 1) {
+                end = end - start + 1;
+                start = 1;
+            }
+            if (end > $scope.totalPages) {
+                start = start - end + $scope.totalPages;
+                end = $scope.totalPages;
+            }
+            for (var n = start; n <= end; n++) {
+                currentPages.push(n);
+            }
+            $scope.pagination = currentPages;
+            $("#"+pagesContainerId+" .active").removeClass("active");
+            $("#"+pagesContainerId+" #page"+i).addClass("active");
+        };
+        $scope.nextPage = function() {
+            $scope.setPage($scope.currentPageId + 1);
+        };
+        $scope.prevPage = function() {
+            $scope.setPage($scope.currentPageId - 1);
+        };
+        if (defaultPageId < 1) defaultPageId = 1;
+        else if (defaultPageId > $scope.totalPages) defaultPageId = $scope.totalPages;
+        $scope.setPage(defaultPageId);
+        $(document).ready(function() {$("#"+pagesContainerId+" #page"+defaultPageId).addClass("active");});
+        if (content.length == 0) {
+            $scope.currentPage = [];
+        }
+    };
+
+    $scope.setUpMessagesPagination = function(defaultPage) {
+        $scope.initPagination($scope.currentMessages, 8, 5, 'messagesCrudPagination', defaultPage);
     };
 
     $scope.parseDateTimestamp = parseDateTimestamp;

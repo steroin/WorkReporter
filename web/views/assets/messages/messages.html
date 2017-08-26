@@ -11,7 +11,20 @@
                 <%@ include file="sentMessages.html"%>
             </div>
             <div class="panel-footer messagesButtons">
-                <button data-target="#newMessageModal" id="newMessage" type="button" class="btn btn-default" ng-click="newMessageModalOpen()">Nowa wiadomość</button>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <button data-target="#newMessageModal" id="newMessage" type="button" class="btn btn-default messagesNewMessageButton" ng-click="newMessageModalOpen()">Nowa wiadomość</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="crudPagination">
+                            <ul id="messagesCrudPagination" class="pagination">
+                                <li id="prevPage"><a href="#" ng-click="prevPage()">prev</a></li>
+                                <li ng-repeat="page in pagination" id="page{{page}}"><a href="#" ng-click="setPage(page)">{{page}}</a></li>
+                                <li id="nextPage"><a href="#" ng-click="nextPage()">next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
