@@ -32,3 +32,36 @@
     display: inline-block;
     width: 100px;
 }
+
+.changeStatusDropdownCell {
+    overflow: visible !important;
+}
+
+.changeStatusDropdown {
+    min-width: 100px;
+    padding: 0;
+}
+
+.changeStatusDropdownOption {
+    font-size: 12px;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+}
+
+.changeStatusDropdownOption:hover {
+    opacity: 0.8;
+}
+
+.optionInfo {
+    background-color: #337ab7 !important;
+}
+
+.optionSuccess {
+    background-color: #5cb85c !important;
+}
+
+.optionDanger {
+    background-color: #d9534f !important;
+}

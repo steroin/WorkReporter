@@ -57,6 +57,7 @@ module.controller('teamManagementController', function($scope, $http) {
     };
 
     $scope.setCurrentEmployee = function(id) {
+        if ($scope.currentEmployees.length == 0) return;
         startLoading();
         var period = $("#periodPicker").val();
         var days = 7;
@@ -72,6 +73,7 @@ module.controller('teamManagementController', function($scope, $http) {
     };
 
     $scope.setCurrentPeriod = function(period) {
+        if ($scope.currentEmployees.length == 0) return;
         $("#periodPicker").val(period);
         $scope.currentPeriod = period;
         $scope.setCurrentEmployee($scope.currentEmployee.id);

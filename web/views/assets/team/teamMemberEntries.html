@@ -20,7 +20,16 @@
                         <td style="width: 10%">{{entry.loggedHours}}</td>
                         <td style="width: 15%">{{entry.logTypeName}}</td>
                         <td style="width: 35%">{{entry.projectName}}</td>
-                        <td style="width: 15%"><div class="{{getStatusClass(entry.status)}} logEntryStatus">{{getStatusName(entry.status)}}</div></td>
+                        <td class="changeStatusDropdownCell" style="width: 15%">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle logEntryStatus {{getStatusClass(entry.status)}}" role="button" data-toggle="dropdown">{{getStatusName(entry.status)}}</a>
+                                <ul class="dropdown-menu changeStatusDropdown">
+                                    <li><a class="changeStatusDropdownOption optionInfo" href="#">Oczekujące</a></li>
+                                    <li><a class="changeStatusDropdownOption optionSuccess" href="#">Zatwierdzone</a></li>
+                                    <li><a class="changeStatusDropdownOption optionDanger" href="#">Odrzucone</a></li>
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
                 </table>
             </div>
