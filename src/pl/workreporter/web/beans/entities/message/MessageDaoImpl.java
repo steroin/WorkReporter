@@ -1,7 +1,6 @@
 package pl.workreporter.web.beans.entities.message;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.NestedRuntimeException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import pl.workreporter.web.service.date.DateParser;
