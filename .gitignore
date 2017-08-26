@@ -28,5 +28,3 @@ build/
 src/main/
 web/resources/full.css
 web/WEB-INF/jdbc.properties
-hibernate.cfg.xml
-hibernate.cfg.xml
