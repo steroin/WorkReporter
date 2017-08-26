@@ -24,9 +24,9 @@
                             <div class="dropdown">
                                 <a class="dropdown-toggle logEntryStatus {{getStatusClass(entry.status)}}" role="button" data-toggle="dropdown">{{getStatusName(entry.status)}}</a>
                                 <ul class="dropdown-menu changeStatusDropdown">
-                                    <li><a class="changeStatusDropdownOption optionInfo" href="#">Oczekujące</a></li>
-                                    <li><a class="changeStatusDropdownOption optionSuccess" href="#">Zatwierdzone</a></li>
-                                    <li><a class="changeStatusDropdownOption optionDanger" href="#">Odrzucone</a></li>
+                                    <li><a class="changeStatusDropdownOption optionInfo" href="#" ng-click="changeEntryStatusToWaiting(entry.id)">Oczekujące</a></li>
+                                    <li><a class="changeStatusDropdownOption optionSuccess" href="#" ng-click="changeEntryStatusToAccepted(entry.id)">Zatwierdzone</a></li>
+                                    <li><a class="changeStatusDropdownOption optionDanger" href="#" ng-click="changeEntryStatusToRejected(entry.id)">Odrzucone</a></li>
                                 </ul>
                             </div>
                         </td>

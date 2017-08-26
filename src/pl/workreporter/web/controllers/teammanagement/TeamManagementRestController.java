@@ -12,6 +12,7 @@ import pl.workreporter.web.beans.entities.user.UserDao;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 
 /**
  * Created by Sergiusz on 25.08.2017.
@@ -43,5 +44,13 @@ public class TeamManagementRestController {
     List<LogEntry> getAllEmployeesLogEntries(@PathVariable("teamid") long teamId, @PathVariable("userid") long userId, @RequestParam("period") int period) {
         List<LogEntry> result = logEntryDao.getLastLogEntries(userId, period);
         return result;
+    }
+
+    @RequestMapping(value = "/teams/{teamid}/employees/{userid}/entries/{entryid}", method = PATCH)
+    public void changeLogEntryStatus(@PathVariable("teamid") long teamId,
+                                     @PathVariable("userid") long userId,
+                                     @PathVariable("entryid") long entryId,
+                                     @RequestBody int status) {
+        logEntryDao.changeLogEntryStatus(entryId, status);
     }
 }

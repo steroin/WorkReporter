@@ -146,6 +146,12 @@ public class LogEntryDaoImpl implements LogEntryDao {
     }
 
     @Override
+    public void changeLogEntryStatus(long logEntryId, int status) {
+        String query = "update log_entry set status="+status+" where id="+logEntryId;
+        jdbcTemplate.execute(query);
+    }
+
+    @Override
     public void updateLogEntry(LogEntry logEntry) {
         String query = "update log_entry set " +
                 "userid="+logEntry.getUserId()+", " +

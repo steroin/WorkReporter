@@ -12,6 +12,7 @@ public interface LogEntryDao {
     List<LogEntry> getDailyLogEntries(long userId, int year, int month, int day);
     List<LogEntry> getLastLogEntries(long userId, int period);
     List<LogType> getAllLogTypes();
+    void changeLogEntryStatus(long logEntryId, int status);
     void updateLogEntry(LogEntry logEntry);
     void removeLogEntry(long logEntryId);
     void removeLogEntries(List<Long> entries);

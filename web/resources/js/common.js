@@ -64,6 +64,13 @@ function getStatusClass(status) {
     else return "";
 }
 
+function getStatusOptionClass(status) {
+    if (status == 1) return 'optionInfo';
+    else if (status == 2) return 'optionSuccess';
+    else if (status == 3) return 'optionDanger';
+    else return "";
+}
+
 function glowInputWrong(obj) {
     obj.addClass("inputWrong");
     obj.keypress(function() {

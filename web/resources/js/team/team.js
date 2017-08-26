@@ -88,6 +88,29 @@ module.controller('teamManagementController', function($scope, $http) {
             return "Ostatni rok";
         }
     };
+
+    $scope.changeEntryStatus = function(id, status) {
+        var entry = $scope.currentLogEntries.filter(function(obj) {return obj.id == id;})[0];
+        if (status == entry.status) return;
+        startLoading();
+        $http.patch('teams/'+$scope.currentTeam.id+'/employees/'+$scope.currentEmployee.id+'/entries/'+id, status).then(function(data) {
+            entry.status = status;
+            finishLoading();
+        });
+    };
+
+    $scope.changeEntryStatusToWaiting = function(id) {
+        $scope.changeEntryStatus(id, 1);
+    };
+
+    $scope.changeEntryStatusToAccepted = function(id) {
+        $scope.changeEntryStatus(id, 2);
+    };
+
+    $scope.changeEntryStatusToRejected = function(id) {
+        $scope.changeEntryStatus(id, 3);
+    };
+
     $scope.getStatusName = getStatusName;
     $scope.getStatusClass = getStatusClass;
     $scope.init();
