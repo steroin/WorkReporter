@@ -64,13 +64,6 @@ function getStatusClass(status) {
     else return "";
 }
 
-function getStatusOptionClass(status) {
-    if (status == 1) return 'optionInfo';
-    else if (status == 2) return 'optionSuccess';
-    else if (status == 3) return 'optionDanger';
-    else return "";
-}
-
 function glowInputWrong(obj) {
     obj.addClass("inputWrong");
     obj.keypress(function() {
@@ -78,4 +71,22 @@ function glowInputWrong(obj) {
             $(this).removeClass("inputWrong");
         }
     });
+}
+
+function splitDate(date) {
+    var split = date.split(" ");
+    var dateSplit = split[0].split("-");
+    var timeSplit = split.length > 1 ? split[1].split(":") : ['00', '00', '00'];
+    return [dateSplit[2], dateSplit[1], dateSplit[0], timeSplit[0], timeSplit[1], timeSplit[2]];
+}
+
+function compareDates(dateA, dateB) {
+    var dateASplit = splitDate(dateA);
+    var dateBSplit = splitDate(dateB);
+
+    for (var i = 0; i < 6; i++) {
+        if (dateASplit[i] > dateBSplit[i]) return -1;
+        else if (dateASplit[i] < dateBSplit[i]) return 1;
+    }
+    return 0;
 }

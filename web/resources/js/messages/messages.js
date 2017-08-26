@@ -16,9 +16,11 @@ module.controller('messagesController', function($scope, $http) {
             return $http.get('messages/received', {params : {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
             $scope.receivedMessages = data.data;
+            $scope.receivedMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
             return $http.get('messages/sent', {params : {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
             $scope.sentMessages = data.data;
+            $scope.sentMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
             finishLoading();
             $("#messagesMainContainer").show();
             $scope.activeReceivedMessagesContent();
@@ -28,6 +30,7 @@ module.controller('messagesController', function($scope, $http) {
     $scope.loadReceivedMessages = function() {
         $http.get('messages/received', {params : {'userid' : $scope.authentication.principal.userId}}).then(function(data) {
             $scope.receivedMessages = data.data;
+            $scope.receivedMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
             $scope.currentMessages = $scope.receivedMessages;
         });
     };
@@ -35,7 +38,7 @@ module.controller('messagesController', function($scope, $http) {
     $scope.loadSentMessages = function() {
         $http.get('messages/sent', {params : {'userid' : $scope.authentication.principal.userId}}).then(function(data) {
             $scope.sentMessages = data.data;
-            $scope.currentMessages = $scope.sentMessages;
+            $scope.currentMessages = $scope.sentMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
         });
     };
 
@@ -144,6 +147,7 @@ module.controller('messagesController', function($scope, $http) {
 
         $http.post('messages', message).then(function(data) {
             $scope.sentMessages.push(data.data);
+            $scope.sentMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
             finishLoading();
         });
     };

@@ -26,6 +26,7 @@ module.controller('teamManagementController', function($scope, $http) {
         }).then(function(data) {
             if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
             else $scope.currentLogEntries = data.data;
+            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.day+' '+a.startHour, b.day+' '+b.startHour)});
             $(".pageContent").show();
             $scope.setUpTeamManagementPagination(1);
             finishLoading();
@@ -117,6 +118,7 @@ module.controller('teamManagementController', function($scope, $http) {
         }).then(function(data) {
             if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
             else $scope.currentLogEntries = data.data;
+            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.day+' '+a.startHour, b.day+' '+b.startHour)});
             $scope.setUpTeamManagementPagination(1);
             finishLoading();
         });
@@ -135,6 +137,7 @@ module.controller('teamManagementController', function($scope, $http) {
         $http.get('teams/'+$scope.currentTeam.id+'/employees/'+id, {params : {'period' : days}}).then(function(data) {
             if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
             else $scope.currentLogEntries = data.data;
+            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.day+' '+a.startHour, b.day+' '+b.startHour)});
             $scope.setUpTeamManagementPagination(1);
             finishLoading();
         });

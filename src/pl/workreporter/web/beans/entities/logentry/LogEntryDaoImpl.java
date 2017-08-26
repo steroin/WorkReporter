@@ -103,7 +103,7 @@ public class LogEntryDaoImpl implements LogEntryDao {
                 "from log_entry le " +
                 "left join project p on le.projectid=p.id " +
                 "join log_type lt on le.logtypeid=lt.id " +
-                "where le.userid="+userId+" and to_date(sysdate)-to_date(le.day) <= "+period+" " +
+                "where le.userid="+userId+" and to_date(sysdate)-to_date(le.day) <= "+period+" "+
                 "order by le.day desc, le.starthour";
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
         List<LogEntry> entries = new ArrayList<>();
