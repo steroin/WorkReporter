@@ -24,11 +24,75 @@ module.controller('teamManagementController', function($scope, $http) {
 
             return $http.get('teams/'+$scope.currentTeam.id+'/employees/'+$scope.currentEmployee.id, {params : {'period' : 7}});
         }).then(function(data) {
-            $scope.currentLogEntries = data.data;
+            if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
+            else $scope.currentLogEntries = data.data;
             $(".pageContent").show();
+            $scope.setUpTeamManagementPagination(1);
             finishLoading();
         });
     };
+
+    $scope.initPagination = function(content, itemsPerPage, maxVisiblePages, pagesContainerId, defaultPageId) {
+        $scope.totalPages = Math.ceil(content.length / itemsPerPage);
+        if ($scope.totalPages < 2) {
+            $("#"+pagesContainerId).hide();
+        } else {
+            $("#"+pagesContainerId).show();
+        }
+        if (maxVisiblePages > $scope.totalPages) {
+            maxVisiblePages = $scope.totalPages;
+        }
+        $scope.setPage = function(i) {
+            if (i < 1 || i > $scope.totalPages) return;
+            if (i == 1) {
+                $("#"+pagesContainerId+" #prevPage").addClass("disabled");
+            } else {
+                $("#"+pagesContainerId+" #prevPage").removeClass("disabled");
+            }
+            if (i == $scope.totalPages) {
+                $("#"+pagesContainerId+" #nextPage").addClass("disabled");
+            } else {
+                $("#"+pagesContainerId+" #nextPage").removeClass("disabled");
+            }
+            $scope.currentPageId = i;
+            $scope.currentPage = content.slice(($scope.currentPageId - 1) * itemsPerPage, $scope.currentPageId * itemsPerPage);
+            var currentPages = [];
+            var start = $scope.currentPageId - Math.floor(maxVisiblePages  / 2) + (maxVisiblePages + 1) % 2;
+            var end = $scope.currentPageId + Math.floor(maxVisiblePages / 2);
+            if (start < 1) {
+                end = end - start + 1;
+                start = 1;
+            }
+            if (end > $scope.totalPages) {
+                start = start - end + $scope.totalPages;
+                end = $scope.totalPages;
+            }
+            for (var n = start; n <= end; n++) {
+                currentPages.push(n);
+            }
+            $scope.pagination = currentPages;
+            $("#"+pagesContainerId+" .active").removeClass("active");
+            $("#"+pagesContainerId+" #page"+i).addClass("active");
+        };
+        $scope.nextPage = function() {
+            $scope.setPage($scope.currentPageId + 1);
+        };
+        $scope.prevPage = function() {
+            $scope.setPage($scope.currentPageId - 1);
+        };
+        if (defaultPageId < 1) defaultPageId = 1;
+        else if (defaultPageId > $scope.totalPages) defaultPageId = $scope.totalPages;
+        $scope.setPage(defaultPageId);
+        $(document).ready(function() {$("#"+pagesContainerId+" #page"+defaultPageId).addClass("active");});
+        if (content.length == 0) {
+            $scope.currentPage = [];
+        }
+    };
+
+    $scope.setUpTeamManagementPagination = function(defaultPage) {
+        $scope.initPagination($scope.currentLogEntries, 10, 5, 'teamManagementCrudPagination', defaultPage);
+    };
+
     $scope.setCurrentTeam = function(id) {
         startLoading();
         $scope.currentTeam = $scope.allTeams.filter(function(obj) {return obj.id == id})[0];
@@ -51,7 +115,9 @@ module.controller('teamManagementController', function($scope, $http) {
 
             return $http.get('teams/'+$scope.currentTeam.id+'/employees/'+$scope.currentEmployee.id, {params : {'period' : days}});
         }).then(function(data) {
-            $scope.currentLogEntries = data.data;
+            if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
+            else $scope.currentLogEntries = data.data;
+            $scope.setUpTeamManagementPagination(1);
             finishLoading();
         });
     };
@@ -67,7 +133,9 @@ module.controller('teamManagementController', function($scope, $http) {
 
         $scope.currentEmployee = $scope.currentEmployees.filter(function(obj) {return obj.id == id})[0];
         $http.get('teams/'+$scope.currentTeam.id+'/employees/'+id, {params : {'period' : days}}).then(function(data) {
-            $scope.currentLogEntries = data.data;
+            if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
+            else $scope.currentLogEntries = data.data;
+            $scope.setUpTeamManagementPagination(1);
             finishLoading();
         });
     };

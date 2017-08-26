@@ -14,7 +14,7 @@
                         <th style="width: 15%">Status</th>
                     </tr>
                     </thead>
-                    <tr ng-repeat="entry in currentLogEntries">
+                    <tr ng-repeat="entry in currentPage">
                         <td style="width: 15%">{{entry.day}}</td>
                         <td style="width: 15%">{{entry.startHour}}</td>
                         <td style="width: 10%">{{entry.loggedHours}}</td>
@@ -32,6 +32,18 @@
                         </td>
                     </tr>
                 </table>
+            </div>
+            <div class="row crudButtonsContainer">
+                <div class="col-xs-6"></div>
+                <div class="col-xs-6">
+                    <div class="crudPagination">
+                        <ul id="teamManagementCrudPagination" class="pagination">
+                            <li id="prevPage"><a href="#" ng-click="prevPage()">prev</a></li>
+                            <li ng-repeat="page in pagination" id="page{{page}}"><a href="#" ng-click="setPage(page)">{{page}}</a></li>
+                            <li id="nextPage"><a href="#" ng-click="nextPage()">next</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
