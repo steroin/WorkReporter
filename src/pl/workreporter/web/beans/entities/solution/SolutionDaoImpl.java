@@ -3,7 +3,7 @@ package pl.workreporter.web.beans.entities.solution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import javax.transaction.Transactional;
 import pl.workreporter.web.service.date.DateParser;
 
 import java.util.ArrayList;
