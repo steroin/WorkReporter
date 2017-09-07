@@ -74,12 +74,14 @@ function initSolutionProjectsManagement($scope, $http) {
 
         $("#editProjectModal").modal("hide");
         startLoading();
-        $scope.currentProject.name = name;
-        $scope.currentProject.description = desc;
-        $http.patch('solution/projects/'+$scope.currentProject.id, $scope.currentProject).then(function(data) {
-            return $http.get('currentdate');
-        }).then(function(data) {
-            $scope.currentProject.lastEditionDate = data.data;
+        var objectToAdd = {
+            'solutionid' : $scope.currentSolution.id,
+            'name' : name,
+            'description' : desc
+        };
+        $http.patch('solution/projects/'+$scope.currentProject.id, objectToAdd).then(function(data) {
+            $scope.solutionProjects = $scope.solutionProjects.map(function(obj) {return obj.id == data.data.id ? data.data : obj});
+            $scope.setUpProjectPagination($scope.currentPageId);
             finishLoading();
         });
     };

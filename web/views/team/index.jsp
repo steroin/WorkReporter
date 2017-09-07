@@ -32,7 +32,7 @@
         </div>
     </div>
 </div>
-
+<%@ include file="../assets/team/teamNoTeamsError.html"%>
 <%@ include file="../assets/team/teamChooser.html"%>
 <%@ include file="../assets/team/teamMemberEntries.html"%>
 

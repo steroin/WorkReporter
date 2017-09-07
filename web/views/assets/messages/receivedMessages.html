@@ -1,14 +1,14 @@
 ﻿<div id="receivedMessages" class="row">
     <div class="list-group message" ng-repeat="message in currentPage">
-        <div data-toggle="collapse" data-target="#receivedMessage{{message.id}}" class="list-group-item list-group-item-info">
+        <div data-toggle="collapse" data-target="#receivedMessage{{message.message.id}}" class="list-group-item list-group-item-info">
             <div class="messageHeader">
                 <div class="row messageHeaderContainer">
                     <div class="col-xs-9">
                         <div class="messageHeaderTitle">
-                            {{message.title}}
+                            {{message.message.title}}
                         </div>
                         <div class="messageHeaderSender">
-                            Od: {{message.sender.firstName}} {{message.sender.lastName}} ({{message.sender.email}})
+                            Od: {{message.message.sender.personalData.firstName}} {{message.message.sender.personalData.lastName}} ({{message.message.sender.account.email}})
                         </div>
                     </div>
                     <div class="col-xs-3 messageHeaderDateContainer">
@@ -19,13 +19,13 @@
                 </div>
             </div>
         </div>
-        <div id="receivedMessage{{message.id}}" class="collapse messageBody">
+        <div id="receivedMessage{{message.message.id}}" class="collapse messageBody">
             <div class="panel panel-default">
                 <div class="messageText">
-                    {{message.content}}
+                    {{message.message.content}}
                 </div>
                 <div class="panel-footer messageButtons">
-                    <button id="receivedMessage{{message.id}}Response" type="button" class="btn btn-default" ng-click="responseModalOpen(message.id)">Odpowiedz</button>
+                    <button id="receivedMessage{{message.message.id}}Response" type="button" class="btn btn-default" ng-click="responseModalOpen(message.message.id)">Odpowiedz</button>
                 </div>
             </div>
         </div>

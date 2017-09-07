@@ -60,7 +60,7 @@ module.controller('mainController', function($scope, $http) {
             'day' : $scope.currentDay
         }}).then(function(data) {
             $scope.currentEntries = data.data;
-            $scope.currentEntries.sort(function(a,b ) { return a.startHour > b.startHour});
+            $scope.currentEntries.sort(function(a,b) { return compareDates(b.logStart, a.logStart)});
             $scope.markedItems = [];
             enableDateChange();
             finishLoading();
@@ -147,8 +147,7 @@ module.controller('mainController', function($scope, $http) {
         startLoading();
         var objectToAdd = {
             'userid' : $scope.authentication.principal.userId,
-            'day' : $scope.currentDay+"-"+$scope.currentMonth+"-"+$scope.currentYear,
-            'starthour' : startHour,
+            'start' : $scope.currentDay+"-"+$scope.currentMonth+"-"+$scope.currentYear+" "+startHour,
             'loggedhours' : loggedHours,
             'logtypeid' : logType,
             'projectid' : project
@@ -173,7 +172,7 @@ module.controller('mainController', function($scope, $http) {
     $scope.editLogEntryModalOpen = function() {
         if ($scope.currentEntry.status != 1) return;
         startLoading();
-        $("#editLogEntryStartHour").val($scope.currentEntry.startHour);
+        $("#editLogEntryStartHour").val($scope.getDateTime($scope.currentEntry.logStart));
         $("#editLogEntryLoggedHours").val($scope.currentEntry.loggedHours);
         $("#logEntryEditStartHourError").hide();
         $("#logEntryEditStartLoggedHours").hide();
@@ -183,10 +182,10 @@ module.controller('mainController', function($scope, $http) {
             return $http.get('entries/projects', {params: {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
             $scope.userAvailableProjects = data.data;
-            $("#editLogEntryEntryType").val($scope.currentEntry.logTypeId);
+            $("#editLogEntryEntryType").val($scope.currentEntry.logType.id);
             return $http.get('empty');
         }).then(function() {
-            $("#editLogEntryProject").val($scope.currentEntry.projectId);
+            $("#editLogEntryProject").val($scope.currentEntry.project === null ? "" : $scope.currentEntry.project.id);
             finishLoading();
             $("#editLogEntryModal").modal("show");
         });
@@ -216,6 +215,7 @@ module.controller('mainController', function($scope, $http) {
         $("#editLogEntryModal").modal("hide");
         startLoading();
 
+        // TO DO:
         $scope.currentEntry.startHour = startHour;
         $scope.currentEntry.loggedHours = loggedHours;
         $scope.currentEntry.logTypeId = logType;
@@ -284,7 +284,15 @@ module.controller('mainController', function($scope, $http) {
             $scope.markItem(id);
         }
     };
+    $scope.getDateDate = function(date) {
+        var split = splitDate(date);
+        return split[0]+"-"+split[1]+"-"+split[2];
+    };
 
+    $scope.getDateTime = function(date) {
+        var split = splitDate(date);
+        return split[3]+":"+split[4];
+    };
     $scope.getStatusName = getStatusName;
     $scope.getStatusClass = getStatusClass;
     $scope.parseDateTimestamp = parseDateTimestamp;

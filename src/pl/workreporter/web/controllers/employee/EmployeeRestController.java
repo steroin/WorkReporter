@@ -40,23 +40,19 @@ public class EmployeeRestController {
 
     @RequestMapping(value = "/solution/employees/{userid}", method = DELETE)
     public void removeEmployee(@RequestParam("solutionid") long solutionId,
-                               @RequestParam("personaldataid") long personalDataId,
-                               @RequestParam("accountid") long accountId,
                                @PathVariable("userid") long employeeId) {
-        userDao.removeUser(solutionId, employeeId, personalDataId, accountId);
+        userDao.removeUser(solutionId, employeeId);
     }
 
     @RequestMapping(value = "/solution/employees", method = DELETE)
     public void removeSelectedEmployees(@RequestParam("solutionid") long solutionId,
-                                        @RequestParam("employees") List<Long> employees,
-                                        @RequestParam("personaldatas") List<Long> personalDatas,
-                                        @RequestParam("accounts") List<Long> accounts) {
-        userDao.removeUsers(solutionId, employees, personalDatas, accounts);
+                                        @RequestParam("employees") List<Long> employees) {
+        userDao.removeUsers(solutionId, employees);
     }
 
     @RequestMapping(value = "/solution/employees/{id}", method = PATCH)
-    public void updateEmployee(@PathVariable("id") long employeeId, @RequestBody User employee) {
-        userDao.updateUser(employee);
+    public User updateEmployee(@PathVariable("id") long employeeId, @RequestBody Map<String, String> employee) {
+        return userDao.updateUser(employeeId, employee);
     }
 
     @RequestMapping(value="/solution/employees", method = POST)

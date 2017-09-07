@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.workreporter.web.beans.entities.message.MessageDao;
-import pl.workreporter.web.beans.entities.message.MessageParticipant;
-import pl.workreporter.web.beans.entities.message.ReceivedMessage;
-import pl.workreporter.web.beans.entities.message.SentMessage;
+import pl.workreporter.web.beans.entities.message.Message;
+import pl.workreporter.web.beans.entities.message.MessageSend;
+import pl.workreporter.web.beans.entities.message.SentMessageWrapper;
+import pl.workreporter.web.beans.entities.user.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,17 +27,17 @@ public class MessagesRestController {
     private MessageDao messageDao;
 
     @RequestMapping(value = "/messages/received", method = GET)
-    public List<ReceivedMessage> getReceivedMessages(@RequestParam("userid") long userId) {
+    public List<MessageSend> getReceivedMessages(@RequestParam("userid") long userId) {
         return messageDao.getUserReceivedMessages(userId);
     }
 
     @RequestMapping(value = "/messages/sent", method = GET)
-    public List<SentMessage> getSentMessages(@RequestParam("userid") long userId) {
+    public List<SentMessageWrapper> getSentMessages(@RequestParam("userid") long userId) {
         return messageDao.getUserSentMessages(userId);
     }
 
     @RequestMapping(value = "/messages", method = POST)
-    public SentMessage sendMessage(@RequestBody SentMessage message) {
-        return messageDao.sendMessage(message.getSender(), message.getReceivers(), message.getTitle(), message.getContent());
+    public SentMessageWrapper sendMessage(@RequestBody SentMessageWrapper sentMessageWrapper) {
+        return messageDao.sendMessage(sentMessageWrapper.getMessage().getSender().getId(), sentMessageWrapper.getReceivers(), sentMessageWrapper.getMessage().getTitle(), sentMessageWrapper.getMessage().getContent());
     }
 }

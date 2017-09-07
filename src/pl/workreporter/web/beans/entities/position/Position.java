@@ -1,14 +1,36 @@
 package pl.workreporter.web.beans.entities.position;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import pl.workreporter.web.beans.entities.solution.Solution;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * Created by Sergiusz on 19.08.2017.
  */
-public class Position {
+@Entity
+@Table(name = "POSITION")
+public class Position implements Serializable {
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "positionseq")
+    @SequenceGenerator(name = "positionseq", sequenceName = "positionseq", allocationSize = 1)
     private long id;
-    private long solutionId;
+    @ManyToOne
+    @JoinColumn(name = "SOLUTIONID")
+    @JsonBackReference(value = "solutionPositions")
+    private Solution solution;
+    @Column(name = "NAME")
     private String name;
-    private String creationDate;
-    private String lastEditionDate;
+    @Column(name = "CREATION_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    private Date creationDate = new Date();
+    @Column(name = "LAST_EDITION_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    private Date lastEditionDate = new Date();
 
     public long getId() {
         return id;
@@ -18,12 +40,12 @@ public class Position {
         this.id = id;
     }
 
-    public long getSolutionId() {
-        return solutionId;
+    public Solution getSolution() {
+        return solution;
     }
 
-    public void setSolutionId(long solutionId) {
-        this.solutionId = solutionId;
+    public void setSolution(Solution solution) {
+        this.solution = solution;
     }
 
     public String getName() {
@@ -34,19 +56,19 @@ public class Position {
         this.name = name;
     }
 
-    public String getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
-    public String getLastEditionDate() {
+    public Date getLastEditionDate() {
         return lastEditionDate;
     }
 
-    public void setLastEditionDate(String lastEditionDate) {
+    public void setLastEditionDate(Date lastEditionDate) {
         this.lastEditionDate = lastEditionDate;
     }
 }

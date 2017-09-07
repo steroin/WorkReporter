@@ -39,8 +39,8 @@ public class ProjectRestController {
     }
 
     @RequestMapping(value = "/solution/projects/{id}", method = PATCH)
-    public void updateProject(@PathVariable("id") long projectId, @RequestBody Project project) {
-        projectDao.updateProject(project);
+    public Project updateProject(@PathVariable("id") long projectId, @RequestBody Map<String, String> map) {
+        return projectDao.updateProject(projectId, map);
     }
 
     @RequestMapping(value="/solution/projects", method = POST)

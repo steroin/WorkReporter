@@ -1,13 +1,14 @@
 package pl.workreporter.web.beans.entities.position;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
-import pl.workreporter.web.service.date.DateParser;
+import pl.workreporter.web.beans.entities.solution.Solution;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Map;
 
@@ -17,89 +18,65 @@ import java.util.Map;
 @Repository
 public class PositionDaoImpl implements PositionDao {
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private DateParser dateParser;
+    private LocalContainerEntityManagerFactoryBean entityManagerFactoryBean;
 
     @Override
     public Position getPositionById(long id) {
-        String query = "select * from position where id="+id;
-        Map<String, Object> result = jdbcTemplate.queryForMap(query);
-        Position position = new Position();
-        position.setId(Long.parseLong(result.get("id").toString()));
-        position.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
-        position.setName(result.get("name").toString());
-        position.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date").toString()));
-        position.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date").toString()));
-        return position;
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        return entityManager.find(Position.class, id);
     }
 
     @Override
     public List<Position> getAllPositionsInSolution(long solutionId) {
-        String query = "select * from position where solutionid="+solutionId;
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-        List<Position> positions = new ArrayList<>();
-
-        for (Map<String, Object> map : result) {
-            Position position = new Position();
-            position.setId(Long.parseLong(map.get("id").toString()));
-            position.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
-            position.setName(map.get("name").toString());
-            position.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
-            position.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
-            positions.add(position);
-        }
-        return positions;
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Position> query = criteriaBuilder.createQuery(Position.class);
+        Root<Position> root = query.from(Position.class);
+        query.select(root);
+        query.where(criteriaBuilder.equal(root.get("solution"), entityManager.find(Solution.class, solutionId)));
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
     public Position addPosition(long solutionId, String name) {
-        String query = "select positionseq.nextval from dual";
-        Map<String, Object> result = jdbcTemplate.queryForMap(query);
-        long id = Long.parseLong(result.get("nextval").toString());
-
-        query = "insert into position(id, solutionid, name, creation_date, last_edition_date) values (?, ?, ?, sysdate, sysdate)";
-        jdbcTemplate.update(query, id, solutionId, name);
-        query = "select * from position where id = ?";
-        result = jdbcTemplate.queryForMap(query, id);
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         Position position = new Position();
-        position.setId(Long.parseLong(result.get("id").toString()));
-        position.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
-        position.setName(result.get("name").toString());
-        position.setCreationDate(dateParser.parseToDatabaseTimestamp(result.get("creation_date").toString()));
-        position.setLastEditionDate(dateParser.parseToDatabaseTimestamp(result.get("last_edition_date").toString()));
+        position.setName(name);
+        position.setSolution(entityManager.find(Solution.class, solutionId));
+        entityManager.getTransaction().begin();
+        entityManager.persist(position);
+        entityManager.getTransaction().commit();
         return position;
     }
 
     @Override
     public void removePosition(long solutionId, long positionId) {
-        String query = "delete from position where id="+positionId+" and solutionid="+solutionId;
-        jdbcTemplate.execute(query);
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        entityManager.getTransaction().begin();
+        Position position = entityManager.find(Position.class, positionId);
+        entityManager.remove(position);
+        entityManager.getTransaction().commit();
     }
 
     @Override
     public void removePositions(long solutionId, List<Long> positionsIds) {
-        StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("delete from position where solutionid="+solutionId);
-        queryBuilder.append(" and (");
-        for (int i = 0; i < positionsIds.size(); i++) {
-            queryBuilder.append("id="+positionsIds.get(i));
-            if (i < positionsIds.size() - 1) {
-                queryBuilder.append(" or ");
-            }
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        entityManager.getTransaction().begin();
+        for (long id : positionsIds) {
+            Position position = entityManager.find(Position.class, id);
+            entityManager.remove(position);
         }
-        queryBuilder.append(")");
-        jdbcTemplate.execute(queryBuilder.toString());
+        entityManager.getTransaction().commit();
     }
 
     @Override
-    public void updatePosition(Position position) {
-        String query = "update position " +
-                "set solutionid = "+position.getSolutionId()+", " +
-                "name = '"+position.getName()+"', " +
-                "creation_date = "+dateParser.parseToDatabaseTimestamp(position.getCreationDate())+", " +
-                "last_edition_date = sysdate " +
-                "where id = "+position.getId();
-        jdbcTemplate.execute(query);
+    public Position updatePosition(long positionId, Map<String, String> map) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        Position position = entityManager.find(Position.class, positionId);
+        position.setName(map.get("name"));
+        entityManager.getTransaction().begin();
+        entityManager.merge(position);
+        entityManager.getTransaction().commit();
+        return position;
     }
 }

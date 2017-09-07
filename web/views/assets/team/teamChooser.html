@@ -22,7 +22,7 @@
     <div class="col-sm-2">
         <div class="row">
             <div class="chooseHeaderContainer">
-                <h2>{{currentEmployee.firstName}} {{currentEmployee.lastName}}</h2>
+                <h2>{{currentEmployee.personalData.firstName}} {{currentEmployee.personalData.lastName}}</h2>
             </div>
         </div>
         <div class="row">
@@ -31,7 +31,7 @@
                     <span class="caret"></span></button>
                 <ul class="dropdown-menu chooserList">
                     <li ng-repeat="employee in currentEmployees">
-                        <a id="employee{{employee.id}}" href="#" ng-click="setCurrentEmployee(employee.id)">{{employee.firstName}} {{employee.lastName}}</a>
+                        <a id="employee{{employee.id}}" href="#" ng-click="setCurrentEmployee(employee.id)">{{employee.personalData.firstName}} {{employee.personalData.lastName}}</a>
                     </li>
                 </ul>
             </div>

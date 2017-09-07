@@ -10,23 +10,33 @@ module.config(['$httpProvider', function($httpProvider) {
 module.controller('teamManagementController', function($scope, $http) {
     $scope.init = function() {
         startLoading();
+        $(".teamChooserContainer").hide();
+        $("#noTeamsError").hide();
         $http.get('auth').then(function(data){
             $scope.authentication = data.data;
             return $http.get("teams", {params : {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
+            if (data.data.length === 0) {
+                finishLoading();
+                $("#noTeamsError").show();
+                return null;
+            }
+            $(".teamChooserContainer").show();
             $scope.allTeams = data.data;
             $scope.currentTeam = $scope.allTeams[0];
             return $http.get('teams/'+$scope.currentTeam.id+'/employees');
         }).then(function(data) {
+            if (data === null) return null;
             $scope.currentEmployees = data.data;
             $scope.currentEmployee = $scope.currentEmployees[0];
             $scope.currentPeriod = 0;
 
             return $http.get('teams/'+$scope.currentTeam.id+'/employees/'+$scope.currentEmployee.id, {params : {'period' : 7}});
         }).then(function(data) {
+            if (data === null) return;
             if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
             else $scope.currentLogEntries = data.data;
-            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.day+' '+a.startHour, b.day+' '+b.startHour)});
+            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.logStart, b.logStart)});
             $(".pageContent").show();
             $scope.setUpTeamManagementPagination(1);
             finishLoading();
@@ -118,7 +128,7 @@ module.controller('teamManagementController', function($scope, $http) {
         }).then(function(data) {
             if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
             else $scope.currentLogEntries = data.data;
-            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.day+' '+a.startHour, b.day+' '+b.startHour)});
+            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.logStart, b.logStart)});
             $scope.setUpTeamManagementPagination(1);
             finishLoading();
         });
@@ -137,7 +147,7 @@ module.controller('teamManagementController', function($scope, $http) {
         $http.get('teams/'+$scope.currentTeam.id+'/employees/'+id, {params : {'period' : days}}).then(function(data) {
             if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
             else $scope.currentLogEntries = data.data;
-            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.day+' '+a.startHour, b.day+' '+b.startHour)});
+            $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.logStart, b.logStart)});
             $scope.setUpTeamManagementPagination(1);
             finishLoading();
         });
@@ -182,6 +192,15 @@ module.controller('teamManagementController', function($scope, $http) {
         $scope.changeEntryStatus(id, 3);
     };
 
+    $scope.getDateDate = function(date) {
+        var split = splitDate(date);
+        return split[0]+"-"+split[1]+"-"+split[2];
+    };
+
+    $scope.getDateTime = function(date) {
+        var split = splitDate(date);
+        return split[3]+":"+split[4];
+    };
     $scope.getStatusName = getStatusName;
     $scope.getStatusClass = getStatusClass;
     $scope.init();

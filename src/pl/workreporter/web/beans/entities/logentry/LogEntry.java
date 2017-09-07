@@ -1,23 +1,54 @@
 package pl.workreporter.web.beans.entities.logentry;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import pl.workreporter.web.beans.entities.project.Project;
+import pl.workreporter.web.beans.entities.team.Team;
+import pl.workreporter.web.beans.entities.user.User;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * Created by Sergiusz on 21.08.2017.
  */
-public class LogEntry {
+@Entity
+@Table(name = "LOG_ENTRY")
+@SecondaryTable(name = "LOG_TYPE")
+public class LogEntry implements Serializable {
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logentryseq")
+    @SequenceGenerator(name = "logentryseq", sequenceName = "logentryseq", allocationSize = 1)
     private long id;
-    private long userId;
-    private long teamId;
-    private long logTypeId;
-    private String logTypeName;
-    private Long projectId;
-    private String projectName;
-    private String startHour;
+    @ManyToOne
+    @JoinColumn(name = "USERID")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "TEAMID")
+    private Team team;
+    @ManyToOne
+    @JoinColumn(name = "LOGTYPEID")
+    private LogType logType;
+    @ManyToOne
+    @JoinColumn(name = "PROJECTID")
+    private Project project;
+    @Column(name = "LOG_START")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    private Date logStart;
+    @Column(name = "LOGGEDHOURS")
     private double loggedHours;
-    private String day;
-    private String logDate;
-    private String lastEditionDate;
-    private int status;
-    private Long acceptedBy;
+    @Column(name = "LOG_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    private Date logDate = new Date();
+    @Column(name = "LAST_EDITION_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    private Date lastEditionDate = new Date();
+    @Column(name = "STATUS")
+    private int status = 1;
+    @ManyToOne
+    @JoinColumn(name = "ACCEPTEDBY")
+    private User acceptedBy = null;
 
     public long getId() {
         return id;
@@ -27,60 +58,44 @@ public class LogEntry {
         this.id = id;
     }
 
-    public long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public long getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamId(long teamId) {
-        this.teamId = teamId;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
-    public long getLogTypeId() {
-        return logTypeId;
+    public LogType getLogType() {
+        return logType;
     }
 
-    public void setLogTypeId(long logTypeId) {
-        this.logTypeId = logTypeId;
+    public void setLogType(LogType logType) {
+        this.logType = logType;
     }
 
-    public String getLogTypeName() {
-        return logTypeName;
+    public Project getProject() {
+        return project;
     }
 
-    public void setLogTypeName(String logTypeName) {
-        this.logTypeName = logTypeName;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Long getProjectId() {
-        return projectId;
+    public Date getLogStart() {
+        return logStart;
     }
 
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getStartHour() {
-        return startHour;
-    }
-
-    public void setStartHour(String startHour) {
-        this.startHour = startHour;
+    public void setLogStart(Date logStart) {
+        this.logStart = logStart;
     }
 
     public double getLoggedHours() {
@@ -91,27 +106,19 @@ public class LogEntry {
         this.loggedHours = loggedHours;
     }
 
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-    }
-
-    public String getLogDate() {
+    public Date getLogDate() {
         return logDate;
     }
 
-    public void setLogDate(String logDate) {
+    public void setLogDate(Date logDate) {
         this.logDate = logDate;
     }
 
-    public String getLastEditionDate() {
+    public Date getLastEditionDate() {
         return lastEditionDate;
     }
 
-    public void setLastEditionDate(String lastEditionDate) {
+    public void setLastEditionDate(Date lastEditionDate) {
         this.lastEditionDate = lastEditionDate;
     }
 
@@ -123,11 +130,11 @@ public class LogEntry {
         this.status = status;
     }
 
-    public Long getAcceptedBy() {
+    public User getAcceptedBy() {
         return acceptedBy;
     }
 
-    public void setAcceptedBy(Long acceptedBy) {
+    public void setAcceptedBy(User acceptedBy) {
         this.acceptedBy = acceptedBy;
     }
 }

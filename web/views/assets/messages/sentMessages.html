@@ -1,16 +1,16 @@
 ﻿<div id="sentMessages" class="row">
     <div class="list-group message" ng-repeat="message in currentPage">
-        <div data-toggle="collapse" data-target="#sentMessage{{message.id}}" class="list-group-item list-group-item-info">
+        <div data-toggle="collapse" data-target="#sentMessage{{message.message.id}}" class="list-group-item list-group-item-info">
             <div class="messageHeader">
                 <div class="row messageHeaderContainer">
                     <div class="col-xs-9">
                         <div class="messageHeaderTitle">
-                            {{message.title}}
+                            {{message.message.title}}
                         </div>
                         <div class="messageHeaderSender" ng-if="message.receivers.length == 1">
                             Do:
                             <span ng-repeat="receiver in message.receivers">
-                                {{receiver.firstName}} {{receiver.lastName}} ({{receiver.email}})
+                                {{receiver.personalData.firstName}} {{receiver.personalData.lastName}} ({{receiver.account.email}})
                                 <span ng-if="!$last">, </span>
                             </span>
                         </div>
@@ -23,17 +23,17 @@
                 </div>
             </div>
         </div>
-        <div id="sentMessage{{message.id}}" class="collapse messageBody">
+        <div id="sentMessage{{message.message.id}}" class="collapse messageBody">
             <div class="panel panel-default">
                 <div class="messageTextReceivers" ng-if="message.receivers.length > 1">
                     Odbiorcy:
                     <span ng-repeat="receiver in message.receivers">
-                        {{receiver.firstName}} {{receiver.lastName}} ({{receiver.email}})
+                        {{receiver.personalData.firstName}} {{receiver.personalData.lastName}} ({{receiver.account.email}})
                         <span ng-if="!$last">, </span>
                     </span>
                 </div>
                 <div class="messageText">
-                    {{message.content}}
+                    {{message.message.content}}
                 </div>
             </div>
         </div>

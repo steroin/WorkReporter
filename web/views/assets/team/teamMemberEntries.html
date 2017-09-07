@@ -15,11 +15,11 @@
                     </tr>
                     </thead>
                     <tr ng-repeat="entry in currentPage">
-                        <td style="width: 15%">{{entry.day}}</td>
-                        <td style="width: 15%">{{entry.startHour}}</td>
+                        <td style="width: 15%">{{getDateDate(entry.logStart)}}</td>
+                        <td style="width: 15%">{{getDateTime(entry.logStart)}}</td>
                         <td style="width: 10%">{{entry.loggedHours}}</td>
-                        <td style="width: 15%">{{entry.logTypeName}}</td>
-                        <td style="width: 35%">{{entry.projectName}}</td>
+                        <td style="width: 15%">{{entry.logType.name}}</td>
+                        <td style="width: 35%">{{entry.project.name}}</td>
                         <td class="changeStatusDropdownCell" style="width: 15%">
                             <div class="dropdown">
                                 <a class="dropdown-toggle logEntryStatus {{getStatusClass(entry.status)}}" role="button" data-toggle="dropdown">{{getStatusName(entry.status)}}</a>

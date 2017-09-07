@@ -19,7 +19,7 @@
                             <label for="userDataFirstName">Imię</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue" >
-                            <div id="userDataFirstName" class="userDataRowValueText">{{userData.firstName}}</div>
+                            <div id="userDataFirstName" class="userDataRowValueText">{{userData.personalData.firstName}}</div>
                         </div>
                     </div>
                     <div class="row form-group userDataRow">
@@ -27,7 +27,7 @@
                             <label for="userDataLastName">Nazwisko</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue" >
-                            <div id="userDataLastName" class="userDataRowValueText">{{userData.lastName}}</div>
+                            <div id="userDataLastName" class="userDataRowValueText">{{userData.personalData.lastName}}</div>
                         </div>
                     </div>
                     <div class="row form-group userDataRow">
@@ -35,7 +35,7 @@
                             <label for="userDataBirthday">Data urodzenia</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue" >
-                            <input id="userDataBirthday" class="form-control userDataRowValueText" type="text" value="{{parseDateTimestamp(userData.birthday)}}">
+                            <input id="userDataBirthday" class="form-control userDataRowValueText" type="text" value="{{parseDateTimestamp(userData.personalData.birthday)}}">
                         </div>
                     </div>
                     <div class="row form-group userDataRow">
@@ -43,7 +43,7 @@
                             <label for="userDataPhone">Telefon</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue" >
-                            <input id="userDataPhone" class="form-control userDataRowValueText" type="text" value="{{userData.phone}}">
+                            <input id="userDataPhone" class="form-control userDataRowValueText" type="text" value="{{userData.personalData.phone}}">
                         </div>
                     </div>
                 </form>
@@ -55,7 +55,7 @@
                             <label for="userDataLogin">Login</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue" >
-                            <div id="userDataLogin" class="userDataRowValueText">{{userData.login}}</div>
+                            <div id="userDataLogin" class="userDataRowValueText">{{userData.account.login}}</div>
                         </div>
                     </div>
                     <div class="row form-group userDataRow">
@@ -63,7 +63,7 @@
                             <label for="userDataEmail">Email</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue" >
-                            <div id="userDataEmail" class="userDataRowValueText">{{userData.email}}</div>
+                            <div id="userDataEmail" class="userDataRowValueText">{{userData.account.email}}</div>
                         </div>
                     </div>
                     <div class="row form-group userDataRow">
@@ -115,7 +115,7 @@
                             <label for="userDataSolutionName">Nazwa firmy</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue" >
-                            <div id="userDataSolutionName" class="userDataRowValueText">{{userData.solutionName}}</div>
+                            <div id="userDataSolutionName" class="userDataRowValueText">{{currentSolution.name}}</div>
                         </div>
                     </div>
                     <div class="row form-group userDataRow">
@@ -123,7 +123,7 @@
                             <label for="userDataTeamName">Nazwa zespołu</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue">
-                            <div id="userDataTeamName" class="userDataRowValueText">{{userData.teamName}}</div>
+                            <div id="userDataTeamName" class="userDataRowValueText">{{userData.team.name}}</div>
                         </div>
                     </div>
                     <div class="row form-group userDataRow">
@@ -131,7 +131,7 @@
                             <label for="userDataPositionName">Nazwa stanowiska</label>
                         </div>
                         <div class="col-sm-8 userDataRowValue">
-                            <div id="userDataPositionName" class="userDataRowValueText">{{userData.positionName}}</div>
+                            <div id="userDataPositionName" class="userDataRowValueText">{{userData.position.name}}</div>
                         </div>
                     </div>
                     <div class="row form-group userDataRow">

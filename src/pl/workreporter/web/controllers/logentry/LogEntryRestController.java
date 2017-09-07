@@ -8,6 +8,7 @@ import pl.workreporter.web.beans.entities.logentry.LogType;
 import pl.workreporter.web.beans.entities.position.Position;
 import pl.workreporter.web.beans.entities.project.Project;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +42,7 @@ public class LogEntryRestController {
     @RequestMapping(value = "/entries", method = POST)
     public LogEntry addLogEntry(@RequestBody Map<String, String> logEntry) {
         return logEntryDao.addLogEntry(Long.parseLong(logEntry.get("userid")),
-                logEntry.get("day"),
-                logEntry.get("starthour"),
+                logEntry.get("start"),
                 Double.parseDouble(logEntry.get("loggedhours")),
                 Long.parseLong(logEntry.get("logtypeid")),
                 logEntry.get("projectid") == null || logEntry.get("projectid").isEmpty() ? null : Long.parseLong(logEntry.get("projectid")));

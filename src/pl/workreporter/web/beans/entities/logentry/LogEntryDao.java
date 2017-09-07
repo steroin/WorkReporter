@@ -7,8 +7,8 @@ import java.util.List;
  */
 public interface LogEntryDao {
     LogEntry getLogEntryById(long id);
-    LogEntry addLogEntry(long userId, String day, String startHour, double loggedHours,
-                    long logTypeId, Long projectId);
+    LogEntry addLogEntry(long userId, String startDate, double loggedHours,
+                         long logTypeId, Long projectId);
     List<LogEntry> getDailyLogEntries(long userId, int year, int month, int day);
     List<LogEntry> getLastLogEntries(long userId, int period);
     List<LogType> getAllLogTypes();

@@ -2,11 +2,14 @@ package pl.workreporter.web.beans.entities.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
-import pl.workreporter.web.service.date.DateParser;
+import pl.workreporter.web.beans.entities.solution.Solution;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,104 +24,83 @@ public class ProjectDaoImpl implements ProjectDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
-    private DateParser dateParser;
+    private LocalContainerEntityManagerFactoryBean entityManagerFactoryBean;
 
     @Override
     public Project getProjectById(long id) {
-        String query = "select * from project where id="+id;
-        Map<String, Object> result = jdbcTemplate.queryForMap(query);
-        Project project = new Project();
-        project.setId(Long.parseLong(result.get("id").toString()));
-        project.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
-        project.setName(result.get("name").toString());
-        project.setDescription(result.get("description") == null ? "" : result.get("description").toString());
-        project.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date").toString()));
-        project.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date").toString()));
-        return project;
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        return entityManager.find(Project.class, id);
     }
 
     @Override
     public List<Project> getAllProjectsInSolution(long solutionId) {
-        String query = "select * from project where solutionid="+solutionId;
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-        List<Project> projects = new ArrayList<>();
-
-        for (Map<String, Object> map : result) {
-            Project project = new Project();
-            project.setId(Long.parseLong(map.get("id").toString()));
-            project.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
-            project.setName(map.get("name").toString());
-            project.setDescription(map.get("description") == null ? "" : map.get("description").toString());
-            project.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
-            project.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
-            projects.add(project);
-        }
-        return projects;
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Project> query = criteriaBuilder.createQuery(Project.class);
+        Root<Project> root = query.from(Project.class);
+        query.select(root);
+        query.where(criteriaBuilder.equal(root.get("solution"), entityManager.find(Solution.class, solutionId)));
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
     public List<Project> getAllUsersProject(long userId) {
-        String query = "select p.id, p.solutionid, p.name, p.description, p.creation_date, p.last_edition_date from project p " +
+       String query = "select p.id from project p " +
                 "join project_association pa on p.id=pa.projectid " +
                 "join appuser au on au.teamid=pa.teamid " +
                 "where au.id = "+userId;
         List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-        List<Project> projects = new ArrayList<>();
 
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        List<Project> projects = new ArrayList<>();
         for (Map<String, Object> map : result) {
-            Project project = new Project();
-            project.setId(Long.parseLong(map.get("id").toString()));
-            project.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
-            project.setName(map.get("name").toString());
-            project.setDescription(map.get("description") == null ? "" : map.get("description").toString());
-            project.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
-            project.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
-            projects.add(project);
+            projects.add(entityManager.find(Project.class, Long.parseLong(map.get("id").toString())));
         }
         return projects;
     }
 
     @Override
     public Project addProject(long solutionId, String name, String desc) {
-        String query = "select projectseq.nextval from dual";
-        Map<String, Object> result = jdbcTemplate.queryForMap(query);
-        long id = Long.parseLong(result.get("nextval").toString());
-
-        query = "insert into project(id, solutionid, name, description, creation_date, last_edition_date) values (?, ?, ?, ?, sysdate, sysdate)";
-        jdbcTemplate.update(query, id, solutionId, name, desc);
-        return getProjectById(id);
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        Project project = new Project();
+        project.setSolution(entityManager.find(Solution.class, solutionId));
+        project.setName(name);
+        project.setDescription(desc);
+        entityManager.getTransaction().begin();
+        entityManager.persist(project);
+        entityManager.getTransaction().commit();
+        return project;
     }
 
     @Override
     public void removeProject(long solutionId, long projectId) {
-        String query = "delete from project where id="+projectId+" and solutionid="+solutionId;
-        jdbcTemplate.execute(query);
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        entityManager.getTransaction().begin();
+        Project project = entityManager.find(Project.class, projectId);
+        entityManager.remove(project);
+        entityManager.getTransaction().commit();
     }
 
     @Override
     public void removeProjects(long solutionId, List<Long> projectIds) {
-        StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("delete from project where solutionid="+solutionId);
-        queryBuilder.append(" and (");
-        for (int i = 0; i < projectIds.size(); i++) {
-            queryBuilder.append("id="+projectIds.get(i));
-            if (i < projectIds.size() - 1) {
-                queryBuilder.append(" or ");
-            }
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        entityManager.getTransaction().begin();
+        for (long id : projectIds) {
+            Project project = entityManager.find(Project.class, id);
+            entityManager.remove(project);
         }
-        queryBuilder.append(")");
-        jdbcTemplate.execute(queryBuilder.toString());
+        entityManager.getTransaction().commit();
     }
 
     @Override
-    public void updateProject(Project project) {
-        String query = "update project " +
-                "set solutionid = "+project.getSolutionId()+", " +
-                "name = '"+project.getName()+"', " +
-                "description = '"+project.getDescription()+"', " +
-                "creation_date = "+dateParser.parseToDatabaseTimestamp(project.getCreationDate())+", " +
-                "last_edition_date = sysdate " +
-                "where id = "+project.getId();
-        jdbcTemplate.execute(query);
+    public Project updateProject(long projectId, Map<String, String> map) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        Project project = entityManager.find(Project.class, projectId);
+        project.setName(map.get("name"));
+        project.setDescription(map.get("description"));
+        entityManager.getTransaction().begin();
+        entityManager.merge(project);
+        entityManager.getTransaction().commit();
+        return project;
     }
 }

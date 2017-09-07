@@ -46,4 +46,32 @@ public class DateParser {
         String timestamp = dateSplit[2]+"-"+dateSplit[1]+"-"+dateSplit[0]+" "+timeSplit[0]+":"+timeSplit[1]+":"+secondsSplit[0];
         return timestamp;
     }
+
+    public String makeParsableDate(String date) {
+        if (date == null || date.isEmpty()) return "";
+        String[] split = date.split(" ");
+
+        if (split.length == 0) {
+            return "";
+        }
+
+        String[] dateSplit = split[0].split("-");
+        if (dateSplit[0].length() < 2) dateSplit[0] = "0"+dateSplit[0];
+        if (dateSplit[1].length() < 2) dateSplit[1] = "0"+dateSplit[1];
+
+        String[] timeSplit = {"00", "00", "00"};
+        if (split.length > 1) {
+            String[] givenTime = split[1].split(":");
+            timeSplit = new String[] { givenTime[0], givenTime[1], "00" };
+
+            if (givenTime[0].length() < 2) timeSplit[0] = "0"+givenTime[0];
+            if (givenTime[1].length() < 2) timeSplit[1] = "0"+givenTime[1];
+            if (givenTime.length > 2) {
+                if (givenTime[2].length() < 2) timeSplit[2] = "0"+givenTime[2];
+            } else {
+                timeSplit[2] = "00";
+            }
+        }
+        return dateSplit[0] + "-" + dateSplit[1] + "-" + dateSplit[2] + " " + timeSplit[0] + ":" + timeSplit[1] + ":" + timeSplit[2];
+    }
 }

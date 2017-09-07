@@ -56,11 +56,14 @@ function initSolutionPositionsManagement($scope, $http) {
 
         $("#editPositionModal").modal("hide");
         startLoading();
-        $scope.currentPosition.name = name;
-        $http.patch('solution/positions/'+$scope.currentPosition.id, $scope.currentPosition).then(function(data) {
-            return $http.get('currentdate');
-        }).then(function(data) {
-            $scope.currentPosition.lastEditionDate = data.data;
+
+        var objectToAdd = {
+            'solutionid' : $scope.currentSolution.id,
+            'name' : name
+        };
+        $http.patch('solution/positions/'+$scope.currentPosition.id, objectToAdd).then(function(data) {
+            $scope.solutionPositions = $scope.solutionPositions.map(function(obj) {return obj.id == data.data.id ? data.data : obj});
+            $scope.setUpPositionPagination($scope.currentPageId);
             finishLoading();
         });
     };

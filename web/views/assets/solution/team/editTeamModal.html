@@ -16,7 +16,7 @@
                                 <label for="editTeamModalLeaderInput">Lider:</label>
                                 <select id="editTeamModalLeaderInput" class="form-control">
                                     <option value="">(brak)</option>
-                                    <option ng-repeat="member in currentTeamMembers" value="{{member.id}}">{{member.firstName}} {{member.lastName}} ({{member.login}})</option>
+                                    <option ng-repeat="member in currentTeamMembers" value="{{member.id}}">{{member.personalData.firstName}} {{member.personalData.lastName}} ({{member.account.login}})</option>
                                 </select>
                             </div>
 

@@ -1,12 +1,16 @@
 package pl.workreporter.web.beans.entities.team;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
-import pl.workreporter.web.service.date.DateParser;
+import org.springframework.transaction.annotation.Transactional;
+import pl.workreporter.web.beans.entities.solution.Solution;
+import pl.workreporter.web.beans.entities.user.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Map;
 
@@ -14,137 +18,89 @@ import java.util.Map;
  * Created by Sergiusz on 19.08.2017.
  */
 @Repository
+@Transactional
 public class TeamDaoImpl implements TeamDao{
     @Autowired
-    JdbcTemplate jdbcTemplate;
-    @Autowired
-    private DateParser dateParser;
+    private LocalContainerEntityManagerFactoryBean entityManagerFactoryBean;
 
     @Override
     public Team getTeamById(long id) {
-        String query = "select t.id, t.name, t.solutionid, t.leaderid, t.creation_date, t.last_edition_date, pd.firstname, pd.lastname, ac.login\n" +
-                "from team t \n" +
-                "  left join appuser au on t.leaderid = au.id \n" +
-                "  left join personal_data pd on au.personaldataid=pd.id\n" +
-                "  left join account ac on au.accountid = ac.id " +
-                "where t.id="+id;
-        Map<String, Object> result = jdbcTemplate.queryForMap(query);
-        String leaderName = "";
-        if (result.get("firstname") != null && result.get("lastname") != null && result.get("login") != null) {
-            leaderName = result.get("firstname").toString()+" "+result.get("lastname").toString()+" ("+result.get("login").toString()+")";
-        }
-        Team team = new Team();
-        team.setId(Long.parseLong(result.get("id").toString()));
-        team.setSolutionId(Long.parseLong(result.get("solutionid").toString()));
-        team.setLeaderId(result.get("leaderid") == null ? null : Long.parseLong(result.get("leaderid").toString()));
-        team.setLeaderName(leaderName);
-        team.setName(result.get("name").toString());
-        team.setCreationDate(dateParser.parseToReadableDate(result.get("creation_date").toString()));
-        team.setLastEditionDate(dateParser.parseToReadableDate(result.get("last_edition_date").toString()));
-        return team;
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        return entityManager.find(Team.class, id);
     }
 
     @Override
     public List<Team> getAllTeamsInSolution(long solutionId) {
-        String query = "select t.id, t.name, t.solutionid, t.leaderid, t.creation_date, t.last_edition_date, pd.firstname, pd.lastname, ac.login\n" +
-                "from team t \n" +
-                "  left join appuser au on t.leaderid = au.id \n" +
-                "  left join personal_data pd on au.personaldataid=pd.id\n" +
-                "  left join account ac on au.accountid = ac.id " +
-                "where t.solutionid="+solutionId;
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-        List<Team> teams = new ArrayList<>();
-
-        for (Map<String, Object> map : result) {
-            String leaderName = "";
-            if (map.get("firstname") != null && map.get("lastname") != null && map.get("login") != null) {
-                leaderName = map.get("firstname").toString()+" "+map.get("lastname").toString()+" ("+map.get("login").toString()+")";
-            }
-            Team team = new Team();
-            long id = Long.parseLong(map.get("id").toString());
-            team.setId(id);
-            team.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
-            team.setLeaderId(map.get("leaderid") == null ? null : Long.parseLong(map.get("leaderid").toString()));
-            team.setLeaderName(leaderName);
-            team.setName(map.get("name").toString());
-            team.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
-            team.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
-            teams.add(team);
-        }
-        return teams;
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Team> query = criteriaBuilder.createQuery(Team.class);
+        Root<Team> root = query.from(Team.class);
+        query.select(root);
+        query.where(criteriaBuilder.equal(root.get("solution"), entityManager.find(Solution.class, solutionId)));
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
-    public List<Team> getAllTeamsManagedBy(long userId) {String query = "select t.id, t.name, t.solutionid, t.leaderid, t.creation_date, t.last_edition_date, pd.firstname, pd.lastname, ac.login\n" +
-            "from team t \n" +
-            "  left join appuser au on t.leaderid = au.id \n" +
-            "  left join personal_data pd on au.personaldataid=pd.id\n" +
-            "  left join account ac on au.accountid = ac.id " +
-            "where t.leaderid="+userId;
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-        List<Team> teams = new ArrayList<>();
-
-        for (Map<String, Object> map : result) {
-            String leaderName = "";
-            if (map.get("firstname") != null && map.get("lastname") != null && map.get("login") != null) {
-                leaderName = map.get("firstname").toString()+" "+map.get("lastname").toString()+" ("+map.get("login").toString()+")";
-            }
-            Team team = new Team();
-            long id = Long.parseLong(map.get("id").toString());
-            team.setId(id);
-            team.setSolutionId(Long.parseLong(map.get("solutionid").toString()));
-            team.setLeaderId(map.get("leaderid") == null ? null : Long.parseLong(map.get("leaderid").toString()));
-            team.setLeaderName(leaderName);
-            team.setName(map.get("name").toString());
-            team.setCreationDate(dateParser.parseToReadableDate(map.get("creation_date").toString()));
-            team.setLastEditionDate(dateParser.parseToReadableDate(map.get("last_edition_date").toString()));
-            teams.add(team);
-        }
-        return teams;
+    public List<Team> getAllTeamsManagedBy(long userId) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Team> query = criteriaBuilder.createQuery(Team.class);
+        Root<Team> root = query.from(Team.class);
+        query.select(root);
+        query.where(criteriaBuilder.equal(root.get("leaderId"), userId));
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
     public Team addTeam(long solutionId, String name, Long leaderId) {
-        String query = "select teamseq.nextval from dual";
-        Map<String, Object> result = jdbcTemplate.queryForMap(query);
-        long id = Long.parseLong(result.get("nextval").toString());
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        Team team = new Team();
+        team.setName(name);
+        team.setSolution(entityManager.find(Solution.class, solutionId));
+        team.setLeaderId(leaderId);
 
-        query = "insert into team(id, solutionid, leaderid, name, creation_date, last_edition_date) " +
-                "values("+id+", "+solutionId+", "+leaderId+", '"+name+"', sysdate, sysdate)";
-
-        jdbcTemplate.execute(query);
-        return getTeamById(id);
+        entityManager.getTransaction().begin();
+        entityManager.persist(team);
+        entityManager.getTransaction().commit();
+        return team;
     }
 
     @Override
     public void removeTeam(long solutionId, long teamId) {
-        String query = "delete from team where id="+teamId+" and solutionid="+solutionId;
-        jdbcTemplate.execute(query);
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        entityManager.getTransaction().begin();
+        Team project = entityManager.find(Team.class, teamId);
+        entityManager.remove(project);
+        entityManager.getTransaction().commit();
     }
 
     @Override
     public void removeTeams(long solutionId, List<Long> teamIds) {
-        StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("delete from team where solutionid="+solutionId);
-        queryBuilder.append(" and (");
-        for (int i = 0; i < teamIds.size(); i++) {
-            queryBuilder.append("id="+teamIds.get(i));
-            if (i < teamIds.size() - 1) {
-                queryBuilder.append(" or ");
-            }
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        entityManager.getTransaction().begin();
+        for (long id : teamIds) {
+            Team project = entityManager.find(Team.class, id);
+            entityManager.remove(project);
         }
-        queryBuilder.append(")");
-        jdbcTemplate.execute(queryBuilder.toString());
+        entityManager.getTransaction().commit();
     }
 
     @Override
-    public void updateTeam(Team team) {
-        String query = "update team set solutionid="+team.getSolutionId()+", " +
-                "leaderid="+team.getLeaderId()+", " +
-                "name='"+team.getName()+"', " +
-                "creation_date="+dateParser.parseToDatabaseTimestamp(team.getCreationDate())+", " +
-                "last_edition_date=sysdate " +
-                "where id="+team.getId();
-        jdbcTemplate.execute(query);
+    public Team updateTeam(long teamId, Map<String, String> map) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        Team team = entityManager.find(Team.class, teamId);
+        team.setName(map.get("name"));
+        if (map.get("leaderId") == null || map.get("leaderId").isEmpty()) {
+            team.setLeaderId(null);
+            team.setLeaderName("");
+        } else {
+            User leader = entityManager.find(User.class, Long.parseLong(map.get("leaderId")));
+            team.setLeaderId(leader.getId());
+            team.setLeaderName(leader.getPersonalData().getFirstName()+" "+leader.getPersonalData().getLastName());
+        }
+        entityManager.getTransaction().begin();
+        entityManager.merge(team);
+        entityManager.getTransaction().commit();
+        return team;
     }
 }

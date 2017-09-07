@@ -38,8 +38,8 @@ public class PositionRestController {
     }
 
     @RequestMapping(value = "/solution/positions/{id}", method = PATCH)
-    public void updatePosition(@PathVariable("id") long positionId, @RequestBody Position position) {
-        positionDao.updatePosition(position);
+    public Position updatePosition(@PathVariable("id") long positionId, @RequestBody Map<String, String> map) {
+        return positionDao.updatePosition(positionId, map);
     }
 
     @RequestMapping(value="/solution/positions", method = POST)

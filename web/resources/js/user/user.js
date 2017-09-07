@@ -12,7 +12,8 @@ module.controller('userController', function($scope, $http) {
     $scope.init = function() {
         startLoading();
         $http.get('users/me').then(function(data) {
-            $scope.userData = data.data;
+            $scope.userData = data.data.user;
+            $scope.currentSolution = data.data.solution;
             $("#userData").show();
             $scope.activePersonalData();
             finishLoading();
@@ -55,13 +56,19 @@ module.controller('userController', function($scope, $http) {
             var birthday = $("#userDataBirthday").val();
             var phone = $("#userDataPhone").val();
 
-            if (birthday === parseDateTimestamp($scope.userData.birthday) && phone === $scope.userData.phone) return;
+            if (birthday === parseDateTimestamp($scope.userData.personalData.birthday) && phone === $scope.userData.personalData.phone) return;
 
             startLoading();
             $(".modalError").hide();
-            $scope.userData.birthday = birthday;
-            $scope.userData.phone = phone;
-            $http.patch('users/'+$scope.userData.userId, $scope.userData).then(function(data) {
+
+            var objectToAdd = {
+                'solutionid' : $scope.currentSolution.id,
+                'birthday' : birthday,
+                'phone' : phone
+            };
+
+            $http.patch('users/'+$scope.userData.id, objectToAdd).then(function(data) {
+                $scope.userData = data.data;
                 finishLoading();
             });
         } else if ($scope.currentUserData == 1) {
@@ -79,7 +86,7 @@ module.controller('userController', function($scope, $http) {
 
             startLoading();
             $(".modalError").hide();
-            $http.patch('pwd/'+$scope.userData.userId, {
+            $http.patch('pwd/'+$scope.userData.id, {
                 'password' : existingPassword,
                 'newPassword' : newPassword,
                 'passwordRepeat' : repeatPassword

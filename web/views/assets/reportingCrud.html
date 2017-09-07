@@ -17,10 +17,10 @@
                     </thead>
                     <tr ng-repeat="entry in currentEntries">
                         <td style="width: 5%"><input type="checkbox" ng-disabled="entry.status != 1" ng-checked="isMarked(entry.id)" ng-click="crudItemCheckboxAction(entry.id)"/></td>
-                        <td style="width: 15%">{{entry.startHour}}</td>
+                        <td style="width: 15%">{{getDateTime(entry.logStart)}}</td>
                         <td style="width: 10%">{{entry.loggedHours}}</td>
-                        <td style="width: 15%">{{entry.logTypeName}}</td>
-                        <td style="width: 35%">{{entry.projectName}}</td>
+                        <td style="width: 15%">{{entry.logType.name}}</td>
+                        <td style="width: 35%">{{entry.project.name}}</td>
                         <td style="width: 15%"><div class="{{getStatusClass(entry.status)}} logEntryStatus">{{getStatusName(entry.status)}}</div></td>
                         <td style="width: 5%">
                             <div ng-show="entry.status == 1" class="crudTableActionButtonsContainer">

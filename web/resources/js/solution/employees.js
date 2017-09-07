@@ -114,13 +114,13 @@ function initSolutionEmployeesManagement($scope, $http) {
         $("#employeeEditModalLoginError").hide();
         $("#employeeEditModalPositionError").hide();
         $("#employeeEditModalWorkingTimeError").hide();
-        $("#editEmployeeModalFirstNameInput").val($scope.currentEmployee.firstName);
-        $("#editEmployeeModalLastNameInput").val($scope.currentEmployee.lastName);
-        $("#editEmployeeModalEmailInput").val($scope.currentEmployee.email);
-        $("#editEmployeeModalLoginInput").val($scope.currentEmployee.login);
+        $("#editEmployeeModalFirstNameInput").val($scope.currentEmployee.personalData.firstName);
+        $("#editEmployeeModalLastNameInput").val($scope.currentEmployee.personalData.lastName);
+        $("#editEmployeeModalEmailInput").val($scope.currentEmployee.account.email);
+        $("#editEmployeeModalLoginInput").val($scope.currentEmployee.account.login);
         $("#editEmployeeModalWorkingTimeInput").val($scope.currentEmployee.workingTime);
-        $("#editEmployeeModalBirthDayInput").val(parseDateTimestamp($scope.currentEmployee.birthday));
-        $("#editEmployeeModalPhoneInput").val($scope.currentEmployee.phone);
+        $("#editEmployeeModalBirthDayInput").val($scope.currentEmployee.personalData.birthday == null ? "" : parseDateTimestamp($scope.currentEmployee.personalData.birthday));
+        $("#editEmployeeModalPhoneInput").val($scope.currentEmployee.personalData.phone == null ? "" : parseDateTimestamp($scope.currentEmployee.personalData.phone));
 
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
             $scope.solutionPositions = data.data;
@@ -129,8 +129,8 @@ function initSolutionEmployeesManagement($scope, $http) {
             $scope.solutionTeams = data.data;
             return $http.get('empty')
         }).then(function(data) {
-            $("#editEmployeeModalPositionInput").val($scope.currentEmployee.positionId);
-            $("#editEmployeeModalTeamInput").val($scope.currentEmployee.teamId);
+            $("#editEmployeeModalPositionInput").val($scope.currentEmployee.position.id);
+            $("#editEmployeeModalTeamInput").val($scope.currentEmployee.team == null ? "" : $scope.currentEmployee.team.id);
             $("#editEmployeeModal").modal("show");
             finishLoading();
         });
@@ -178,19 +178,24 @@ function initSolutionEmployeesManagement($scope, $http) {
         var phone = $("#editEmployeeModalPhoneInput").val();
         $("#editEmployeeModal").modal("hide");
         startLoading();
-        $scope.currentEmployee.firstName = firstName;
-        $scope.currentEmployee.lastName = lastName;
-        $scope.currentEmployee.email = email;
-        $scope.currentEmployee.login = login;
-        $scope.currentEmployee.positionId = position;
-        $scope.currentEmployee.teamId = team;
-        $scope.currentEmployee.workingTime = workingTime;
-        $scope.currentEmployee.birthday = birthday;
-        $scope.currentEmployee.phone = phone;
-        $http.patch('solution/employees/'+$scope.currentEmployee.id, $scope.currentEmployee).then(function(data) {
-            return $http.get('currentdate');
-        }).then(function(data) {
-            $scope.currentEmployee.lastEditionDate = data.data;
+
+
+        var objectToAdd = {
+            'solutionid' : $scope.currentSolution.id,
+            'teamid' : team,
+            'positionid' : position,
+            'workingtime' : workingTime,
+            'firstname' : firstName,
+            'lastname' : lastName,
+            'birthday' : birthday,
+            'phone' : phone,
+            'login' : login,
+            'email' : email
+        };
+
+        $http.patch('solution/employees/'+$scope.currentEmployee.id, objectToAdd).then(function(data) {
+            $scope.solutionEmployees = $scope.solutionEmployees.map(function(obj) {return obj.id == data.data.id ? data.data : obj});
+            $scope.setUpEmployeesPagination($scope.currentPageId);
             finishLoading();
         });
     };
@@ -205,22 +210,20 @@ function initSolutionEmployeesManagement($scope, $http) {
         }
     };
 
-    $scope.deleteEmployeeModalOpen = function() {
+    $scope.deleteEmployeeModalOpen = function() {/*
         if ($scope.currentSolution.administrators.indexOf($scope.currentEmployee.id) > -1) {
             $("#errorEmployeeModal").modal("show");
             $("#employeeErrorModalDeleteSolutionAdmin").show();
-        } else {
+        } else {*/
             $("#deleteEmployeeModal").modal("show");
-        }
+        //}
     };
 
     $scope.deleteEmployee = function() {
         $("#deleteEmployeeModal").modal("hide");
         startLoading();
         $http.delete('solution/employees/'+$scope.currentEmployee.id, {params: {
-            'solutionid' : $scope.currentSolution.id,
-            'personaldataid' : $scope.currentEmployee.personalDataId,
-            'accountid' : $scope.currentEmployee.accountId
+            'solutionid' : $scope.currentSolution.id
         }}).then(function(data) {
             $scope.solutionEmployees = $scope.solutionEmployees.filter(function(obj) {
                 return obj['id'] != $scope.currentEmployee.id;
@@ -241,8 +244,6 @@ function initSolutionEmployeesManagement($scope, $http) {
         startLoading();
         $http.delete('solution/employees', {params: {
             'solutionid' : $scope.currentSolution.id,
-            'personaldatas' : $scope.solutionEmployees.filter(function(item) {return $scope.markedItems.indexOf(item.id) > -1}).map(function(item) {return item.personalDataId}),
-            'accounts' : $scope.solutionEmployees.filter(function(item) {return $scope.markedItems.indexOf(item.id) > -1}).map(function(item) {return item.accountId}),
             'employees' : $scope.markedItems
         }}).then(function(data) {
             $scope.solutionEmployees = $scope.solutionEmployees.filter(function(obj) {

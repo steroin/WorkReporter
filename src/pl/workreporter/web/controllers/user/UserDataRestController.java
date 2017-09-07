@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.workreporter.security.login.CompleteUserDetails;
-import pl.workreporter.web.beans.entities.userdata.UserData;
-import pl.workreporter.web.beans.entities.userdata.UserDataDao;
-import pl.workreporter.web.service.password.changer.PasswordChangeResult;
+import pl.workreporter.web.beans.entities.user.User;
+import pl.workreporter.web.beans.entities.user.UserDao;
 import pl.workreporter.web.service.password.changer.PasswordChanger;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -20,26 +20,30 @@ import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 @RestController
 public class UserDataRestController {
     @Autowired
-    private UserDataDao userDataDao;
+    private UserDao userDao;
     @Autowired
     private PasswordChanger passwordChanger;
 
     @RequestMapping(value = "/users/{id}", method = GET)
     @ResponseBody
-    public UserData getUserData(@PathVariable("id") long userId) {
-        return userDataDao.getUserData(userId);
+    public User getUser(@PathVariable("id") long userId) {
+        return userDao.getUserById(userId);
     }
 
     @RequestMapping(value = "/users/me", method = GET)
     @ResponseBody
-    public UserData getUserData() {
+    public Map<String, Object> getMyUserData() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CompleteUserDetails cud = null;
         if (principal instanceof CompleteUserDetails) {
             cud = (CompleteUserDetails) principal;
         }
         long userId = cud.getUserId();
-        return userDataDao.getUserData(userId);
+        Map<String, Object> map = new HashMap<>();
+        User user = userDao.getUserById(userId);
+        map.put("user", user);
+        map.put("solution", user.getSolution());
+        return map;
     }
 
     @RequestMapping(value = "/pwd/{id}", method = PATCH)
@@ -52,7 +56,7 @@ public class UserDataRestController {
 
     @RequestMapping(value = "/users/{id}", method = PATCH)
     @ResponseBody
-    public void updateUserData(@PathVariable("id") long userId, @RequestBody UserData userData) {
-        userDataDao.updateUserData(userData);
+    public User updateUserData(@PathVariable("id") long userId, @RequestBody Map<String, String> map) {
+        return userDao.updateUser(userId, map);
     }
 }

@@ -41,13 +41,13 @@ public class TeamRestController {
     }
 
     @RequestMapping(value = "/solution/teams/{id}", method = PATCH)
-    public void updateTeam(@PathVariable("id") long teamId, @RequestBody Team team) {
-        teamDao.updateTeam(team);
+    public Team updateTeam(@PathVariable("id") long teamId, @RequestBody Map<String, String> map) {
+        return teamDao.updateTeam(teamId, map);
     }
 
     @RequestMapping(value="/solution/teams", method = POST)
-    public Team addTeam(@RequestBody Team team) {
-        return teamDao.addTeam(team.getSolutionId(), team.getName(), team.getLeaderId());
+    public Team addTeam(@RequestBody Map<String, String> map) {
+        return teamDao.addTeam(Long.parseLong(map.get("solutionId")), map.get("name"), null);
     }
 
     @RequestMapping(value = "/solution/teams", params = "projectid", method = GET)

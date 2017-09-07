@@ -14,9 +14,9 @@
                 </thead>
                 <tr ng-repeat="employee in currentPage">
                     <td style="width: 5%"><input type="checkbox" ng-checked="isMarked(employee.id)" ng-click="crudItemCheckboxAction(employee.id)"/></td>
-                    <td style="width: 25%">{{employee.firstName}} {{employee.lastName}}</td>
-                    <td style="width: 25%">{{employee.login}}</td>
-                    <td style="width: 18%">{{employee.positionName}}</td>
+                    <td style="width: 25%">{{employee.personalData.firstName}} {{employee.personalData.lastName}}</td>
+                    <td style="width: 25%">{{employee.account.login}}</td>
+                    <td style="width: 18%">{{employee.position.name}}</td>
                     <td style="width: 20%">{{parseDateTimestamp(employee.creationDate)}}</td>
                     <td style="width: 7%">
                         <div class="crudTableActionButtonsContainer">

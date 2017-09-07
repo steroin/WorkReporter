@@ -1,26 +1,52 @@
 package pl.workreporter.web.beans.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import pl.workreporter.web.beans.entities.account.Account;
+import pl.workreporter.web.beans.entities.personaldata.PersonalData;
+import pl.workreporter.web.beans.entities.position.Position;
+import pl.workreporter.web.beans.entities.solution.Solution;
+import pl.workreporter.web.beans.entities.team.Team;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * Created by Sergiusz on 19.08.2017.
  */
-public class User {
+@Entity
+@Table(name = "APPUSER")
+public class User implements Serializable {
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appuserseq")
+    @SequenceGenerator(name = "appuserseq", sequenceName = "appuserseq", allocationSize = 1)
     private long id;
-    private long solutionId;
-    private Long teamId;
-    private long accountId;
-    private long positionId;
-    private String positionName;
-    private long personalDataId;
+    @ManyToOne
+    @JoinColumn(name = "SOLUTIONID")
+    @JsonBackReference(value = "solutionEmployees")
+    private Solution solution;
+    @ManyToOne
+    @JoinColumn(name = "TEAMID")
+    private Team team;
+    @OneToOne
+    @JoinColumn(name = "ACCOUNTID")
+    private Account account;
+    @ManyToOne
+    @JoinColumn(name = "POSITIONID")
+    private Position position;
+    @OneToOne
+    @JoinColumn(name = "PERSONALDATAID")
+    private PersonalData personalData;
+    @Column(name = "WORKING_TIME")
     private double workingTime;
-    private String firstName;
-    private String lastName;
-    private String birthday;
-    private String phone;
-    private String login;
-    private String email;
-    private int accountStatus;
-    private String creationDate;
-    private String lastEditionDate;
+    @Column(name = "CREATION_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    private Date creationDate = new Date();
+    @Column(name = "LAST_EDITION_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    private Date lastEditionDate = new Date();
 
     public long getId() {
         return id;
@@ -30,52 +56,44 @@ public class User {
         this.id = id;
     }
 
-    public long getSolutionId() {
-        return solutionId;
+    public Solution getSolution() {
+        return solution;
     }
 
-    public void setSolutionId(long solutionId) {
-        this.solutionId = solutionId;
+    public void setSolution(Solution solution) {
+        this.solution = solution;
     }
 
-    public Long getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
-    public long getAccountId() {
-        return accountId;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public long getPositionId() {
-        return positionId;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setPositionId(long positionId) {
-        this.positionId = positionId;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public String getPositionName() {
-        return positionName;
+    public PersonalData getPersonalData() {
+        return personalData;
     }
 
-    public void setPositionName(String positionName) {
-        this.positionName = positionName;
-    }
-
-    public long getPersonalDataId() {
-        return personalDataId;
-    }
-
-    public void setPersonalDataId(long personalDataId) {
-        this.personalDataId = personalDataId;
+    public void setPersonalData(PersonalData personalData) {
+        this.personalData = personalData;
     }
 
     public double getWorkingTime() {
@@ -86,75 +104,19 @@ public class User {
         this.workingTime = workingTime;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getAccountStatus() {
-        return accountStatus;
-    }
-
-    public void setAccountStatus(int accountStatus) {
-        this.accountStatus = accountStatus;
-    }
-
-    public String getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 
-    public String getLastEditionDate() {
+    public Date getLastEditionDate() {
         return lastEditionDate;
     }
 
-    public void setLastEditionDate(String lastEditionDate) {
+    public void setLastEditionDate(Date lastEditionDate) {
         this.lastEditionDate = lastEditionDate;
     }
 }

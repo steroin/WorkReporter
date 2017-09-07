@@ -75,14 +75,15 @@ function initSolutionTeamsManagement($scope, $http) {
 
         $("#editTeamModal").modal("hide");
         startLoading();
-        $scope.currentTeam.name = name;
-        $scope.currentTeam.leaderId = leader;
-        var leaderObject = $scope.currentTeamMembers.filter(function(item) {return item.id == leader})[0];
-        $scope.currentTeam.leaderName = leader.length == 0 ? "" : leaderObject.firstName+" "+leaderObject.lastName+" ("+leaderObject.login+")";
-        $http.patch('solution/teams/'+$scope.currentTeam.id, $scope.currentTeam).then(function(data) {
-            return $http.get('currentdate');
-        }).then(function(data) {
-            $scope.currentTeam.lastEditionDate = data.data;
+
+        var objectToAdd = {
+            'solutionId' : $scope.currentSolution.id,
+            'name' : name,
+            'leaderId' : leader
+        };
+        $http.patch('solution/teams/'+$scope.currentTeam.id, objectToAdd).then(function(data) {
+            $scope.solutionTeams = $scope.solutionTeams.map(function(obj) {return obj.id == data.data.id ? data.data : obj});
+            $scope.setUpTeamPagination($scope.currentPageId);
             finishLoading();
         });
     };
