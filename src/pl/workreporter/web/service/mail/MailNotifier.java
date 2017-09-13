@@ -11,7 +11,7 @@ import java.util.Properties;
  * Created by Sergiusz on 19.08.2017.
  */
 @Service
-public class MailNotificator {
+public class MailNotifier {
     public void sendInitialMessage(String login, String password, String email) {
         final String sourceUsername = "noreply.workreporter@gmail.com";
         final String sourcePassword = "workreporter1";

@@ -2,7 +2,7 @@ package pl.workreporter.web.controllers.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.workreporter.web.service.mail.MailNotificator;
+import pl.workreporter.web.service.mail.MailNotifier;
 import pl.workreporter.web.service.password.generator.PasswordGenerator;
 import pl.workreporter.web.beans.entities.user.User;
 import pl.workreporter.web.beans.entities.user.UserDao;
@@ -22,7 +22,7 @@ public class EmployeeRestController {
     @Autowired
     private PasswordGenerator passwordGenerator;
     @Autowired
-    private MailNotificator notificator;
+    private MailNotifier notifier;
 
     @RequestMapping(value = "/solution/employees", params = "id",  method = GET)
     public @ResponseBody
@@ -65,7 +65,7 @@ public class EmployeeRestController {
                 Long.parseLong(employee.get("positionid")), Double.parseDouble(employee.get("workingtime")),
                 employee.get("firstname"), employee.get("lastname"), birthday, phone,
                 employee.get("login"), password, employee.get("email"));
-        notificator.sendInitialMessage(employee.get("login"), password, employee.get("email"));
+        notifier.sendInitialMessage(employee.get("login"), password, employee.get("email"));
         return user;
     }
 }
