@@ -1,14 +1,12 @@
 package pl.workreporter.web.beans.security.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Repository;
-import pl.workreporter.security.login.CompleteUserDetails;
-import pl.workreporter.security.login.UserRole;
+import pl.workreporter.security.authentication.CompleteUserDetails;
+import pl.workreporter.security.authentication.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +35,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public String getEmail(String login) {
-        return getEmail("login", "'"+login+"'");
+        return getEmail("authentication", "'"+login+"'");
     }
 
     private String getEmail(String keyAttribute, Object value) {
@@ -64,7 +62,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public String getPasswordHash(String login) {
-        return getPasswordHash("login", "'"+login+"'");
+        return getPasswordHash("authentication", "'"+login+"'");
     }
 
     @Override
@@ -80,7 +78,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public CompleteUserDetails loadUserDetails(String login) {
-        return loadUserDetails("login", "'"+login+"'");
+        return loadUserDetails("authentication", "'"+login+"'");
     }
 
     @Override
@@ -103,8 +101,8 @@ public class LoginDaoImpl implements LoginDao {
             return null;
         }
 
-        List<Long> managedSolutions = getManagedSolutions(result.get("login").toString());
-        List<Long> managedTeams = getManagedTeams(result.get("login").toString());
+        List<Long> managedSolutions = getManagedSolutions(result.get("authentication").toString());
+        List<Long> managedTeams = getManagedTeams(result.get("authentication").toString());
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         authorities.add(new UserRole("ROLE_USER"));
@@ -124,7 +122,7 @@ public class LoginDaoImpl implements LoginDao {
         cud.setFirstName(result.get("firstname").toString());
         cud.setLastName(result.get("lastname").toString());
         cud.setPassword(result.get("password").toString());
-        cud.setUsername(result.get("login").toString());
+        cud.setUsername(result.get("authentication").toString());
         cud.setEmail(result.get("email").toString());
         cud.setAccountNonExpired(true);
         cud.setAccountNonLocked(true);
@@ -138,7 +136,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public List<Long> getManagedSolutions(String login) {
-        return getManagedSolutions("login", "'"+login+"'");
+        return getManagedSolutions("authentication", "'"+login+"'");
     }
 
     @Override
@@ -161,7 +159,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public List<Long> getManagedTeams(String login) {
-        return getManagedTeams("login", "'"+login+"'");
+        return getManagedTeams("authentication", "'"+login+"'");
     }
 
     @Override

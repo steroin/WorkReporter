@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import pl.workreporter.security.login.CompleteUserDetails;
+import pl.workreporter.security.authentication.CompleteUserDetails;
 import pl.workreporter.web.beans.entities.solution.Solution;
 import pl.workreporter.web.beans.entities.solution.SolutionDao;
 import pl.workreporter.web.beans.security.rest.RestResponse;

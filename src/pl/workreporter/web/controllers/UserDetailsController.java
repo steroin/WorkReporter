@@ -3,7 +3,7 @@ package pl.workreporter.web.controllers;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import pl.workreporter.security.login.CompleteUserDetails;
+import pl.workreporter.security.authentication.CompleteUserDetails;
 
 /**
  * Created by Sergiusz on 12.08.2017.

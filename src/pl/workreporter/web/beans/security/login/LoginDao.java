@@ -1,6 +1,6 @@
 package pl.workreporter.web.beans.security.login;
 
-import pl.workreporter.security.login.CompleteUserDetails;
+import pl.workreporter.security.authentication.CompleteUserDetails;
 
 import java.util.List;
 

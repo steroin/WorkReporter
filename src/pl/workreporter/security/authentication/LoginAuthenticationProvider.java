@@ -1,17 +1,12 @@
-package pl.workreporter.security.login;
+package pl.workreporter.security.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import pl.workreporter.web.beans.security.login.LoginDao;
-
-import java.security.Security;
 
 /**
  * Created by Sergiusz on 08.08.2017.

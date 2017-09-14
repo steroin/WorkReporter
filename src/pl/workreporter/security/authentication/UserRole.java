@@ -1,4 +1,4 @@
-package pl.workreporter.security.login;
+package pl.workreporter.security.authentication;
 
 import org.springframework.security.core.GrantedAuthority;
 

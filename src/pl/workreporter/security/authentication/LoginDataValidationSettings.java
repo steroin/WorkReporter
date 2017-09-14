@@ -1,4 +1,4 @@
-package pl.workreporter.security.login;
+package pl.workreporter.security.authentication;
 
 /**
  * Created by Sergiusz on 09.08.2017.

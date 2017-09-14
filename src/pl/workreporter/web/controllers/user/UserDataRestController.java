@@ -3,7 +3,7 @@ package pl.workreporter.web.controllers.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import pl.workreporter.security.login.CompleteUserDetails;
+import pl.workreporter.security.authentication.CompleteUserDetails;
 import pl.workreporter.web.beans.entities.user.User;
 import pl.workreporter.web.beans.entities.user.UserDao;
 import pl.workreporter.web.beans.security.rest.RestResponse;

@@ -23,7 +23,7 @@
         </session-management>
     </http>
 
-    <beans:bean id="authenticationProvider" class="pl.workreporter.security.login.LoginAuthenticationProvider"/>
+    <beans:bean id="authenticationProvider" class="pl.workreporter.security.authentication.LoginAuthenticationProvider"/>
     <authentication-manager >
         <authentication-provider ref="authenticationProvider"/>
     </authentication-manager>

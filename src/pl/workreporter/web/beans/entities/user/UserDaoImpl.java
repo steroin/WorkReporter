@@ -191,8 +191,8 @@ public class UserDaoImpl implements UserDao {
         if (map.containsKey("phone")) {
             personalData.setPhone(map.get("phone") == null || map.get("phone").isEmpty() ? null : map.get("phone"));
         }
-        if (map.containsKey("login")) {
-            account.setLogin(map.get("login"));
+        if (map.containsKey("authentication")) {
+            account.setLogin(map.get("authentication"));
         }
         if (map.containsKey("email")) {
             account.setEmail(map.get("email"));

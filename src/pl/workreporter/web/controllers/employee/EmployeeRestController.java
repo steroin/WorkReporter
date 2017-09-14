@@ -68,8 +68,8 @@ public class EmployeeRestController {
         User user = userDao.addUser(Long.parseLong(employee.get("solutionid")), teamId,
                 Long.parseLong(employee.get("positionid")), Double.parseDouble(employee.get("workingtime")),
                 employee.get("firstname"), employee.get("lastname"), birthday, phone,
-                employee.get("login"), password, employee.get("email"));
-        notifier.sendInitialMessage(employee.get("login"), password, employee.get("email"));
+                employee.get("authentication"), password, employee.get("email"));
+        notifier.sendInitialMessage(employee.get("authentication"), password, employee.get("email"));
         return new RestResponseSuccess<>(user);
     }
 }

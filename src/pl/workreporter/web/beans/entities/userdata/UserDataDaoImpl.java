@@ -39,7 +39,7 @@ public class UserDataDaoImpl implements UserDataDao {
         userData.setLastName(result.get("lastname").toString());
         userData.setBirthday(dateParser.parseToReadableDate(result.get("birthday").toString()));
         userData.setPhone(result.get("phone") == null ? null : result.get("phone").toString());
-        userData.setLogin(result.get("login").toString());
+        userData.setLogin(result.get("authentication").toString());
         userData.setEmail(result.get("email").toString());
         userData.setSolutionName(result.get("solutionname").toString());
         userData.setTeamName(result.get("teamname").toString());

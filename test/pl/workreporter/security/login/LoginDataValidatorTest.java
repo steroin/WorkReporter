@@ -1,4 +1,4 @@
-package pl.workreporter.security.login;
+package pl.workreporter.security.authentication;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,25 +11,25 @@ public class LoginDataValidatorTest {
     public void validateLogin() throws Exception {
         LoginDataValidationSettings settings = new LoginDataValidationSettings(5, 32, 5, 32);
         LoginDataValidator validator = new LoginDataValidator(settings);
-        Assert.assertTrue(validator.validateLogin("login"));
-        Assert.assertTrue(validator.validateLogin("my-login"));
-        Assert.assertTrue(validator.validateLogin("-login-my"));
-        Assert.assertTrue(validator.validateLogin("-login-my-"));
+        Assert.assertTrue(validator.validateLogin("authentication"));
+        Assert.assertTrue(validator.validateLogin("my-authentication"));
+        Assert.assertTrue(validator.validateLogin("-authentication-my"));
+        Assert.assertTrue(validator.validateLogin("-authentication-my-"));
         Assert.assertTrue(validator.validateLogin("my_login"));
-        Assert.assertTrue(validator.validateLogin("my.login"));
-        Assert.assertTrue(validator.validateLogin("my$login"));
+        Assert.assertTrue(validator.validateLogin("my.authentication"));
+        Assert.assertTrue(validator.validateLogin("my$authentication"));
 
         Assert.assertFalse(validator.validateLogin(""));
         Assert.assertFalse(validator.validateLogin("      "));
         Assert.assertFalse(validator.validateLogin("log"));
-        Assert.assertFalse(validator.validateLogin("my login"));
-        Assert.assertFalse(validator.validateLogin("my@login.pl"));
-        Assert.assertFalse(validator.validateLogin("my'login'"));
-        Assert.assertFalse(validator.validateLogin("my`login`"));
-        Assert.assertFalse(validator.validateLogin("my~login"));
-        Assert.assertFalse(validator.validateLogin("my~login"));
-        Assert.assertFalse(validator.validateLogin("/my/login"));
-        Assert.assertFalse(validator.validateLogin("\\login"));
+        Assert.assertFalse(validator.validateLogin("my authentication"));
+        Assert.assertFalse(validator.validateLogin("my@authentication.pl"));
+        Assert.assertFalse(validator.validateLogin("my'authentication'"));
+        Assert.assertFalse(validator.validateLogin("my`authentication`"));
+        Assert.assertFalse(validator.validateLogin("my~authentication"));
+        Assert.assertFalse(validator.validateLogin("my~authentication"));
+        Assert.assertFalse(validator.validateLogin("/my/authentication"));
+        Assert.assertFalse(validator.validateLogin("\\authentication"));
         Assert.assertFalse(validator.validateLogin("myloginmyloginmyloginmyloginmylogin"));
     }
 
