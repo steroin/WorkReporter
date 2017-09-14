@@ -7,6 +7,8 @@ import pl.workreporter.web.beans.entities.logentry.LogEntryDao;
 import pl.workreporter.web.beans.entities.logentry.LogType;
 import pl.workreporter.web.beans.entities.position.Position;
 import pl.workreporter.web.beans.entities.project.Project;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 
 import java.util.Date;
 import java.util.List;
@@ -24,42 +26,45 @@ public class LogEntryRestController {
 
     @RequestMapping(value = "/entries", method = GET)
     public @ResponseBody
-    List<LogEntry> getAllLogEntries(@RequestParam("userid") long userId,
-                                    @RequestParam("year") int year,
-                                    @RequestParam("month") int month,
-                                    @RequestParam("day") int day) {
+    RestResponse<List<LogEntry>> getAllLogEntries(@RequestParam("userid") long userId,
+                                                 @RequestParam("year") int year,
+                                                 @RequestParam("month") int month,
+                                                 @RequestParam("day") int day) {
         List<LogEntry> result = logEntryDao.getDailyLogEntries(userId, year, month, day);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/entrytypes", method = GET)
     public @ResponseBody
-    List<LogType> getLogEntryTypes() {
+    RestResponse<List<LogType>> getLogEntryTypes() {
         List<LogType> result = logEntryDao.getAllLogTypes();
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/entries", method = POST)
-    public LogEntry addLogEntry(@RequestBody Map<String, String> logEntry) {
-        return logEntryDao.addLogEntry(Long.parseLong(logEntry.get("userid")),
+    public RestResponse<LogEntry> addLogEntry(@RequestBody Map<String, String> logEntry) {
+        return new RestResponseSuccess<>(logEntryDao.addLogEntry(Long.parseLong(logEntry.get("userid")),
                 logEntry.get("start"),
                 Double.parseDouble(logEntry.get("loggedhours")),
                 Long.parseLong(logEntry.get("logtypeid")),
-                logEntry.get("projectid") == null || logEntry.get("projectid").isEmpty() ? null : Long.parseLong(logEntry.get("projectid")));
+                logEntry.get("projectid") == null || logEntry.get("projectid").isEmpty() ? null : Long.parseLong(logEntry.get("projectid"))));
     }
 
     @RequestMapping(value = "/entries/{id}", method = PATCH)
-    public void updateLogEntry(@PathVariable("id") long entryId, @RequestBody LogEntry logEntry) {
+    public RestResponse<Void> updateLogEntry(@PathVariable("id") long entryId, @RequestBody LogEntry logEntry) {
         logEntryDao.updateLogEntry(logEntry);
+        return new RestResponseSuccess<>();
     }
 
     @RequestMapping(value = "/entries/{id}", method = DELETE)
-    public void removeLogEntry(@PathVariable long id) {
+    public RestResponse<Void> removeLogEntry(@PathVariable long id) {
         logEntryDao.removeLogEntry(id);
+        return new RestResponseSuccess<>();
     }
 
     @RequestMapping(value = "/entries", method = DELETE)
-    public void removeLogEntries(@RequestParam List<Long> entries) {
+    public RestResponse<Void> removeLogEntries(@RequestParam List<Long> entries) {
         logEntryDao.removeLogEntries(entries);
+        return new RestResponseSuccess<>();
     }
 }

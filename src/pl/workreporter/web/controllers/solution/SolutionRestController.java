@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.workreporter.security.login.CompleteUserDetails;
 import pl.workreporter.web.beans.entities.solution.Solution;
 import pl.workreporter.web.beans.entities.solution.SolutionDao;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +26,7 @@ public class SolutionRestController {
     private SolutionDao solutionDao;
 
     @RequestMapping(value = "/solution/solutions", method = GET)
-    public Map<String, Object> getManagedSolutions() {
+    public RestResponse<Map<String, Object>> getManagedSolutions() {
         long userId = ((CompleteUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
         Map<Long, String> managedSolutions = solutionDao.getSolutionIdNameMap(userId);
 
@@ -34,17 +36,18 @@ public class SolutionRestController {
             result.put("firstSolutionId", entry.getKey());
             break;
         }
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/solution/solutions/{id}", method = GET)
-    public @ResponseBody Solution getSolution(@PathVariable("id") long solutionId) {
+    public @ResponseBody RestResponse<Solution> getSolution(@PathVariable("id") long solutionId) {
         Solution result = solutionDao.loadSolution(solutionId);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value="/solution/solutions/{id}", method = PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updateSolutionName(@PathVariable("id") long solutionId, @RequestBody Solution newSolution) {
+    public RestResponse<Void> updateSolutionName(@PathVariable("id") long solutionId, @RequestBody Solution newSolution) {
         solutionDao.updateSolution(newSolution);
+        return new RestResponseSuccess<>();
     }
 }

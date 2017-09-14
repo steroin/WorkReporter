@@ -2,6 +2,8 @@ package pl.workreporter.web.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 
 import java.security.Principal;
 
@@ -11,8 +13,8 @@ import java.security.Principal;
 @RestController
 public class UserDetailsRestController {
     @RequestMapping("/auth")
-    public Principal user(Principal user) {
-        return user;
+    public RestResponse<Principal> user(Principal user) {
+        return new RestResponseSuccess<>(user);
     }
 
 }

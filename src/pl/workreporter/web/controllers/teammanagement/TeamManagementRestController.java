@@ -8,6 +8,8 @@ import pl.workreporter.web.beans.entities.team.Team;
 import pl.workreporter.web.beans.entities.team.TeamDao;
 import pl.workreporter.web.beans.entities.user.User;
 import pl.workreporter.web.beans.entities.user.UserDao;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 
 import java.util.List;
 
@@ -28,29 +30,30 @@ public class TeamManagementRestController {
     private LogEntryDao logEntryDao;
 
     @RequestMapping("/teams")
-    public List<Team> getManagedTeam(@RequestParam("userid") long userId) {
-        return teamDao.getAllTeamsManagedBy(userId);
+    public RestResponse<List<Team>> getManagedTeam(@RequestParam("userid") long userId) {
+        return new RestResponseSuccess<>(teamDao.getAllTeamsManagedBy(userId));
     }
 
     @RequestMapping(value = "/teams/{id}/employees", method = GET)
     public @ResponseBody
-    List<User> getAllEmployeesInTeam(@PathVariable("id") long teamId) {
+    RestResponse<List<User>> getAllEmployeesInTeam(@PathVariable("id") long teamId) {
         List<User> result = userDao.getAllUsersInTeam(teamId);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/teams/{teamid}/employees/{userid}", method = GET)
     public @ResponseBody
-    List<LogEntry> getAllEmployeesLogEntries(@PathVariable("teamid") long teamId, @PathVariable("userid") long userId, @RequestParam("period") int period) {
+    RestResponse<List<LogEntry>> getAllEmployeesLogEntries(@PathVariable("teamid") long teamId, @PathVariable("userid") long userId, @RequestParam("period") int period) {
         List<LogEntry> result = logEntryDao.getLastLogEntries(userId, period);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/teams/{teamid}/employees/{userid}/entries/{entryid}", method = PATCH)
-    public void changeLogEntryStatus(@PathVariable("teamid") long teamId,
+    public RestResponse<Void> changeLogEntryStatus(@PathVariable("teamid") long teamId,
                                      @PathVariable("userid") long userId,
                                      @PathVariable("entryid") long entryId,
                                      @RequestBody int status) {
         logEntryDao.changeLogEntryStatus(entryId, status);
+        return new RestResponseSuccess<>();
     }
 }

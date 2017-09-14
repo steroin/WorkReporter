@@ -6,6 +6,8 @@ import pl.workreporter.web.beans.entities.position.Position;
 import pl.workreporter.web.beans.entities.position.PositionDao;
 import pl.workreporter.web.beans.entities.project.Project;
 import pl.workreporter.web.beans.entities.project.ProjectDao;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 
 import java.util.List;
 import java.util.Map;
@@ -22,28 +24,30 @@ public class PositionRestController {
 
     @RequestMapping(value = "/solution/positions", method = GET)
     public @ResponseBody
-    List<Position> getAllPositions(@RequestParam("id") long solutionId) {
+    RestResponse<List<Position>> getAllPositions(@RequestParam("id") long solutionId) {
         List<Position> result = positionDao.getAllPositionsInSolution(solutionId);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/solution/positions/{id}", method = DELETE)
-    public void removePosition(@RequestParam("solutionid") long solutionId, @PathVariable("id") long positionId) {
+    public RestResponse<Void> removePosition(@RequestParam("solutionid") long solutionId, @PathVariable("id") long positionId) {
         positionDao.removePosition(solutionId, positionId);
+        return new RestResponseSuccess<>();
     }
 
     @RequestMapping(value = "/solution/positions", method = DELETE)
-    public void removeSelectedPositions(@RequestParam("solutionid") long solutionId, @RequestParam("positions") List<Long> positions) {
+    public RestResponse<Void> removeSelectedPositions(@RequestParam("solutionid") long solutionId, @RequestParam("positions") List<Long> positions) {
         positionDao.removePositions(solutionId, positions);
+        return new RestResponseSuccess<>();
     }
 
     @RequestMapping(value = "/solution/positions/{id}", method = PATCH)
-    public Position updatePosition(@PathVariable("id") long positionId, @RequestBody Map<String, String> map) {
-        return positionDao.updatePosition(positionId, map);
+    public RestResponse<Position> updatePosition(@PathVariable("id") long positionId, @RequestBody Map<String, String> map) {
+        return new RestResponseSuccess<>(positionDao.updatePosition(positionId, map));
     }
 
     @RequestMapping(value="/solution/positions", method = POST)
-    public Position addPosition(@RequestBody Map<String, String> position) {
-        return positionDao.addPosition(Long.parseLong(position.get("solutionid")), position.get("name"));
+    public RestResponse<Position> addPosition(@RequestBody Map<String, String> position) {
+        return new RestResponseSuccess<>(positionDao.addPosition(Long.parseLong(position.get("solutionid")), position.get("name")));
     }
 }

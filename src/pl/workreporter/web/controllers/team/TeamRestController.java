@@ -6,6 +6,8 @@ import pl.workreporter.web.beans.entities.position.Position;
 import pl.workreporter.web.beans.entities.projectassociation.ProjectAssociationDao;
 import pl.workreporter.web.beans.entities.team.Team;
 import pl.workreporter.web.beans.entities.team.TeamDao;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,41 +27,45 @@ public class TeamRestController {
 
     @RequestMapping(value = "/solution/teams", params = "id", method = GET)
     public @ResponseBody
-    List<Team> getAllTeams(@RequestParam("id") long solutionId) {
+    RestResponse<List<Team>> getAllTeams(@RequestParam("id") long solutionId) {
         List<Team> result = teamDao.getAllTeamsInSolution(solutionId);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/solution/teams/{id}", method = DELETE)
-    public void removeTeam(@RequestParam("solutionid") long solutionId, @PathVariable("id") long teamId) {
+    public RestResponse<Void> removeTeam(@RequestParam("solutionid") long solutionId, @PathVariable("id") long teamId) {
         teamDao.removeTeam(solutionId, teamId);
+        return new RestResponseSuccess<>();
     }
 
     @RequestMapping(value = "/solution/teams", method = DELETE)
-    public void removeSelectedTeams(@RequestParam("solutionid") long solutionId, @RequestParam("teams") List<Long> teams) {
+    public RestResponse<Void> removeSelectedTeams(@RequestParam("solutionid") long solutionId, @RequestParam("teams") List<Long> teams) {
         teamDao.removeTeams(solutionId, teams);
+        return new RestResponseSuccess<>();
     }
 
     @RequestMapping(value = "/solution/teams/{id}", method = PATCH)
-    public Team updateTeam(@PathVariable("id") long teamId, @RequestBody Map<String, String> map) {
-        return teamDao.updateTeam(teamId, map);
+    public RestResponse<Team> updateTeam(@PathVariable("id") long teamId, @RequestBody Map<String, String> map) {
+
+        return new RestResponseSuccess<>(teamDao.updateTeam(teamId, map));
     }
 
     @RequestMapping(value="/solution/teams", method = POST)
-    public Team addTeam(@RequestBody Map<String, String> map) {
-        return teamDao.addTeam(Long.parseLong(map.get("solutionId")), map.get("name"), null);
+    public RestResponse<Team> addTeam(@RequestBody Map<String, String> map) {
+        return new RestResponseSuccess<>(teamDao.addTeam(Long.parseLong(map.get("solutionId")), map.get("name"), null));
     }
 
     @RequestMapping(value = "/solution/teams", params = "projectid", method = GET)
     public @ResponseBody
-    List<Map<String, String>> getAllTeamsWithProject(@RequestParam("projectid") long projectid) {
+    RestResponse<List<Map<String, String>>> getAllTeamsWithProject(@RequestParam("projectid") long projectid) {
         List<Map<String, String>> result = projectAssociationDao.getProjectsTeams(projectid);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/solution/teamsprojects/{teamid}", method = PATCH)
-    public void updateAssociatedProjectsState(@PathVariable("teamid") long teamId,
+    public RestResponse<Void> updateAssociatedProjectsState(@PathVariable("teamid") long teamId,
                                               @RequestBody Map<String, List<Long>> projects) {
         projectAssociationDao.updateTeamsProjectsState(teamId, projects.get("projectsToAdd"), projects.get("projectsToRemove"));
+        return new RestResponseSuccess<>();
     }
 }

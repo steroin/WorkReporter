@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.workreporter.security.login.CompleteUserDetails;
 import pl.workreporter.web.beans.entities.user.User;
 import pl.workreporter.web.beans.entities.user.UserDao;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 import pl.workreporter.web.service.password.changer.PasswordChanger;
 
 import java.util.HashMap;
@@ -26,13 +28,13 @@ public class UserDataRestController {
 
     @RequestMapping(value = "/users/{id}", method = GET)
     @ResponseBody
-    public User getUser(@PathVariable("id") long userId) {
-        return userDao.getUserById(userId);
+    public RestResponse<User> getUser(@PathVariable("id") long userId) {
+        return new RestResponseSuccess<>(userDao.getUserById(userId));
     }
 
     @RequestMapping(value = "/users/me", method = GET)
     @ResponseBody
-    public Map<String, Object> getMyUserData() {
+    public RestResponse<Map<String, Object>> getMyUserData() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CompleteUserDetails cud = null;
         if (principal instanceof CompleteUserDetails) {
@@ -43,20 +45,20 @@ public class UserDataRestController {
         User user = userDao.getUserById(userId);
         map.put("user", user);
         map.put("solution", user.getSolution());
-        return map;
+        return new RestResponseSuccess<>(map);
     }
 
     @RequestMapping(value = "/pwd/{id}", method = PATCH)
-    public int changePassword(@PathVariable("id") long userId, @RequestBody Map<String, String> passwords) {
+    public RestResponse<Integer> changePassword(@PathVariable("id") long userId, @RequestBody Map<String, String> passwords) {
         String password = passwords.get("password");
         String passwordRepeat = passwords.get("newPassword");
         String newPassword = passwords.get("passwordRepeat");
-        return passwordChanger.changePassword(userId, password, passwordRepeat, newPassword).getResultCode();
+        return new RestResponseSuccess<>(passwordChanger.changePassword(userId, password, passwordRepeat, newPassword).getResultCode());
     }
 
     @RequestMapping(value = "/users/{id}", method = PATCH)
     @ResponseBody
-    public User updateUserData(@PathVariable("id") long userId, @RequestBody Map<String, String> map) {
-        return userDao.updateUser(userId, map);
+    public RestResponse<User> updateUserData(@PathVariable("id") long userId, @RequestBody Map<String, String> map) {
+        return new RestResponseSuccess<>(userDao.updateUser(userId, map));
     }
 }

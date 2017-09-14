@@ -10,6 +10,8 @@ import pl.workreporter.web.beans.entities.message.Message;
 import pl.workreporter.web.beans.entities.message.MessageSend;
 import pl.workreporter.web.beans.entities.message.SentMessageWrapper;
 import pl.workreporter.web.beans.entities.user.User;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 
 import java.util.List;
 import java.util.Map;
@@ -27,17 +29,19 @@ public class MessagesRestController {
     private MessageDao messageDao;
 
     @RequestMapping(value = "/messages/received", method = GET)
-    public List<MessageSend> getReceivedMessages(@RequestParam("userid") long userId) {
-        return messageDao.getUserReceivedMessages(userId);
+    public RestResponse<List<MessageSend>> getReceivedMessages(@RequestParam("userid") long userId) {
+        return new RestResponseSuccess<>(messageDao.getUserReceivedMessages(userId));
     }
 
     @RequestMapping(value = "/messages/sent", method = GET)
-    public List<SentMessageWrapper> getSentMessages(@RequestParam("userid") long userId) {
-        return messageDao.getUserSentMessages(userId);
+    public RestResponse<List<SentMessageWrapper>> getSentMessages(@RequestParam("userid") long userId) {
+        return new RestResponseSuccess<>(messageDao.getUserSentMessages(userId));
     }
 
     @RequestMapping(value = "/messages", method = POST)
-    public SentMessageWrapper sendMessage(@RequestBody SentMessageWrapper sentMessageWrapper) {
-        return messageDao.sendMessage(sentMessageWrapper.getMessage().getSender().getId(), sentMessageWrapper.getReceivers(), sentMessageWrapper.getMessage().getTitle(), sentMessageWrapper.getMessage().getContent());
+    public RestResponse<SentMessageWrapper> sendMessage(@RequestBody SentMessageWrapper sentMessageWrapper) {
+        return new RestResponseSuccess<>(messageDao.sendMessage(sentMessageWrapper.getMessage().getSender().getId(),
+                sentMessageWrapper.getReceivers(), sentMessageWrapper.getMessage().getTitle(),
+                sentMessageWrapper.getMessage().getContent()));
     }
 }

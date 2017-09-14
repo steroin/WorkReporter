@@ -2,6 +2,8 @@ package pl.workreporter.web.controllers.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.workreporter.web.beans.security.rest.RestResponse;
+import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 import pl.workreporter.web.service.mail.MailNotifier;
 import pl.workreporter.web.service.password.generator.PasswordGenerator;
 import pl.workreporter.web.beans.entities.user.User;
@@ -26,37 +28,39 @@ public class EmployeeRestController {
 
     @RequestMapping(value = "/solution/employees", params = "id",  method = GET)
     public @ResponseBody
-    List<User> getAllEmployees(@RequestParam("id") long solutionId) {
+    RestResponse<List<User>> getAllEmployees(@RequestParam("id") long solutionId) {
         List<User> result = userDao.getAllUsersInSolution(solutionId);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/solution/employees", params = "teamid", method = GET)
     public @ResponseBody
-    List<User> getAllEmployeesInTeam(@RequestParam("teamid") long teamId) {
+    RestResponse<List<User>> getAllEmployeesInTeam(@RequestParam("teamid") long teamId) {
         List<User> result = userDao.getAllUsersInTeam(teamId);
-        return result;
+        return new RestResponseSuccess<>(result);
     }
 
     @RequestMapping(value = "/solution/employees/{userid}", method = DELETE)
-    public void removeEmployee(@RequestParam("solutionid") long solutionId,
+    public RestResponse<Void> removeEmployee(@RequestParam("solutionid") long solutionId,
                                @PathVariable("userid") long employeeId) {
         userDao.removeUser(solutionId, employeeId);
+        return new RestResponseSuccess<>();
     }
 
     @RequestMapping(value = "/solution/employees", method = DELETE)
-    public void removeSelectedEmployees(@RequestParam("solutionid") long solutionId,
+    public RestResponse<Void> removeSelectedEmployees(@RequestParam("solutionid") long solutionId,
                                         @RequestParam("employees") List<Long> employees) {
         userDao.removeUsers(solutionId, employees);
+        return new RestResponseSuccess<>();
     }
 
     @RequestMapping(value = "/solution/employees/{id}", method = PATCH)
-    public User updateEmployee(@PathVariable("id") long employeeId, @RequestBody Map<String, String> employee) {
-        return userDao.updateUser(employeeId, employee);
+    public RestResponse<User> updateEmployee(@PathVariable("id") long employeeId, @RequestBody Map<String, String> employee) {
+        return new RestResponseSuccess<>(userDao.updateUser(employeeId, employee));
     }
 
     @RequestMapping(value="/solution/employees", method = POST)
-    public User addEmployee(@RequestBody Map<String, String> employee) {
+    public RestResponse<User> addEmployee(@RequestBody Map<String, String> employee) {
         String password = passwordGenerator.generate(12);
         Long teamId = employee.get("teamid").isEmpty() ? null : Long.parseLong(employee.get("teamid"));
         String birthday = employee.get("birthday").isEmpty() ? null : employee.get("birthday");
@@ -66,6 +70,6 @@ public class EmployeeRestController {
                 employee.get("firstname"), employee.get("lastname"), birthday, phone,
                 employee.get("login"), password, employee.get("email"));
         notifier.sendInitialMessage(employee.get("login"), password, employee.get("email"));
-        return user;
+        return new RestResponseSuccess<>(user);
     }
 }
