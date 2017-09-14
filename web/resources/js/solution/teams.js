@@ -5,7 +5,7 @@ function initSolutionTeamsManagement($scope, $http) {
     $scope.activeSolutionTeamsContent = function () {
         startLoading();
         $http.get('solution/teams', {params: {'id': $scope.currentSolution.id}}).then(function (data) {
-            $scope.solutionTeams = data.data;
+            $scope.solutionTeams = data.data.response;
             $scope.activeContent('solutionTeams', 'solutionMenuTeams');
             $scope.setUpTeamPagination(1);
             $scope.markedItems = [];
@@ -46,7 +46,7 @@ function initSolutionTeamsManagement($scope, $http) {
             'leaderId' : 'null'
         };
         $http.post('solution/teams', objectToAdd).then(function(data) {
-            $scope.solutionTeams.push(data.data);
+            $scope.solutionTeams.push(data.data.response);
             $scope.setUpTeamPagination($scope.totalPages);
             finishLoading();
         });
@@ -56,7 +56,7 @@ function initSolutionTeamsManagement($scope, $http) {
         $("#teamEditModalNameError").hide();
         $("#editTeamModalNameInput").val($scope.currentTeam.name);
         $http.get('solution/employees', {params : {'teamid' : $scope.currentTeam.id}}).then(function(data) {
-            $scope.currentTeamMembers = data.data;
+            $scope.currentTeamMembers = data.data.response;
             return $http.get('empty');
         }).then(function(data) {
             $("#editTeamModalLeaderInput").val($scope.currentTeam.leaderId);
@@ -82,7 +82,8 @@ function initSolutionTeamsManagement($scope, $http) {
             'leaderId' : leader
         };
         $http.patch('solution/teams/'+$scope.currentTeam.id, objectToAdd).then(function(data) {
-            $scope.solutionTeams = $scope.solutionTeams.map(function(obj) {return obj.id == data.data.id ? data.data : obj});
+            var response = data.data.response;
+            $scope.solutionTeams = $scope.solutionTeams.map(function(obj) {return obj.id == response.id ? response : obj});
             $scope.setUpTeamPagination($scope.currentPageId);
             finishLoading();
         });
@@ -131,7 +132,7 @@ function initSolutionTeamsManagement($scope, $http) {
             return $http.get('solution/projects', {params : {'id' : $scope.currentSolution.id}});
         }).then(function(data) {
             var currentTeamProjectIds = $scope.currentTeamProjects.map(function(obj) { return parseInt(obj.id); });
-            $scope.currentTeamAllProjects = data.data;
+            $scope.currentTeamAllProjects = data.data.response;
             $scope.currentTeamAvailableProjects = $scope.currentTeamAllProjects.filter(function(obj) { return currentTeamProjectIds.indexOf(obj.id) == -1 });
             $("#teamProjectsModal").modal("show");
             $scope.projectsToAdd = [];

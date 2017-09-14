@@ -5,7 +5,7 @@ function initSolutionPositionsManagement($scope, $http) {
     $scope.activeSolutionPositionsContent = function() {
         startLoading();
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
-            $scope.solutionPositions = data.data;
+            $scope.solutionPositions = data.data.response;
             $scope.activeContent('solutionPositions', 'solutionMenuPositions');
             $scope.setUpPositionPagination(1);
             $scope.markedItems = [];
@@ -36,7 +36,7 @@ function initSolutionPositionsManagement($scope, $http) {
             'name' : name
         };
         $http.post('solution/positions', objectToAdd).then(function(data) {
-            $scope.solutionPositions.push(data.data);
+            $scope.solutionPositions.push(data.data.response);
             $scope.setUpPositionPagination($scope.totalPages);
             finishLoading();
         });
@@ -62,7 +62,8 @@ function initSolutionPositionsManagement($scope, $http) {
             'name' : name
         };
         $http.patch('solution/positions/'+$scope.currentPosition.id, objectToAdd).then(function(data) {
-            $scope.solutionPositions = $scope.solutionPositions.map(function(obj) {return obj.id == data.data.id ? data.data : obj});
+            var response = data.data.response;
+            $scope.solutionPositions = $scope.solutionPositions.map(function(obj) {return obj.id == response.id ? response : obj});
             $scope.setUpPositionPagination($scope.currentPageId);
             finishLoading();
         });

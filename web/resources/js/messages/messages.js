@@ -12,14 +12,14 @@ module.controller('messagesController', function($scope, $http) {
     $scope.init = function() {
         startLoading();
         $http.get('auth').then(function(data){
-            $scope.authentication = data.data;
+            $scope.authentication = data.data.response;
             return $http.get('messages/received', {params : {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
-            $scope.receivedMessages = data.data;
+            $scope.receivedMessages = data.data.response;
             $scope.receivedMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
             return $http.get('messages/sent', {params : {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
-            $scope.sentMessages = data.data;
+            $scope.sentMessages = data.data.response;
             $scope.sentMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
             finishLoading();
             $("#messagesMainContainer").show();
@@ -29,7 +29,7 @@ module.controller('messagesController', function($scope, $http) {
     };
     $scope.loadReceivedMessages = function() {
         $http.get('messages/received', {params : {'userid' : $scope.authentication.principal.userId}}).then(function(data) {
-            $scope.receivedMessages = data.data;
+            $scope.receivedMessages = data.data.response;
             $scope.receivedMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
             $scope.currentMessages = $scope.receivedMessages;
         });
@@ -37,7 +37,7 @@ module.controller('messagesController', function($scope, $http) {
 
     $scope.loadSentMessages = function() {
         $http.get('messages/sent', {params : {'userid' : $scope.authentication.principal.userId}}).then(function(data) {
-            $scope.sentMessages = data.data;
+            $scope.sentMessages = data.data.response;
             $scope.currentMessages =  $scope.sentMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
         });
     };
@@ -69,7 +69,7 @@ module.controller('messagesController', function($scope, $http) {
         $scope.currentReceivers = [];
         $scope.responseTitle = "";
         $http.get('solution/employees', {params: {'id' : $scope.authentication.principal.solutionId}}).then(function(data) {
-            $scope.allReceivers = data.data;
+            $scope.allReceivers = data.data.response;
             $scope.currentAvailableReceivers = $scope.allReceivers.filter(function(obj) {return obj.id != $scope.authentication.principal.userId;});
             $("#newMessageModal").modal("show");
             finishLoading();
@@ -85,7 +85,7 @@ module.controller('messagesController', function($scope, $http) {
         $scope.responseTitle = "RE: "+receivedMessage.message.title;
         $scope.receiversToAdd.push(receivedMessage.message.sender.id);
         $http.get('solution/employees', {params: {'id' : $scope.authentication.principal.solutionId}}).then(function(data) {
-            $scope.allReceivers = data.data;
+            $scope.allReceivers = data.data.response;
             $scope.currentAvailableReceivers = $scope.allReceivers.filter(function(obj) {return obj.id != $scope.authentication.principal.userId && obj.id != receivedMessage.message.sender.id;});
             $scope.currentReceivers = $scope.allReceivers.filter(function(obj) { return obj.id == receivedMessage.message.sender.id});
             $("#newMessageModal").modal("show");
@@ -145,7 +145,7 @@ module.controller('messagesController', function($scope, $http) {
         $("#newMessageModal").modal("hide");
 
         $http.post('messages', messageWrapper).then(function(data) {
-            $scope.sentMessages.push(data.data);
+            $scope.sentMessages.push(data.data.response);
             $scope.sentMessages.sort(function(a,b) { return compareDates(a.sendDate, b.sendDate)});
             finishLoading();
         });

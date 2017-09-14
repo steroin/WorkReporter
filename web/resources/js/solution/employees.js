@@ -5,7 +5,7 @@ function initSolutionEmployeesManagement($scope, $http) {
     $scope.activeSolutionEmployeesContent = function() {
         startLoading();
         $http.get('solution/employees', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
-            $scope.solutionEmployees = data.data;
+            $scope.solutionEmployees = data.data.response;
             $scope.activeContent('solutionEmployees', 'solutionMenuEmployees');
             $scope.setUpEmployeesPagination(1);
             $scope.markedItems = [];
@@ -38,7 +38,7 @@ function initSolutionEmployeesManagement($scope, $http) {
             $scope.solutionPositions = data.data;
             return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
         }).then(function(data) {
-            $scope.solutionTeams = data.data;
+            $scope.solutionTeams = data.data.response;
             $("#addEmployeeModal").modal("show");
             finishLoading();
         });
@@ -100,7 +100,7 @@ function initSolutionEmployeesManagement($scope, $http) {
         };
 
         $http.post('solution/employees', objectToAdd).then(function(data) {
-            $scope.solutionEmployees.push(data.data);
+            $scope.solutionEmployees.push(data.data.response);
             $scope.setUpEmployeesPagination($scope.totalPages);
             finishLoading();
         });
@@ -123,10 +123,10 @@ function initSolutionEmployeesManagement($scope, $http) {
         $("#editEmployeeModalPhoneInput").val($scope.currentEmployee.personalData.phone == null ? "" : parseDateTimestamp($scope.currentEmployee.personalData.phone));
 
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
-            $scope.solutionPositions = data.data;
+            $scope.solutionPositions = data.data.response;
             return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
         }).then(function(data) {
-            $scope.solutionTeams = data.data;
+            $scope.solutionTeams = data.data.response;
             return $http.get('empty')
         }).then(function(data) {
             $("#editEmployeeModalPositionInput").val($scope.currentEmployee.position.id);

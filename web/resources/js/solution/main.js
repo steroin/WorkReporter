@@ -14,10 +14,10 @@ module.controller('solutionController', function($scope, $http) {
         initSolutionTeamsManagement($scope, $http);
         initSolutionEmployeesManagement($scope, $http);
         $http.get("solution/solutions").then(function(data) {
-            $scope.solutionChooserData = data.data;
+            $scope.solutionChooserData = data.data.response;
             return $scope.getSolutionRequest($scope.solutionChooserData.firstSolutionId);
         }).then(function(data) {
-            $scope.currentSolution = data.data;
+            $scope.currentSolution = data.data.response;
             $scope.activeContent('solutionInfo', 'solutionMenuInfo');
             finishLoading();
         });
@@ -26,7 +26,7 @@ module.controller('solutionController', function($scope, $http) {
     $scope.setCurrentSolution = function(id) {
         startLoading();
         $scope.getSolutionRequest(id).then(function(data) {
-            $scope.currentSolution = data.data;
+            $scope.currentSolution = data.data.response;
             $scope.currentPage = {};
             $scope.activeSolutionInfoContent();
             finishLoading();
@@ -156,7 +156,7 @@ module.controller('solutionController', function($scope, $http) {
             $http.patch('solution/solutions/'+$scope.currentSolution.id, $scope.currentSolution).then(function(data) {
                 return $http.get('currentdate');
             }).then(function(data) {
-                $scope.currentSolution.lastEditionDate = data.data;
+                $scope.currentSolution.lastEditionDate = data.data.response;
                 finishLoading();
             });
         }

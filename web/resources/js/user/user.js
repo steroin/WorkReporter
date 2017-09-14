@@ -12,8 +12,8 @@ module.controller('userController', function($scope, $http) {
     $scope.init = function() {
         startLoading();
         $http.get('users/me').then(function(data) {
-            $scope.userData = data.data.user;
-            $scope.currentSolution = data.data.solution;
+            $scope.userData = data.data.response.user;
+            $scope.currentSolution = data.data.response.solution;
             $("#userData").show();
             $scope.activePersonalData();
             finishLoading();
@@ -68,7 +68,7 @@ module.controller('userController', function($scope, $http) {
             };
 
             $http.patch('users/'+$scope.userData.id, objectToAdd).then(function(data) {
-                $scope.userData = data.data;
+                $scope.userData = data.data.response;
                 finishLoading();
             });
         } else if ($scope.currentUserData == 1) {

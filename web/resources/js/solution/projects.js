@@ -6,7 +6,7 @@ function initSolutionProjectsManagement($scope, $http) {
     $scope.activeSolutionProjectsContent = function() {
         startLoading();
         $http.get('solution/projects', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
-            $scope.solutionProjects = data.data;
+            $scope.solutionProjects = data.data.response;
             $scope.activeContent('solutionProjects', 'solutionMenuProjects');
             $scope.setUpProjectPagination(1);
             $scope.markedItems = [];
@@ -46,7 +46,7 @@ function initSolutionProjectsManagement($scope, $http) {
             'description' : desc
         };
         $http.post('solution/projects', objectToAdd).then(function(data) {
-            $scope.solutionProjects.push(data.data);
+            $scope.solutionProjects.push(data.data.response);
             $scope.setUpProjectPagination($scope.totalPages);
             finishLoading();
         });
@@ -80,7 +80,8 @@ function initSolutionProjectsManagement($scope, $http) {
             'description' : desc
         };
         $http.patch('solution/projects/'+$scope.currentProject.id, objectToAdd).then(function(data) {
-            $scope.solutionProjects = $scope.solutionProjects.map(function(obj) {return obj.id == data.data.id ? data.data : obj});
+            var response = data.data.response;
+            $scope.solutionProjects = $scope.solutionProjects.map(function(obj) {return obj.id == response.id ? response : obj});
             $scope.setUpProjectPagination($scope.currentPageId);
             finishLoading();
         });
@@ -138,7 +139,7 @@ function initSolutionProjectsManagement($scope, $http) {
             return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
         }).then(function(data) {
             var currentProjectTeamIds = $scope.currentProjectTeams.map(function(obj) { return parseInt(obj.id); });
-            $scope.currentProjectAllTeams = data.data;
+            $scope.currentProjectAllTeams = data.data.response;
             $scope.currentProjectAvailableTeams = $scope.currentProjectAllTeams.filter(function(obj) { return currentProjectTeamIds.indexOf(obj.id) == -1 });
             $("#projectTeamsModal").modal("show");
             $scope.teamsToAdd = [];

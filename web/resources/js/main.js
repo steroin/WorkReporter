@@ -18,7 +18,7 @@ module.controller('mainController', function($scope, $http) {
 
         $(".pageContent").show();
         $http.get('auth').then(function(data){
-            $scope.authentication = data.data;
+            $scope.authentication = data.data.response;
             $scope.setCurrentDate(today.getFullYear(), today.getMonth()+1, today.getDate());
         });
     };
@@ -59,7 +59,7 @@ module.controller('mainController', function($scope, $http) {
             'month' : $scope.currentMonth,
             'day' : $scope.currentDay
         }}).then(function(data) {
-            $scope.currentEntries = data.data;
+            $scope.currentEntries = data.data.response;
             $scope.currentEntries.sort(function(a,b) { return compareDates(b.logStart, a.logStart)});
             $scope.markedItems = [];
             enableDateChange();
@@ -114,10 +114,10 @@ module.controller('mainController', function($scope, $http) {
         $("#logEntryAddStartLoggedHours").hide();
         $("#logEntryAddEntryTypeError").hide();
         $http.get('entrytypes').then(function(data) {
-            $scope.logEntryTypes = data.data;
+            $scope.logEntryTypes = data.data.response;
             return $http.get('entries/projects', {params: {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
-            $scope.userAvailableProjects = data.data;
+            $scope.userAvailableProjects = data.data.response;
             finishLoading();
             $("#addLogEntryModal").modal("show");
         });
@@ -153,7 +153,7 @@ module.controller('mainController', function($scope, $http) {
             'projectid' : project
         };
         $http.post('entries', objectToAdd).then(function(data) {
-            $scope.currentEntries.push(data.data);
+            $scope.currentEntries.push(data.data.response);
             $scope.currentEntries.sort(function(a,b ) { return a.startHour > b.startHour});
             finishLoading();
         });
@@ -178,10 +178,10 @@ module.controller('mainController', function($scope, $http) {
         $("#logEntryEditStartLoggedHours").hide();
         $("#logEntryEditEntryTypeError").hide();
         $http.get('entrytypes').then(function(data) {
-            $scope.logEntryTypes = data.data;
+            $scope.logEntryTypes = data.data.response;
             return $http.get('entries/projects', {params: {'userid' : $scope.authentication.principal.userId}});
         }).then(function(data) {
-            $scope.userAvailableProjects = data.data;
+            $scope.userAvailableProjects = data.data.response;
             $("#editLogEntryEntryType").val($scope.currentEntry.logType.id);
             return $http.get('empty');
         }).then(function() {
