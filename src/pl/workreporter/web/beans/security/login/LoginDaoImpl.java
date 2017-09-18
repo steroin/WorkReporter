@@ -35,7 +35,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public String getEmail(String login) {
-        return getEmail("authentication", "'"+login+"'");
+        return getEmail("login", "'"+login+"'");
     }
 
     private String getEmail(String keyAttribute, Object value) {
@@ -62,7 +62,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public String getPasswordHash(String login) {
-        return getPasswordHash("authentication", "'"+login+"'");
+        return getPasswordHash("login", "'"+login+"'");
     }
 
     @Override
@@ -78,7 +78,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public CompleteUserDetails loadUserDetails(String login) {
-        return loadUserDetails("authentication", "'"+login+"'");
+        return loadUserDetails("login", "'"+login+"'");
     }
 
     @Override
@@ -101,8 +101,8 @@ public class LoginDaoImpl implements LoginDao {
             return null;
         }
 
-        List<Long> managedSolutions = getManagedSolutions(result.get("authentication").toString());
-        List<Long> managedTeams = getManagedTeams(result.get("authentication").toString());
+        List<Long> managedSolutions = getManagedSolutions(result.get("login").toString());
+        List<Long> managedTeams = getManagedTeams(result.get("login").toString());
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         authorities.add(new UserRole("ROLE_USER"));
@@ -122,7 +122,7 @@ public class LoginDaoImpl implements LoginDao {
         cud.setFirstName(result.get("firstname").toString());
         cud.setLastName(result.get("lastname").toString());
         cud.setPassword(result.get("password").toString());
-        cud.setUsername(result.get("authentication").toString());
+        cud.setUsername(result.get("login").toString());
         cud.setEmail(result.get("email").toString());
         cud.setAccountNonExpired(true);
         cud.setAccountNonLocked(true);
@@ -136,7 +136,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public List<Long> getManagedSolutions(String login) {
-        return getManagedSolutions("authentication", "'"+login+"'");
+        return getManagedSolutions("login", "'"+login+"'");
     }
 
     @Override
@@ -159,7 +159,7 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public List<Long> getManagedTeams(String login) {
-        return getManagedTeams("authentication", "'"+login+"'");
+        return getManagedTeams("login", "'"+login+"'");
     }
 
     @Override

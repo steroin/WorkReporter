@@ -215,15 +215,13 @@ module.controller('mainController', function($scope, $http) {
         $("#editLogEntryModal").modal("hide");
         startLoading();
 
-        // TO DO:
-        $scope.currentEntry.startHour = startHour;
+        var logStartSplit = $scope.currentEntry.logStart.split(" ");
+        logStartSplit[1] = startHour;
+        $scope.currentEntry.logStart = logStartSplit[0]+" "+logStartSplit[1]+":00";
         $scope.currentEntry.loggedHours = loggedHours;
-        $scope.currentEntry.logTypeId = logType;
-        $scope.currentEntry.projectId = project;
-        $scope.currentEntry.logTypeName = $scope.logEntryTypes.filter(function(obj) { return obj.id == logType;})[0].name;
+        $scope.currentEntry.project = $scope.userAvailableProjects.filter(function(obj) {return obj.id == project})[0];
+        $scope.currentEntry.logType = $scope.logEntryTypes.filter(function(obj) { return obj.id == logType;})[0];
         $scope.currentEntries.sort(function(a,b ) { return a.startHour > b.startHour});
-        var newName = $scope.userAvailableProjects.filter(function(obj) {return obj.id == project});
-        $scope.currentEntry.projectName = newName.length == 0 ? "" : newName[0].name;
         $http.patch('entries/'+$scope.currentEntry.id, $scope.currentEntry).then(function() {
             finishLoading();
         });

@@ -95,6 +95,17 @@ public class LogEntryDaoImpl implements LogEntryDao {
     }
 
     @Override
+    public List<LogEntry> getLogEntries(List<Long> ids) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<LogEntry> query = criteriaBuilder.createQuery(LogEntry.class);
+        Root<LogEntry> root = query.from(LogEntry.class);
+        query.select(root);
+        query.where(root.get("id").in(ids));
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
     public List<LogType> getAllLogTypes() {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
