@@ -68,7 +68,7 @@ module.controller('messagesController', function($scope, $http) {
         $scope.receiversToAdd = [];
         $scope.currentReceivers = [];
         $scope.responseTitle = "";
-        $http.get('solution/employees', {params: {'id' : $scope.authentication.principal.solutionId}}).then(function(data) {
+        $http.get('messages/receivers', {params: {'solutionid' : $scope.authentication.principal.solutionId}}).then(function(data) {
             $scope.allReceivers = data.data.response;
             $scope.currentAvailableReceivers = $scope.allReceivers.filter(function(obj) {return obj.id != $scope.authentication.principal.userId;});
             $("#newMessageModal").modal("show");
@@ -84,7 +84,7 @@ module.controller('messagesController', function($scope, $http) {
         var receivedMessage = $scope.receivedMessages.filter(function(obj) {return obj.message.id == id})[0];
         $scope.responseTitle = "RE: "+receivedMessage.message.title;
         $scope.receiversToAdd.push(receivedMessage.message.sender.id);
-        $http.get('solution/employees', {params: {'id' : $scope.authentication.principal.solutionId}}).then(function(data) {
+        $http.get('messages/receivers', {params: {'solutionid' : $scope.authentication.principal.solutionId}}).then(function(data) {
             $scope.allReceivers = data.data.response;
             $scope.currentAvailableReceivers = $scope.allReceivers.filter(function(obj) {return obj.id != $scope.authentication.principal.userId && obj.id != receivedMessage.message.sender.id;});
             $scope.currentReceivers = $scope.allReceivers.filter(function(obj) { return obj.id == receivedMessage.message.sender.id});

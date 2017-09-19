@@ -23,7 +23,7 @@ public class MessageSend implements Serializable {
     private Message message;
     @ManyToOne
     @JoinColumn(name = "RECEIVERID")
-    private User receiver;
+    private MessageReceiver receiver;
     @Column(name = "SENDDATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
     private Date sendDate = new Date();
@@ -46,11 +46,11 @@ public class MessageSend implements Serializable {
         this.message = message;
     }
 
-    public User getReceiver() {
+    public MessageReceiver getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(MessageReceiver receiver) {
         this.receiver = receiver;
     }
 

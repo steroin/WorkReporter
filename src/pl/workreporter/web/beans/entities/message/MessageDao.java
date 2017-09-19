@@ -11,5 +11,6 @@ import java.util.Map;
 public interface MessageDao {
     List<MessageSend> getUserReceivedMessages(long userId);
     List<SentMessageWrapper> getUserSentMessages(long userId);
-    SentMessageWrapper sendMessage(long senderId, List<User> receivers, String title, String content);
+    SentMessageWrapper sendMessage(long senderId, List<MessageReceiver> receivers, String title, String content);
+    List<MessageReceiver> getAllReceiversInSolution(long solutionId);
 }

@@ -10,7 +10,7 @@
                         <div class="messageHeaderSender" ng-if="message.receivers.length == 1">
                             Do:
                             <span ng-repeat="receiver in message.receivers">
-                                {{receiver.personalData.firstName}} {{receiver.personalData.lastName}} ({{receiver.account.email}})
+                                {{receiver.firstName}} {{receiver.lastName}} ({{receiver.email}})
                                 <span ng-if="!$last">, </span>
                             </span>
                         </div>
@@ -28,7 +28,7 @@
                 <div class="messageTextReceivers" ng-if="message.receivers.length > 1">
                     Odbiorcy:
                     <span ng-repeat="receiver in message.receivers">
-                        {{receiver.personalData.firstName}} {{receiver.personalData.lastName}} ({{receiver.account.email}})
+                        {{receiver.firstName}} {{receiver.lastName}} ({{receiver.email}})
                         <span ng-if="!$last">, </span>
                     </span>
                 </div>

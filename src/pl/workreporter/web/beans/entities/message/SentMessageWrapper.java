@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class SentMessageWrapper {
     private Message message;
-    private List<User> receivers;
+    private List<MessageReceiver> receivers;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
     private Date sendDate;
 
@@ -23,11 +23,11 @@ public class SentMessageWrapper {
         this.message = message;
     }
 
-    public List<User> getReceivers() {
+    public List<MessageReceiver> getReceivers() {
         return receivers;
     }
 
-    public void setReceivers(List<User> receivers) {
+    public void setReceivers(List<MessageReceiver> receivers) {
         this.receivers = receivers;
     }
 

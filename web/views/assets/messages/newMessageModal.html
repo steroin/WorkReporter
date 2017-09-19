@@ -14,7 +14,7 @@
                                 <div id="currentReceivers" class="panel panel-default modalListSmall">
                                     <div class="alert alert-info modalListItem" ng-repeat="receiver in currentReceivers">
                                         <div class="col-xs-11 modalListItemText">
-                                            <span>{{receiver.personalData.firstName}} {{receiver.personalData.lastName}} ({{receiver.account.email}})</span>
+                                            <span>{{receiver.firstName}} {{receiver.lastName}} ({{receiver.email}})</span>
                                         </div>
                                         <div class="col-xs-1">
                                             <a href="#" ng-click="removeReceiver(receiver.id)"><span class="glyphicon glyphicon-remove"></span></a>
@@ -26,7 +26,7 @@
                                 <label for="newMessageModalReceiversInput">Wybierz odbiorców:</label>
                                 <select id="newMessageModalReceiversInput" class="form-control">
                                     <option ng-repeat="receiver in currentAvailableReceivers" value="{{receiver.id}}">
-                                        {{receiver.personalData.firstName}} {{receiver.personalData.lastName}} ({{receiver.account.email}})
+                                        {{receiver.firstName}} {{receiver.lastName}} ({{receiver.email}})
                                     </option>
                                 </select>
                             </div>

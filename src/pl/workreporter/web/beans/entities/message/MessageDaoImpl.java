@@ -27,7 +27,8 @@ public class MessageDaoImpl implements MessageDao {
         CriteriaQuery<MessageSend> query = criteriaBuilder.createQuery(MessageSend.class);
         Root<MessageSend> root = query.from(MessageSend.class);
         query.select(root);
-        query.where(criteriaBuilder.equal(root.get("receiver"), entityManager.find(User.class, userId)));
+        entityManager.find(MessageReceiver.class, userId);
+        query.where(criteriaBuilder.equal(root.get("receiver"), entityManager.find(MessageReceiver.class, userId)));
         return entityManager.createQuery(query).getResultList();
     }
 
@@ -44,10 +45,10 @@ public class MessageDaoImpl implements MessageDao {
 
         for (MessageSend send : sends) {
             Message message = send.getMessage();
-            User receiver = send.getReceiver();
+            MessageReceiver receiver = send.getReceiver();
 
             if (!map.containsKey(message)) {
-                List<User> receivers = new ArrayList<>();
+                List<MessageReceiver> receivers = new ArrayList<>();
                 receivers.add(receiver);
                 SentMessageWrapper sentMessageWrapper = new SentMessageWrapper();
                 sentMessageWrapper.setMessage(message);
@@ -63,7 +64,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public SentMessageWrapper sendMessage(long senderId, List<User> receivers, String title, String content) {
+    public SentMessageWrapper sendMessage(long senderId, List<MessageReceiver> receivers, String title, String content) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         Message message = new Message();
         message.setTitle(title);
@@ -74,7 +75,7 @@ public class MessageDaoImpl implements MessageDao {
         entityManager.persist(message);
         Date sendDate = null;
 
-        for (User receiver : receivers) {
+        for (MessageReceiver receiver : receivers) {
             MessageSend messageSend = new MessageSend();
             messageSend.setMessage(message);
             messageSend.setReceiver(receiver);
@@ -91,5 +92,16 @@ public class MessageDaoImpl implements MessageDao {
         sentMessageWrapper.setSendDate(sendDate);
 
         return sentMessageWrapper;
+    }
+
+    @Override
+    public List<MessageReceiver> getAllReceiversInSolution(long solutionId) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<MessageReceiver> query = criteriaBuilder.createQuery(MessageReceiver.class);
+        Root<MessageReceiver> root = query.from(MessageReceiver.class);
+        query.select(root);
+        query.where(criteriaBuilder.equal(root.get("solutionId"), solutionId));
+        return entityManager.createQuery(query).getResultList();
     }
 }

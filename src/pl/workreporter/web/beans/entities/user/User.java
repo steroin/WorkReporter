@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by Sergiusz on 19.08.2017.
  */
-@Entity
+@Entity(name = "User")
 @Table(name = "APPUSER")
 public class User implements Serializable {
     @Id
