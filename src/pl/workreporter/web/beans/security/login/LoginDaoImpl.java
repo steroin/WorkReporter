@@ -87,7 +87,8 @@ public class LoginDaoImpl implements LoginDao {
     }
 
     private CompleteUserDetails loadUserDetails(String keyAttribute, Object value) {
-        String query = "select au.id as userId, ac.id as accountId, au.solutionid, firstname, lastname, login, password, ac.email as email " +
+        String query = "select au.id as userId, ac.id as accountId, au.solutionid, firstname, lastname, login, password, ac.email as email, " +
+                "au.positionid, au.teamid " +
                 "from account ac " +
                 "inner join appuser au on ac.id = au.accountid " +
                 "inner join personal_data pd on au.personaldataid = pd.id " +
@@ -123,6 +124,8 @@ public class LoginDaoImpl implements LoginDao {
         cud.setLastName(result.get("lastname").toString());
         cud.setPassword(result.get("password").toString());
         cud.setUsername(result.get("login").toString());
+        cud.setPositionId(result.get("positionid") == null ? null : Long.parseLong(result.get("positionid").toString()));
+        cud.setPositionId(result.get("teamid") == null ? null : Long.parseLong(result.get("teamid").toString()));
         cud.setEmail(result.get("email").toString());
         cud.setAccountNonExpired(true);
         cud.setAccountNonLocked(true);

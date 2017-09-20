@@ -22,6 +22,7 @@
 
                                 <label for="addEmployeeModalPositionInput">Stanowisko:</label>
                                 <select id="addEmployeeModalPositionInput" class="form-control">
+                                    <option value="">(brak)</option>
                                     <option ng-repeat="position in solutionPositions" value="{{position.id}}">{{position.name}}</option>
                                 </select>
 

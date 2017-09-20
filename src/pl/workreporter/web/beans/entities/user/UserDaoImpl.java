@@ -65,7 +65,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User addUser(long solutionId, Long teamId, long positionId, double workingTime, String firstName,
+    public User addUser(long solutionId, Long teamId, Long positionId, double workingTime, String firstName,
                         String lastName, String birthday, String phone, String login, String password, String email) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(16));
@@ -96,7 +96,7 @@ public class UserDaoImpl implements UserDao {
         user.setWorkingTime(workingTime);
         user.setAccount(account);
         user.setPersonalData(personalData);
-        user.setPosition(entityManager.find(Position.class, positionId));
+        user.setPosition(positionId == null ? null : entityManager.find(Position.class, positionId));
         user.setSolution(entityManager.find(Solution.class, solutionId));
         user.setTeam(teamId == null ? null : entityManager.find(Team.class, teamId));
 

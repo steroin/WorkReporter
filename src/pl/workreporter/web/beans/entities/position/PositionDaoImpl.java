@@ -38,6 +38,17 @@ public class PositionDaoImpl implements PositionDao {
     }
 
     @Override
+    public List<Position> getPositions(List<Long> positionsIds) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Position> query = criteriaBuilder.createQuery(Position.class);
+        Root<Position> root = query.from(Position.class);
+        query.select(root);
+        query.where(root.get("id").in(positionsIds));
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
     public Position addPosition(long solutionId, String name) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         Position position = new Position();
@@ -50,7 +61,7 @@ public class PositionDaoImpl implements PositionDao {
     }
 
     @Override
-    public void removePosition(long solutionId, long positionId) {
+    public void removePosition(long positionId) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         entityManager.getTransaction().begin();
         Position position = entityManager.find(Position.class, positionId);
@@ -59,7 +70,7 @@ public class PositionDaoImpl implements PositionDao {
     }
 
     @Override
-    public void removePositions(long solutionId, List<Long> positionsIds) {
+    public void removePositions(List<Long> positionsIds) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         entityManager.getTransaction().begin();
         for (long id : positionsIds) {

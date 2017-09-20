@@ -1,13 +1,13 @@
 package pl.workreporter.web.controllers.position;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.beans.entities.position.Position;
-import pl.workreporter.web.beans.entities.position.PositionDao;
-import pl.workreporter.web.beans.entities.project.Project;
-import pl.workreporter.web.beans.entities.project.ProjectDao;
+import pl.workreporter.web.beans.entities.position.PositionDaoWrapper;
 import pl.workreporter.web.beans.security.rest.RestResponse;
 import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
+import pl.workreporter.web.beans.security.rest.views.user.JsonPositionView;
 
 import java.util.List;
 import java.util.Map;
@@ -20,34 +20,34 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 public class PositionRestController {
     @Autowired
-    private PositionDao positionDao;
+    private PositionDaoWrapper positionDaoWrapper;
 
+    @JsonView(JsonPositionView.SolutionManager.class)
     @RequestMapping(value = "/solution/positions", method = GET)
     public @ResponseBody
     RestResponse<List<Position>> getAllPositions(@RequestParam("id") long solutionId) {
-        List<Position> result = positionDao.getAllPositionsInSolution(solutionId);
-        return new RestResponseSuccess<>(result);
+        return positionDaoWrapper.getAllPositionsInSolution(solutionId);
     }
 
     @RequestMapping(value = "/solution/positions/{id}", method = DELETE)
-    public RestResponse<Void> removePosition(@RequestParam("solutionid") long solutionId, @PathVariable("id") long positionId) {
-        positionDao.removePosition(solutionId, positionId);
-        return new RestResponseSuccess<>();
+    public RestResponse<Void> removePosition(@PathVariable("id") long positionId) {
+        return positionDaoWrapper.removePosition(positionId);
     }
 
     @RequestMapping(value = "/solution/positions", method = DELETE)
-    public RestResponse<Void> removeSelectedPositions(@RequestParam("solutionid") long solutionId, @RequestParam("positions") List<Long> positions) {
-        positionDao.removePositions(solutionId, positions);
-        return new RestResponseSuccess<>();
+    public RestResponse<Void> removeSelectedPositions(@RequestParam("positions") List<Long> positions) {
+        return positionDaoWrapper.removePositions(positions);
     }
 
     @RequestMapping(value = "/solution/positions/{id}", method = PATCH)
+    @JsonView(JsonPositionView.SolutionManager.class)
     public RestResponse<Position> updatePosition(@PathVariable("id") long positionId, @RequestBody Map<String, String> map) {
-        return new RestResponseSuccess<>(positionDao.updatePosition(positionId, map));
+        return positionDaoWrapper.updatePosition(positionId, map);
     }
 
     @RequestMapping(value="/solution/positions", method = POST)
+    @JsonView(JsonPositionView.SolutionManager.class)
     public RestResponse<Position> addPosition(@RequestBody Map<String, String> position) {
-        return new RestResponseSuccess<>(positionDao.addPosition(Long.parseLong(position.get("solutionid")), position.get("name")));
+        return positionDaoWrapper.addPosition(Long.parseLong(position.get("solutionid")), position.get("name"));
     }
 }

@@ -15,6 +15,8 @@ public class CompleteUserDetails implements UserDetails {
     private long accountId;
     private long userId;
     private long solutionId;
+    private Long positionId;
+    private Long teamId;
     private String firstName;
     private String lastName;
     private String password;
@@ -153,5 +155,21 @@ public class CompleteUserDetails implements UserDetails {
 
     public void setManagedTeams(List<Long> managedTeams) {
         this.managedTeams = managedTeams;
+    }
+
+    public Long getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(Long positionId) {
+        this.positionId = positionId;
+    }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 }

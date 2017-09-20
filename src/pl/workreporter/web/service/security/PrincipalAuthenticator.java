@@ -25,6 +25,14 @@ public class PrincipalAuthenticator {
         return teamId != null && getPrincipal().getManagedTeams().contains(teamId);
     }
 
+    public boolean authenticatePositionId(Long positionId) {
+        return positionId != null && positionId.equals(getPrincipal().getPositionId());
+    }
+
+    public boolean authenticateTeamId(Long teamId) {
+        return teamId != null && teamId.equals(getPrincipal().getTeamId());
+    }
+
     private CompleteUserDetails getPrincipal() {
         return (CompleteUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }

@@ -9,8 +9,9 @@ import java.util.Map;
 public interface PositionDao {
     Position getPositionById(long id);
     List<Position> getAllPositionsInSolution(long solutionId);
+    List<Position> getPositions(List<Long> positionsIds);
     Position addPosition(long solutionId, String name);
-    void removePosition(long solutionId, long positionId);
-    void removePositions(long solutionId, List<Long> positionsIds);
+    void removePosition(long positionId);
+    void removePositions(List<Long> positionsIds);
     Position updatePosition(long positionId, Map<String, String> map);
 }

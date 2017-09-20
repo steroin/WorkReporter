@@ -195,6 +195,12 @@ public class LogEntryDaoWrapper {
         if (!authenticated) {
             return new RestResponseAuthenticationError<>();
         }
-        return new RestResponseSuccess<>();
+        try {
+            logEntryDao.removeLogEntries(entries);
+            return new RestResponseSuccess<>();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new RestResponseNotFoundError<>();
+        }
     }
 }

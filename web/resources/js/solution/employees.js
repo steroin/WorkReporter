@@ -30,12 +30,12 @@ function initSolutionEmployeesManagement($scope, $http) {
         $("#addEmployeeModalEmailInput").val("");
         $("#addEmployeeModalLoginInput").val("");
         $("#addEmployeeModalTeamInput").val("");
-        $("#addEmployeeModalPositionInput").val($("#addEmployeeModalPositionInput option:first").val());
+        $("#addEmployeeModalPositionInput").val("");
         $("#addEmployeeModalWorkingTimeInput").val("");
         $("#addEmployeeModalBirthDayInput").val("");
         $("#addEmployeeModalPhoneInput").val("");
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
-            $scope.solutionPositions = data.data;
+            $scope.solutionPositions = data.data.response;
             return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
         }).then(function(data) {
             $scope.solutionTeams = data.data.response;
@@ -69,18 +69,13 @@ function initSolutionEmployeesManagement($scope, $http) {
             return;
         } else $("#employeeAddModalLoginError").hide();
 
-        var position = $("#addEmployeeModalPositionInput").val();
-        if (position.length === 0) {
-            $("#employeeAddModalPositionError").show();
-            return;
-        } else $("#employeeAddModalPositionError").hide();
-
         var workingTime = $("#addEmployeeModalWorkingTimeInput").val();
         if (workingTime.length === 0) {
             $("#employeeAddModalWorkingTimeError").show();
             return;
         } else $("#employeeAddModalWorkingTimeError").hide();
 
+        var position = $("#addEmployeeModalPositionInput").val();
         var team = $("#addEmployeeModalTeamInput").val();
         var birthday = $("#addEmployeeModalBirthDayInput").val();
         var phone = $("#addEmployeeModalPhoneInput").val();
@@ -129,7 +124,7 @@ function initSolutionEmployeesManagement($scope, $http) {
             $scope.solutionTeams = data.data.response;
             return $http.get('empty')
         }).then(function(data) {
-            $("#editEmployeeModalPositionInput").val($scope.currentEmployee.position.id);
+            $("#editEmployeeModalPositionInput").val($scope.currentEmployee.position == null ? "" : $scope.currentEmployee.position.id);
             $("#editEmployeeModalTeamInput").val($scope.currentEmployee.team == null ? "" : $scope.currentEmployee.team.id);
             $("#editEmployeeModal").modal("show");
             finishLoading();
@@ -161,18 +156,13 @@ function initSolutionEmployeesManagement($scope, $http) {
             return;
         } else $("#employeeEditModalLoginError").hide();
 
-        var position = $("#editEmployeeModalPositionInput").val();
-        if (position.length === 0) {
-            $("#employeeEditModalPositionError").show();
-            return;
-        } else $("#employeeEditModalPositionError").hide();
-
         var workingTime = $("#editEmployeeModalWorkingTimeInput").val();
         if (workingTime.length === 0) {
             $("#employeeEditModalWorkingTimeError").show();
             return;
         } else $("#employeeEditModalWorkingTimeError").hide();
 
+        var position = $("#editEmployeeModalPositionInput").val();
         var team = $("#editEmployeeModalTeamInput").val();
         var birthday = $("#editEmployeeModalBirthDayInput").val();
         var phone = $("#editEmployeeModalPhoneInput").val();

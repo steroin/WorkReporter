@@ -81,7 +81,7 @@ function initSolutionPositionsManagement($scope, $http) {
     $scope.deletePosition = function() {
         $("#deletePositionModal").modal("hide");
         startLoading();
-        $http.delete('solution/positions/'+$scope.currentPosition.id, {params: {'solutionid' : $scope.currentSolution.id}}).then(function(data) {
+        $http.delete('solution/positions/'+$scope.currentPosition.id).then(function(data) {
             $scope.solutionPositions = $scope.solutionPositions.filter(function(obj) {
                 return obj['id'] != $scope.currentPosition.id;
             });
@@ -100,9 +100,9 @@ function initSolutionPositionsManagement($scope, $http) {
         $("#deleteSelectedPositionsModal").modal("hide");
         startLoading();
         $http.delete('solution/positions', {params: {
-            'solutionid' : $scope.currentSolution.id,
             'positions' : $scope.markedItems
         }}).then(function(data) {
+            alert(JSON.stringify(data.data));
             $scope.solutionPositions = $scope.solutionPositions.filter(function(obj) {
                 return $scope.markedItems.indexOf(obj['id']) == -1;
             });

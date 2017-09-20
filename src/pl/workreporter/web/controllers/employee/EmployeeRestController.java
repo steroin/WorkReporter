@@ -63,10 +63,11 @@ public class EmployeeRestController {
     public RestResponse<User> addEmployee(@RequestBody Map<String, String> employee) {
         String password = passwordGenerator.generate(12);
         Long teamId = employee.get("teamid").isEmpty() ? null : Long.parseLong(employee.get("teamid"));
+        Long positionId = employee.get("positionid").isEmpty() ? null : Long.parseLong(employee.get("positionid"));
         String birthday = employee.get("birthday").isEmpty() ? null : employee.get("birthday");
         String phone = employee.get("phone").isEmpty() ? null : employee.get("phone");
         User user = userDao.addUser(Long.parseLong(employee.get("solutionid")), teamId,
-                Long.parseLong(employee.get("positionid")), Double.parseDouble(employee.get("workingtime")),
+                positionId, Double.parseDouble(employee.get("workingtime")),
                 employee.get("firstname"), employee.get("lastname"), birthday, phone,
                 employee.get("login"), password, employee.get("email"));
         notifier.sendInitialMessage(employee.get("login"), password, employee.get("email"));

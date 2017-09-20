@@ -2,7 +2,9 @@ package pl.workreporter.web.beans.entities.position;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import pl.workreporter.web.beans.entities.solution.Solution;
+import pl.workreporter.web.beans.security.rest.views.user.JsonPositionView;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,18 +20,23 @@ public class Position implements Serializable {
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "positionseq")
     @SequenceGenerator(name = "positionseq", sequenceName = "positionseq", allocationSize = 1)
+    @JsonView(JsonPositionView.User.class)
     private long id;
     @ManyToOne
     @JoinColumn(name = "SOLUTIONID")
     @JsonBackReference(value = "solutionPositions")
+    @JsonView(JsonPositionView.User.class)
     private Solution solution;
     @Column(name = "NAME")
+    @JsonView(JsonPositionView.User.class)
     private String name;
     @Column(name = "CREATION_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonView(JsonPositionView.SolutionManager.class)
     private Date creationDate = new Date();
     @Column(name = "LAST_EDITION_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonView(JsonPositionView.SolutionManager.class)
     private Date lastEditionDate = new Date();
 
     public long getId() {
