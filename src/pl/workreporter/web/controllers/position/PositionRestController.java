@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.beans.entities.position.Position;
 import pl.workreporter.web.beans.entities.position.PositionDaoWrapper;
 import pl.workreporter.web.beans.security.rest.RestResponse;
-import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
-import pl.workreporter.web.beans.security.rest.views.user.JsonPositionView;
+import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class PositionRestController {
     @Autowired
     private PositionDaoWrapper positionDaoWrapper;
 
-    @JsonView(JsonPositionView.SolutionManager.class)
+    @JsonView(JsonDataView.SolutionManager.class)
     @RequestMapping(value = "/solution/positions", method = GET)
     public @ResponseBody
     RestResponse<List<Position>> getAllPositions(@RequestParam("id") long solutionId) {
@@ -40,13 +39,13 @@ public class PositionRestController {
     }
 
     @RequestMapping(value = "/solution/positions/{id}", method = PATCH)
-    @JsonView(JsonPositionView.SolutionManager.class)
+    @JsonView(JsonDataView.SolutionManager.class)
     public RestResponse<Position> updatePosition(@PathVariable("id") long positionId, @RequestBody Map<String, String> map) {
         return positionDaoWrapper.updatePosition(positionId, map);
     }
 
     @RequestMapping(value="/solution/positions", method = POST)
-    @JsonView(JsonPositionView.SolutionManager.class)
+    @JsonView(JsonDataView.SolutionManager.class)
     public RestResponse<Position> addPosition(@RequestBody Map<String, String> position) {
         return positionDaoWrapper.addPosition(Long.parseLong(position.get("solutionid")), position.get("name"));
     }

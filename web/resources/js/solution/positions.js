@@ -5,7 +5,7 @@ function initSolutionPositionsManagement($scope, $http) {
     $scope.activeSolutionPositionsContent = function() {
         startLoading();
         $http.get('solution/positions', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
-            $scope.solutionPositions = data.data.response;
+            $scope.solutionPositions = data.data.response === undefined ? [] : data.data.response;
             $scope.activeContent('solutionPositions', 'solutionMenuPositions');
             $scope.setUpPositionPagination(1);
             $scope.markedItems = [];
@@ -62,7 +62,7 @@ function initSolutionPositionsManagement($scope, $http) {
             'name' : name
         };
         $http.patch('solution/positions/'+$scope.currentPosition.id, objectToAdd).then(function(data) {
-            var response = data.data.response;
+            var response = data.data.response === undefined ? [] : data.data.response;
             $scope.solutionPositions = $scope.solutionPositions.map(function(obj) {return obj.id == response.id ? response : obj});
             $scope.setUpPositionPagination($scope.currentPageId);
             finishLoading();

@@ -60,6 +60,17 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    public List<Project> getProjects(List<Long> projectIds) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Project> query = criteriaBuilder.createQuery(Project.class);
+        Root<Project> root = query.from(Project.class);
+        query.select(root);
+        query.where(root.get("id").in(projectIds));
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
     public Project addProject(long solutionId, String name, String desc) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         Project project = new Project();
@@ -73,7 +84,7 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public void removeProject(long solutionId, long projectId) {
+    public void removeProject(long projectId) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         entityManager.getTransaction().begin();
         Project project = entityManager.find(Project.class, projectId);
@@ -82,7 +93,7 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
-    public void removeProjects(long solutionId, List<Long> projectIds) {
+    public void removeProjects(List<Long> projectIds) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         entityManager.getTransaction().begin();
         for (long id : projectIds) {

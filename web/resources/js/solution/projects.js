@@ -6,7 +6,7 @@ function initSolutionProjectsManagement($scope, $http) {
     $scope.activeSolutionProjectsContent = function() {
         startLoading();
         $http.get('solution/projects', {params : {'id' : $scope.currentSolution.id}}).then(function(data) {
-            $scope.solutionProjects = data.data.response;
+            $scope.solutionProjects = data.data.response === undefined ? [] : data.data.response;
             $scope.activeContent('solutionProjects', 'solutionMenuProjects');
             $scope.setUpProjectPagination(1);
             $scope.markedItems = [];
@@ -99,7 +99,7 @@ function initSolutionProjectsManagement($scope, $http) {
     $scope.deleteProject = function() {
         $("#deleteProjectModal").modal("hide");
         startLoading();
-        $http.delete('solution/projects/'+$scope.currentProject.id, {params: {'solutionid' : $scope.currentSolution.id}}).then(function(data) {
+        $http.delete('solution/projects/'+$scope.currentProject.id).then(function(data) {
             $scope.solutionProjects = $scope.solutionProjects.filter(function(obj) {
                 return obj['id'] != $scope.currentProject.id;
             });
@@ -118,7 +118,6 @@ function initSolutionProjectsManagement($scope, $http) {
         $("#deleteSelectedProjectsModal").modal("hide");
         startLoading();
         $http.delete('solution/projects', {params: {
-            'solutionid' : $scope.currentSolution.id,
             'projects' : $scope.markedItems
         }}).then(function(data) {
             $scope.solutionProjects = $scope.solutionProjects.filter(function(obj) {
@@ -139,7 +138,7 @@ function initSolutionProjectsManagement($scope, $http) {
             return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
         }).then(function(data) {
             var currentProjectTeamIds = $scope.currentProjectTeams.map(function(obj) { return parseInt(obj.id); });
-            $scope.currentProjectAllTeams = data.data.response;
+            $scope.currentProjectAllTeams = data.data.response === undefined ? [] : data.data.response;
             $scope.currentProjectAvailableTeams = $scope.currentProjectAllTeams.filter(function(obj) { return currentProjectTeamIds.indexOf(obj.id) == -1 });
             $("#projectTeamsModal").modal("show");
             $scope.teamsToAdd = [];
