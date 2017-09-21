@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.workreporter.security.authentication.CompleteUserDetails;
 import pl.workreporter.web.beans.entities.solution.Solution;
 import pl.workreporter.web.beans.entities.solution.SolutionDao;
+import pl.workreporter.web.beans.entities.solution.SolutionDaoWrapper;
 import pl.workreporter.web.beans.security.rest.RestResponse;
 import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 
@@ -23,31 +24,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 public class SolutionRestController {
 
     @Autowired
-    private SolutionDao solutionDao;
-
-    @RequestMapping(value = "/solution/solutions", method = GET)
-    public RestResponse<Map<String, Object>> getManagedSolutions() {
-        long userId = ((CompleteUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
-        Map<Long, String> managedSolutions = solutionDao.getSolutionIdNameMap(userId);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("managedSolutions", managedSolutions);
-        for (Map.Entry<Long, String> entry : managedSolutions.entrySet()) {
-            result.put("firstSolutionId", entry.getKey());
-            break;
-        }
-        return new RestResponseSuccess<>(result);
-    }
+    private SolutionDaoWrapper solutionDaoWrapper;
 
     @RequestMapping(value = "/solution/solutions/{id}", method = GET)
     public @ResponseBody RestResponse<Solution> getSolution(@PathVariable("id") long solutionId) {
-        Solution result = solutionDao.loadSolution(solutionId);
-        return new RestResponseSuccess<>(result);
+        return solutionDaoWrapper.loadSolution(solutionId);
     }
 
     @RequestMapping(value="/solution/solutions/{id}", method = PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public RestResponse<Void> updateSolutionName(@PathVariable("id") long solutionId, @RequestBody Solution newSolution) {
-        solutionDao.updateSolution(newSolution);
-        return new RestResponseSuccess<>();
+    public RestResponse<Solution> updateSolutionName(@PathVariable("id") long solutionId, @RequestBody Solution newSolution) {
+        return solutionDaoWrapper.updateSolution(newSolution);
     }
 }

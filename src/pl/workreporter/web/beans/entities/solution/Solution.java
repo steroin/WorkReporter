@@ -2,10 +2,12 @@ package pl.workreporter.web.beans.entities.solution;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import pl.workreporter.web.beans.entities.position.Position;
 import pl.workreporter.web.beans.entities.project.Project;
 import pl.workreporter.web.beans.entities.team.Team;
 import pl.workreporter.web.beans.entities.user.User;
+import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,26 +24,34 @@ public class Solution implements Serializable {
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "solutionseq")
     @SequenceGenerator(name = "solutionseq", sequenceName = "solutionseq", allocationSize = 1)
+    @JsonView(JsonDataView.User.class)
     private long id;
     @Column(name = "NAME")
+    @JsonView(JsonDataView.User.class)
     private String name;
     @Column(name = "CREATION_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Date creationDate = new Date();
     @Column(name = "LAST_EDITION_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Date lastEditionDate = new Date();
     @OneToMany(mappedBy = "solution")
     @JsonManagedReference(value = "solutionProjects")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Set<Project> projects;
     @OneToMany(mappedBy = "solution")
     @JsonManagedReference(value = "solutionPositions")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Set<Position> positions;
     @OneToMany(mappedBy = "solution")
     @JsonManagedReference(value = "solutionTeams")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Set<Team> teams;
     @OneToMany(mappedBy = "solution")
     @JsonManagedReference(value = "solutionEmployees")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Set<User> employees;
 
     public long getId() {

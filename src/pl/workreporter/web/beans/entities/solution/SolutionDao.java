@@ -8,6 +8,5 @@ import java.util.Map;
  */
 public interface SolutionDao {
     Solution loadSolution(long id);
-    Map<Long, String> getSolutionIdNameMap(long userId);
-    void updateSolution(Solution solution);
+    Solution updateSolution(Solution solution);
 }
