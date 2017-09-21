@@ -52,6 +52,17 @@ public class TeamDaoImpl implements TeamDao{
     }
 
     @Override
+    public List<Team> getTeams(List<Long> teamsIds) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Team> query = criteriaBuilder.createQuery(Team.class);
+        Root<Team> root = query.from(Team.class);
+        query.select(root);
+        query.where(root.get("id").in(teamsIds));
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
     public Team addTeam(long solutionId, String name, Long leaderId) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         Team team = new Team();

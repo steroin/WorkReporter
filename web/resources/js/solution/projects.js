@@ -134,7 +134,7 @@ function initSolutionProjectsManagement($scope, $http) {
     $scope.projectTeamsModalOpen = function() {
         startLoading();
         $http.get('solution/teams', {params: {'projectid' : $scope.currentProject.id}}).then(function(data) {
-            $scope.currentProjectTeams = data.data;
+            $scope.currentProjectTeams = data.data.response === undefined ? [] : data.data.response;
             return $http.get('solution/teams', {params : {'id' : $scope.currentSolution.id}});
         }).then(function(data) {
             var currentProjectTeamIds = $scope.currentProjectTeams.map(function(obj) { return parseInt(obj.id); });

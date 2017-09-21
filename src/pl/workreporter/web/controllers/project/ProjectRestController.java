@@ -7,6 +7,7 @@ import pl.workreporter.web.beans.entities.project.Project;
 import pl.workreporter.web.beans.entities.project.ProjectDao;
 import pl.workreporter.web.beans.entities.project.ProjectDaoWrapper;
 import pl.workreporter.web.beans.entities.projectassociation.ProjectAssociationDao;
+import pl.workreporter.web.beans.entities.projectassociation.ProjectAssociationDaoWrapper;
 import pl.workreporter.web.beans.security.rest.RestResponse;
 import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
@@ -24,7 +25,7 @@ public class ProjectRestController {
     @Autowired
     private ProjectDaoWrapper projectDaoWrapper;
     @Autowired
-    private ProjectAssociationDao projectAssociationDao;
+    private ProjectAssociationDaoWrapper projectAssociationDaoWrapper;
 
     @JsonView(JsonDataView.SolutionManager.class)
     @RequestMapping(value = "/solution/projects", method = GET)
@@ -59,15 +60,13 @@ public class ProjectRestController {
     @RequestMapping(value = "/solution/projects", params = "teamid", method = GET)
     public @ResponseBody
     RestResponse<List<Map<String, String>>> getAllProjectsInTeam(@RequestParam("teamid") long teamId) {
-        List<Map<String, String>> result = projectAssociationDao.getTeamsProjects(teamId);
-        return new RestResponseSuccess<>(result);
+        return projectAssociationDaoWrapper.getTeamsProjects(teamId);
     }
 
     @RequestMapping(value = "/solution/projectsteams/{projectid}", method = PATCH)
     public RestResponse<Void> updateAssociatedProjectsState(@PathVariable("projectid") long teamId,
                                               @RequestBody Map<String, List<Long>> teams) {
-        projectAssociationDao.updateProjectsTeamsState(teamId, teams.get("teamsToAdd"), teams.get("teamsToRemove"));
-        return new RestResponseSuccess<>();
+        return projectAssociationDaoWrapper.updateProjectsTeamsState(teamId, teams.get("teamsToAdd"), teams.get("teamsToRemove"));
     }
 
     @JsonView(JsonDataView.User.class)
