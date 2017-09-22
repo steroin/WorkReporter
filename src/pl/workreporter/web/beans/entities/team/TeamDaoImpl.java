@@ -77,7 +77,7 @@ public class TeamDaoImpl implements TeamDao{
     }
 
     @Override
-    public void removeTeam(long solutionId, long teamId) {
+    public void removeTeam(long teamId) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         entityManager.getTransaction().begin();
         Team project = entityManager.find(Team.class, teamId);
@@ -86,7 +86,7 @@ public class TeamDaoImpl implements TeamDao{
     }
 
     @Override
-    public void removeTeams(long solutionId, List<Long> teamIds) {
+    public void removeTeams(List<Long> teamIds) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         entityManager.getTransaction().begin();
         for (long id : teamIds) {

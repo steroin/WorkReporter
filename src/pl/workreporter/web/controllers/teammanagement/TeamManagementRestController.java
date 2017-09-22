@@ -1,15 +1,17 @@
 package pl.workreporter.web.controllers.teammanagement;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.workreporter.web.beans.entities.logentry.LogEntry;
-import pl.workreporter.web.beans.entities.logentry.LogEntryDao;
+import pl.workreporter.web.beans.entities.logentry.LogEntryDaoWrapper;
 import pl.workreporter.web.beans.entities.team.Team;
-import pl.workreporter.web.beans.entities.team.TeamDao;
+import pl.workreporter.web.beans.entities.team.TeamDaoWrapper;
 import pl.workreporter.web.beans.entities.user.User;
 import pl.workreporter.web.beans.entities.user.UserDao;
 import pl.workreporter.web.beans.security.rest.RestResponse;
 import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
+import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
 
 import java.util.List;
 
@@ -23,15 +25,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 public class TeamManagementRestController {
 
     @Autowired
-    private TeamDao teamDao;
+    private TeamDaoWrapper teamDaoWrapper;
     @Autowired
     private UserDao userDao;
     @Autowired
-    private LogEntryDao logEntryDao;
+    private LogEntryDaoWrapper logEntryDaoWrapper;
 
     @RequestMapping("/teams")
+    @JsonView(JsonDataView.User.class)
     public RestResponse<List<Team>> getManagedTeam(@RequestParam("userid") long userId) {
-        return new RestResponseSuccess<>(teamDao.getAllTeamsManagedBy(userId));
+        return teamDaoWrapper.getAllTeamsManagedBy(userId);
     }
 
     @RequestMapping(value = "/teams/{id}/employees", method = GET)
@@ -42,10 +45,10 @@ public class TeamManagementRestController {
     }
 
     @RequestMapping(value = "/teams/{teamid}/employees/{userid}", method = GET)
+    @JsonView(JsonDataView.User.class)
     public @ResponseBody
     RestResponse<List<LogEntry>> getAllEmployeesLogEntries(@PathVariable("teamid") long teamId, @PathVariable("userid") long userId, @RequestParam("period") int period) {
-        List<LogEntry> result = logEntryDao.getLastLogEntries(userId, period);
-        return new RestResponseSuccess<>(result);
+        return logEntryDaoWrapper.getLastLogEntries(userId, period);
     }
 
     @RequestMapping(value = "/teams/{teamid}/employees/{userid}/entries/{entryid}", method = PATCH)
@@ -53,7 +56,6 @@ public class TeamManagementRestController {
                                      @PathVariable("userid") long userId,
                                      @PathVariable("entryid") long entryId,
                                      @RequestBody int status) {
-        logEntryDao.changeLogEntryStatus(entryId, status);
-        return new RestResponseSuccess<>();
+        return logEntryDaoWrapper.changeLogEntryStatus(entryId, status);
     }
 }

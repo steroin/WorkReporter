@@ -2,8 +2,10 @@ package pl.workreporter.web.beans.entities.team;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.Formula;
 import pl.workreporter.web.beans.entities.solution.Solution;
+import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,22 +21,29 @@ public class Team implements Serializable {
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "teamseq")
     @SequenceGenerator(name = "teamseq", sequenceName = "teamseq", allocationSize = 1)
+    @JsonView(JsonDataView.User.class)
     private long id;
     @ManyToOne
     @JoinColumn(name = "SOLUTIONID")
     @JsonBackReference(value = "solutionTeams")
+    @JsonView(JsonDataView.User.class)
     private Solution solution;
     @Column(name = "NAME")
+    @JsonView(JsonDataView.User.class)
     private String name;
     @Column(name = "CREATION_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Date creationDate = new Date();
     @Column(name = "LAST_EDITION_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Date lastEditionDate = new Date();
     @Column(name = "LEADERID")
+    @JsonView(JsonDataView.SolutionManager.class)
     private Long leaderId;
     @Formula("(select pd.firstname || ' ' || pd.lastname from personal_data pd inner join appuser au on au.personaldataid=pd.id where au.ID = LEADERID)")
+    @JsonView(JsonDataView.User.class)
     private String leaderName;
 
     public long getId() {

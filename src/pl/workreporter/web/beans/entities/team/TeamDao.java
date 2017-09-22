@@ -13,7 +13,7 @@ public interface TeamDao {
     List<Team> getAllTeamsManagedBy(long userId);
     List<Team> getTeams(List<Long> teamsIds);
     Team addTeam(long solutionId, String name, Long leaderId);
-    void removeTeam(long solutionId, long teamId);
-    void removeTeams(long solutionId, List<Long> teamIds);
+    void removeTeam(long teamId);
+    void removeTeams(List<Long> teamIds);
     Team updateTeam(long teamId, Map<String, String> map);
 }
