@@ -15,4 +15,7 @@ public abstract class RestResponse<T> {
     public int getResponseCode() {
         return responseCode;
     }
+    public T getResponse() {
+        return response;
+    }
 }

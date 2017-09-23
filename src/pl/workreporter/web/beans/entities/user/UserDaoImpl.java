@@ -30,8 +30,6 @@ import java.util.Map;
 @Repository
 public class UserDaoImpl implements UserDao {
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
     private DateParser dateParser;
     @Autowired
     private LocalContainerEntityManagerFactoryBean entityManagerFactoryBean;
@@ -61,6 +59,17 @@ public class UserDaoImpl implements UserDao {
         Root<User> root = query.from(User.class);
         query.select(root);
         query.where(criteriaBuilder.equal(root.get("team"), entityManager.find(Team.class, teamId)));
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<User> getUsers(List<Long> usersIds) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
+        Root<User> root = query.from(User.class);
+        query.select(root);
+        query.where(root.get("id").in(usersIds));
         return entityManager.createQuery(query).getResultList();
     }
 
@@ -109,7 +118,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void removeUser(long solutionId, long userId) {
+    public void removeUser(long userId) {
         //sprawdzic czy usuwamy solution admina
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         entityManager.getTransaction().begin();
@@ -125,7 +134,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void removeUsers(long solutionId, List<Long> userIds) {
+    public void removeUsers(List<Long> userIds) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         entityManager.getTransaction().begin();
         for (long id : userIds) {

@@ -8,7 +8,7 @@ import pl.workreporter.web.beans.entities.logentry.LogEntryDaoWrapper;
 import pl.workreporter.web.beans.entities.team.Team;
 import pl.workreporter.web.beans.entities.team.TeamDaoWrapper;
 import pl.workreporter.web.beans.entities.user.User;
-import pl.workreporter.web.beans.entities.user.UserDao;
+import pl.workreporter.web.beans.entities.user.UserDaoWrapper;
 import pl.workreporter.web.beans.security.rest.RestResponse;
 import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
 import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
@@ -27,7 +27,7 @@ public class TeamManagementRestController {
     @Autowired
     private TeamDaoWrapper teamDaoWrapper;
     @Autowired
-    private UserDao userDao;
+    private UserDaoWrapper userDaoWrapper;
     @Autowired
     private LogEntryDaoWrapper logEntryDaoWrapper;
 
@@ -38,10 +38,10 @@ public class TeamManagementRestController {
     }
 
     @RequestMapping(value = "/teams/{id}/employees", method = GET)
+    @JsonView(JsonDataView.User.class)
     public @ResponseBody
     RestResponse<List<User>> getAllEmployeesInTeam(@PathVariable("id") long teamId) {
-        List<User> result = userDao.getAllUsersInTeam(teamId);
-        return new RestResponseSuccess<>(result);
+        return userDaoWrapper.getAllUsersInTeam(teamId);
     }
 
     @RequestMapping(value = "/teams/{teamid}/employees/{userid}", method = GET)

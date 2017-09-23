@@ -1,13 +1,16 @@
 package pl.workreporter.web.controllers.user;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.workreporter.security.authentication.CompleteUserDetails;
 import pl.workreporter.web.beans.entities.user.User;
 import pl.workreporter.web.beans.entities.user.UserDao;
+import pl.workreporter.web.beans.entities.user.UserDaoWrapper;
 import pl.workreporter.web.beans.security.rest.RestResponse;
 import pl.workreporter.web.beans.security.rest.RestResponseSuccess;
+import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
 import pl.workreporter.web.service.password.changer.PasswordChanger;
 
 import java.util.HashMap;
@@ -22,18 +25,20 @@ import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 @RestController
 public class UserDataRestController {
     @Autowired
-    private UserDao userDao;
+    private UserDaoWrapper userDaoWrapper;
     @Autowired
     private PasswordChanger passwordChanger;
 
     @RequestMapping(value = "/users/{id}", method = GET)
     @ResponseBody
+    @JsonView(JsonDataView.User.class)
     public RestResponse<User> getUser(@PathVariable("id") long userId) {
-        return new RestResponseSuccess<>(userDao.getUserById(userId));
+        return userDaoWrapper.getUserById(userId);
     }
 
     @RequestMapping(value = "/users/me", method = GET)
     @ResponseBody
+    @JsonView(JsonDataView.Myself.class)
     public RestResponse<Map<String, Object>> getMyUserData() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CompleteUserDetails cud = null;
@@ -42,7 +47,7 @@ public class UserDataRestController {
         }
         long userId = cud.getUserId();
         Map<String, Object> map = new HashMap<>();
-        User user = userDao.getUserById(userId);
+        User user = userDaoWrapper.getUserById(userId).getResponse();
         map.put("user", user);
         map.put("solution", user.getSolution());
         return new RestResponseSuccess<>(map);
@@ -59,6 +64,6 @@ public class UserDataRestController {
     @RequestMapping(value = "/users/{id}", method = PATCH)
     @ResponseBody
     public RestResponse<User> updateUserData(@PathVariable("id") long userId, @RequestBody Map<String, String> map) {
-        return new RestResponseSuccess<>(userDao.updateUser(userId, map));
+        return userDaoWrapper.updateUser(userId, map);
     }
 }

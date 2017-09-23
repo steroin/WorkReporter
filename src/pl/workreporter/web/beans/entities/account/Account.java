@@ -1,5 +1,8 @@
 package pl.workreporter.web.beans.entities.account;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
+
 import javax.persistence.*;
 
 /**
@@ -12,14 +15,19 @@ public class Account {
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountseq")
     @SequenceGenerator(name = "accountseq", sequenceName = "accountseq", allocationSize = 1)
+    @JsonView(JsonDataView.Myself.class)
     private long id;
     @Column(name = "LOGIN")
+    @JsonView(JsonDataView.Myself.class)
     private String login;
     @Column(name = "PASSWORD")
+    @JsonView(JsonDataView.Myself.class)
     private String hashedPassword;
     @Column(name = "EMAIL")
+    @JsonView(JsonDataView.Myself.class)
     private String email;
     @Column(name = "STATUS")
+    @JsonView(JsonDataView.Myself.class)
     private int status;
 
     public long getId() {

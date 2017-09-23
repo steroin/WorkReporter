@@ -6,5 +6,6 @@ package pl.workreporter.web.beans.security.rest.views.user;
 public interface JsonDataView {
     interface Common {}
     interface User extends Common {}
-    interface SolutionManager extends User {}
+    interface Myself extends User {}
+    interface SolutionManager extends Myself {}
 }

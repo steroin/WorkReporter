@@ -212,9 +212,7 @@ function initSolutionEmployeesManagement($scope, $http) {
     $scope.deleteEmployee = function() {
         $("#deleteEmployeeModal").modal("hide");
         startLoading();
-        $http.delete('solution/employees/'+$scope.currentEmployee.id, {params: {
-            'solutionid' : $scope.currentSolution.id
-        }}).then(function(data) {
+        $http.delete('solution/employees/'+$scope.currentEmployee.id).then(function(data) {
             $scope.solutionEmployees = $scope.solutionEmployees.filter(function(obj) {
                 return obj['id'] != $scope.currentEmployee.id;
             });
@@ -233,7 +231,6 @@ function initSolutionEmployeesManagement($scope, $http) {
         $("#deleteSelectedEmployeesModal").modal("hide");
         startLoading();
         $http.delete('solution/employees', {params: {
-            'solutionid' : $scope.currentSolution.id,
             'employees' : $scope.markedItems
         }}).then(function(data) {
             $scope.solutionEmployees = $scope.solutionEmployees.filter(function(obj) {
