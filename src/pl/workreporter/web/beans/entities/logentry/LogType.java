@@ -1,5 +1,8 @@
 package pl.workreporter.web.beans.entities.logentry;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import pl.workreporter.web.beans.security.rest.views.user.JsonDataView;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,8 +17,10 @@ import java.io.Serializable;
 public class LogType implements Serializable {
     @Id
     @Column(name = "id")
+    @JsonView(JsonDataView.User.class)
     private long id;
     @Column(name = "name")
+    @JsonView(JsonDataView.User.class)
     private String name;
 
     public long getId() {
