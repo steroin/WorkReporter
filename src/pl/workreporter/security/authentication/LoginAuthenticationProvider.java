@@ -22,15 +22,17 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         LoginDataValidationSettings settings = new LoginDataValidationSettings(5, 32, 5, 32);
         LoginDataValidator validator = new LoginDataValidator(settings);
 
-        if (!validator.validateLogin(login) || !validator.validatePassword(password)) {
+        if (!validator.validatePassword(password)) {
             return null;
         }
 
         CompleteUserDetails cud;
         if (validator.isEmail(login)) {
             cud = loginDao.loadUserDetailsByEmail(login);
-        } else {
+        } else if (validator.validateLogin(login)){
             cud = loginDao.loadUserDetails(login);
+        } else {
+            return null;
         }
 
         if (cud != null && cud.getPassword() != null && BCrypt.checkpw(password, cud.getPassword())) {
