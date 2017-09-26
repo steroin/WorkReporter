@@ -45,7 +45,7 @@ public class User implements Serializable {
     private Position position;
     @OneToOne
     @JoinColumn(name = "PERSONALDATAID")
-    @JsonView(JsonDataView.Myself.class)
+    @JsonView(JsonDataView.User.class)
     private PersonalData personalData;
     @Column(name = "WORKING_TIME")
     @JsonView(JsonDataView.Myself.class)

@@ -34,7 +34,7 @@ module.controller('teamManagementController', function($scope, $http) {
             return $http.get('teams/'+$scope.currentTeam.id+'/employees/'+$scope.currentEmployee.id, {params : {'period' : 7}});
         }).then(function(data) {
             if (data === null) return;
-            if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
+            if (typeof(data) === 'undefined') $scope.currentLogEntries = [];
             else $scope.currentLogEntries = data.data.response;
             $scope.currentLogEntries.sort(function(a,b) { return compareDates(a.logStart, b.logStart)});
             $(".pageContent").show();
@@ -123,7 +123,6 @@ module.controller('teamManagementController', function($scope, $http) {
 
             if (period == 1) days = 30;
             else if (period == 2) days = 365;
-
             return $http.get('teams/'+$scope.currentTeam.id+'/employees/'+$scope.currentEmployee.id, {params : {'period' : days}});
         }).then(function(data) {
             if (typeof(data) == 'undefined') $scope.currentLogEntries = [];
