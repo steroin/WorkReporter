@@ -11,8 +11,4 @@ public class RestResponseSuccess<T> extends RestResponse<T> {
     public RestResponseSuccess(T response) {
         this.response = response;
     }
-
-    public T getResponse() {
-        return response;
-    }
 }
