@@ -110,6 +110,7 @@ public class LoginDaoImpl implements LoginDao {
 
         if (managedSolutions.size() > 0) {
             authorities.add(new UserRole("ROLE_SOLUTION_ADMIN"));
+            authorities.add(new UserRole("ROLE_TEAM_ADMIN"));
         }
         if (managedTeams.size() > 0) {
             authorities.add(new UserRole("ROLE_TEAM_ADMIN"));
