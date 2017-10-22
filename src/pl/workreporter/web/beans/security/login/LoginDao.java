@@ -17,9 +17,5 @@ public interface LoginDao {
     String getPasswordHashByEmail(String email);
     CompleteUserDetails loadUserDetails(String login);
     CompleteUserDetails loadUserDetailsByEmail(String email);
-    List<Long> getManagedSolutions(String login);
-    List<Long> getManagedSolutionsByEmail(String email);
-    List<Long> getManagedTeams(String login);
-    List<Long> getManagedTeamsByEmail(String email);
     void changeUserPassword(long userId, String hashedPassword);
 }

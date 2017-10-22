@@ -18,11 +18,11 @@ public class PrincipalAuthenticator {
     }
 
     public boolean authenticateSolutionAdministrator(Long solutionId) {
-        return solutionId != null && getPrincipal().getManagedSolutions().contains(solutionId);
+        return authenticateSolutionId(solutionId) && getPrincipal().isSolutionManager();
     }
 
     public boolean authenticateTeamAdministrator(Long teamId) {
-        return teamId != null && getPrincipal().getManagedTeams().contains(teamId);
+        return teamId != null && authenticateTeamId(teamId) && getPrincipal().isTeamManager();
     }
 
     public boolean authenticatePositionId(Long positionId) {

@@ -200,6 +200,10 @@ module.controller('teamManagementController', function($scope, $http) {
         var split = splitDate(date);
         return split[3]+":"+split[4];
     };
+    $scope.hasRole = function(role) {
+        return typeof $scope.authentication.authorities !== 'undefined' && $scope.authentication.authorities.filter(function(obj) { return obj.authority == role;}).length > 0;
+    };
+
     $scope.getStatusName = getStatusName;
     $scope.getStatusClass = getStatusClass;
     $scope.init();

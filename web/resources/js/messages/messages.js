@@ -211,7 +211,9 @@ module.controller('messagesController', function($scope, $http) {
     $scope.setUpMessagesPagination = function(defaultPage) {
         $scope.initPagination($scope.currentMessages, 8, 5, 'messagesCrudPagination', defaultPage);
     };
-
+    $scope.hasRole = function(role) {
+        return typeof $scope.authentication.authorities !== 'undefined' && $scope.authentication.authorities.filter(function(obj) { return obj.authority == role;}).length > 0;
+    };
     $scope.parseDateTimestamp = parseDateTimestamp;
     $scope.init();
 });

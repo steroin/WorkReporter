@@ -113,7 +113,9 @@ module.controller('userController', function($scope, $http) {
             });
         }
     };
-
+    $scope.hasRole = function(role) {
+        return typeof $scope.authentication.authorities !== 'undefined' && $scope.authentication.authorities.filter(function(obj) { return obj.authority == role;}).length > 0;
+    };
     $scope.parseDateTimestamp = parseDateTimestamp;
     $scope.init();
 });

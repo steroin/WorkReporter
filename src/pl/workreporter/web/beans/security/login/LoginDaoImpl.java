@@ -88,7 +88,7 @@ public class LoginDaoImpl implements LoginDao {
 
     private CompleteUserDetails loadUserDetails(String keyAttribute, Object value) {
         String query = "select au.id as userId, ac.id as accountId, au.solutionid, firstname, lastname, login, password, ac.email as email, " +
-                "au.positionid, au.teamid " +
+                "au.positionid, au.teamid, au.is_solution_manager " +
                 "from account ac " +
                 "inner join appuser au on ac.id = au.accountid " +
                 "inner join personal_data pd on au.personaldataid = pd.id " +
@@ -102,17 +102,17 @@ public class LoginDaoImpl implements LoginDao {
             return null;
         }
 
-        List<Long> managedSolutions = getManagedSolutions(result.get("login").toString());
-        List<Long> managedTeams = getManagedTeams(result.get("login").toString());
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         authorities.add(new UserRole("ROLE_USER"));
 
-        if (managedSolutions.size() > 0) {
+        boolean solutionManager = "1".equals(result.get("is_solution_manager").toString());
+        if (solutionManager) {
             authorities.add(new UserRole("ROLE_SOLUTION_ADMIN"));
             authorities.add(new UserRole("ROLE_TEAM_ADMIN"));
         }
-        if (managedTeams.size() > 0) {
+        Long teamId = result.get("teamid") == null ? null : Long.parseLong(result.get("teamid").toString());
+        if (teamId != null && isTeamLeader(teamId, Long.parseLong(result.get("userId").toString()))) {
             authorities.add(new UserRole("ROLE_TEAM_ADMIN"));
         }
 
@@ -126,49 +126,28 @@ public class LoginDaoImpl implements LoginDao {
         cud.setPassword(result.get("password").toString());
         cud.setUsername(result.get("login").toString());
         cud.setPositionId(result.get("positionid") == null ? null : Long.parseLong(result.get("positionid").toString()));
-        cud.setPositionId(result.get("teamid") == null ? null : Long.parseLong(result.get("teamid").toString()));
+        cud.setTeamId(teamId);
         cud.setEmail(result.get("email").toString());
+        cud.setSolutionManager(solutionManager);
         cud.setAccountNonExpired(true);
         cud.setAccountNonLocked(true);
         cud.setCredentialsNonExpired(true);
         cud.setEnabled(true);
-        cud.setManagedSolutions(managedSolutions);
-        cud.setManagedTeams(managedTeams);
 
         return cud;
     }
 
-    @Override
-    public List<Long> getManagedSolutions(String login) {
-        return getManagedSolutions("login", "'"+login+"'");
-    }
+    private boolean isTeamLeader(long teamId, long userId) {
+        String query = "select leaderid from team where id="+teamId;
+        Map<String, Object> result;
 
-    @Override
-    public List<Long> getManagedSolutionsByEmail(String email) {
-        return getManagedSolutions("email", "'"+email+"'");
-    }
-
-    private List<Long> getManagedSolutions(String keyAttribute, Object value) {
-        String query = "select sa.solutionid from solution_administrator sa inner join appuser au on sa.userid=au.id " +
-                "inner join account ac on au.accountid=ac.id where "+keyAttribute+"="+value.toString();
-
-        List<Long> managedSolutions = new ArrayList<>();
-        List<Map<String, Object>> result = jdbcTemplate.queryForList(query);
-
-        for (Map<String, Object> map : result) {
-            managedSolutions.add(Long.parseLong(map.get("solutionid").toString()));
+        try {
+            result = jdbcTemplate.queryForMap(query);
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return false;
         }
-        return managedSolutions;
-    }
 
-    @Override
-    public List<Long> getManagedTeams(String login) {
-        return getManagedTeams("login", "'"+login+"'");
-    }
-
-    @Override
-    public List<Long> getManagedTeamsByEmail(String email) {
-        return getManagedTeams("email", "'"+email+"'");
+        return Long.parseLong(result.get("leaderid").toString()) == userId;
     }
 
     @Override

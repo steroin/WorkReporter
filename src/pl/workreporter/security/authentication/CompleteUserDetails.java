@@ -1,11 +1,9 @@
 package pl.workreporter.security.authentication;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by Sergiusz on 10.08.2017.
@@ -27,9 +25,8 @@ public class CompleteUserDetails implements UserDetails {
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
-    private List<Long> managedSolutions;
-    private List<Long> managedTeams;
-
+    private boolean isSolutionManager;
+    private boolean isTeamManager;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -142,22 +139,6 @@ public class CompleteUserDetails implements UserDetails {
         isEnabled = enabled;
     }
 
-    public List<Long> getManagedSolutions() {
-        return managedSolutions;
-    }
-
-    public void setManagedSolutions(List<Long> managedSolutions) {
-        this.managedSolutions = managedSolutions;
-    }
-
-    public List<Long> getManagedTeams() {
-        return managedTeams;
-    }
-
-    public void setManagedTeams(List<Long> managedTeams) {
-        this.managedTeams = managedTeams;
-    }
-
     public Long getPositionId() {
         return positionId;
     }
@@ -174,4 +155,19 @@ public class CompleteUserDetails implements UserDetails {
         this.teamId = teamId;
     }
 
+    public boolean isSolutionManager() {
+        return isSolutionManager;
+    }
+
+    public void setSolutionManager(boolean solutionManager) {
+        isSolutionManager = solutionManager;
+    }
+
+    public boolean isTeamManager() {
+        return isTeamManager;
+    }
+
+    public void setTeamManager(boolean teamManager) {
+        isTeamManager = teamManager;
+    }
 }
