@@ -1,0 +1,26 @@
+﻿<div id="showReportModal" class="modal fade" role="dialog">
+    <div class="modal-dialog showReportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Widok zestawienia</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="reportTable" class="panel panel-default reportTableContainer">
+                            <table class="table table-striped">
+                                <thead>
+                                    <td ng-repeat="column in currentReport.columns">{{column}}</td>
+                                </thead>
+                                <tr ng-repeat="row in currentReport.content track by $index">
+                                    <td ng-repeat="column in row track by $index">{{column}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

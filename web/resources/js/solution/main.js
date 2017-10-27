@@ -13,7 +13,12 @@ module.controller('solutionController', function($scope, $http) {
         initSolutionPositionsManagement($scope, $http);
         initSolutionTeamsManagement($scope, $http);
         initSolutionEmployeesManagement($scope, $http);
-        $http.get('users/me').then(function(data) {
+        initSolutionReportsManagement($scope, $http);
+
+        $http.get('auth').then(function(data) {
+            $scope.authentication = data.data.response;
+            return $http.get('users/me');
+        }).then(function(data) {
             return $scope.getSolutionRequest(data.data.response.solution.id);
         }).then(function(data) {
             $scope.currentSolution = data.data.response;
@@ -37,7 +42,6 @@ module.controller('solutionController', function($scope, $http) {
         $scope.activeContent('solutionInfo', 'solutionMenuInfo');
         finishLoading();
     };
-
 
     $scope.initPagination = function(content, itemsPerPage, maxVisiblePages, pagesContainerId, defaultPageId) {
         $scope.totalPages = Math.ceil(content.length / itemsPerPage);

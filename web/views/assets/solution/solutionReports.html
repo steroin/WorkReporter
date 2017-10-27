@@ -1,0 +1,49 @@
+﻿<div class="col-sm-6">
+    <div id="solutionReports" class="pageContent">
+        <div class="form-group">
+            <div class="row reportFormRow">
+                <div class="col-sm-4"><label for="reportObject">Przedmiot zestawienia:</label></div>
+                <div class="col-sm-8">
+                    <select id="reportObject" class="form-control">
+                        <option value="0">Pracownicy</option>
+                        <option value="1">Projekty</option>
+                        <option value="2">Stanowiska</option>
+                        <option value="3">Zespoły</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row reportFormRow">
+                <div class="col-sm-4"><label for="reportSortingObject">Sortowanie wg</label></div>
+                <div class="col-sm-8">
+                    <select id="reportSortingObject" class="form-control">
+                        <option ng-repeat="obj in sortingObjects" value="{{obj.value}}">
+                            {{obj.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row reportFormRow">
+                <div class="col-sm-4"><label for="reportSortingType">Rodzaj sortowania</label></div>
+                <div class="col-sm-8">
+                    <select id="reportSortingType" class="form-control">
+                        <option value="0">Rosnąco</option>
+                        <option value="1">Malejąco</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row reportFormRow">
+                <div class="col-sm-4"><label for="reportPeriodFrom">Okres</label></div>
+                <div class="col-sm-8">
+                    <input id="reportPeriodFrom" type="text" class="form-control reportFormDateInput" /> -
+                    <input id="reportPeriodTo" type="text" class="form-control reportFormDateInput" />
+                </div>
+            </div>
+            <div class="row">
+                <button id="generateReportButton" type="button" class="btn btn-primary" ng-click="generateReport()">Generuj zestawienie</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-3"></div>
