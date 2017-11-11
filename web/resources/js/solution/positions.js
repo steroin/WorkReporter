@@ -102,7 +102,6 @@ function initSolutionPositionsManagement($scope, $http) {
         $http.delete('solution/positions', {params: {
             'positions' : $scope.markedItems
         }}).then(function(data) {
-            alert(JSON.stringify(data.data));
             $scope.solutionPositions = $scope.solutionPositions.filter(function(obj) {
                 return $scope.markedItems.indexOf(obj['id']) == -1;
             });
