@@ -8,9 +8,7 @@ import pl.workreporter.web.beans.entities.solution.Solution;
 import pl.workreporter.web.beans.entities.user.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +44,16 @@ public class TeamDaoImpl implements TeamDao{
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Team> query = criteriaBuilder.createQuery(Team.class);
         Root<Team> root = query.from(Team.class);
-        query.select(root);
-        query.where(criteriaBuilder.equal(root.get("leaderId"), userId));
+        Join<Team, Solution> solutionJoin = root.join("solution");
+        Join<Solution, User> userJoin = solutionJoin.join("employees", JoinType.LEFT);
+        query.select(root).distinct(true);
+        query.where(criteriaBuilder.or(
+                criteriaBuilder.equal(root.get("leaderId"), userId),
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(userJoin.get("isSolutionManager"), true),
+                        criteriaBuilder.equal(userJoin.get("id"), userId)
+                )));
+
         return entityManager.createQuery(query).getResultList();
     }
 

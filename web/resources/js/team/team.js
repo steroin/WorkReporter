@@ -108,7 +108,7 @@ module.controller('teamManagementController', function($scope, $http) {
         startLoading();
         $scope.currentTeam = $scope.allTeams.filter(function(obj) {return obj.id == id})[0];
         $http.get('teams/'+id+'/employees').then(function(data) {
-            $scope.currentEmployees = data.data;
+            $scope.currentEmployees = data.data.response;
 
             if ($scope.currentEmployees.length == 0) {
                 $scope.currentEmployee = {};

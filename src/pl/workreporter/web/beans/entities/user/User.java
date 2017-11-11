@@ -50,6 +50,9 @@ public class User implements Serializable {
     @Column(name = "WORKING_TIME")
     @JsonView(JsonDataView.Myself.class)
     private double workingTime;
+    @Column(name = "IS_SOLUTION_MANAGER")
+    @JsonView(JsonDataView.Myself.class)
+    private boolean isSolutionManager;
     @Column(name = "CREATION_DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     @JsonView(JsonDataView.SolutionManager.class)
@@ -129,5 +132,13 @@ public class User implements Serializable {
 
     public void setLastEditionDate(Date lastEditionDate) {
         this.lastEditionDate = lastEditionDate;
+    }
+
+    public boolean isSolutionManager() {
+        return isSolutionManager;
+    }
+
+    public void setSolutionManager(boolean solutionManager) {
+        isSolutionManager = solutionManager;
     }
 }

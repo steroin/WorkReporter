@@ -112,7 +112,8 @@ public class LoginDaoImpl implements LoginDao {
             authorities.add(new UserRole("ROLE_TEAM_ADMIN"));
         }
         Long teamId = result.get("teamid") == null ? null : Long.parseLong(result.get("teamid").toString());
-        if (teamId != null && isTeamLeader(teamId, Long.parseLong(result.get("userId").toString()))) {
+        boolean teamLeader = isTeamLeader(teamId, Long.parseLong(result.get("userId").toString()));
+        if (teamId != null && teamLeader) {
             authorities.add(new UserRole("ROLE_TEAM_ADMIN"));
         }
 
@@ -129,6 +130,7 @@ public class LoginDaoImpl implements LoginDao {
         cud.setTeamId(teamId);
         cud.setEmail(result.get("email").toString());
         cud.setSolutionManager(solutionManager);
+        cud.setTeamManager(teamLeader);
         cud.setAccountNonExpired(true);
         cud.setAccountNonLocked(true);
         cud.setCredentialsNonExpired(true);
