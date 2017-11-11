@@ -85,7 +85,7 @@ public class UserDaoImpl implements UserDao {
         account.setLogin(login);
         account.setStatus(1);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         //do wyjebania przy implementacji error handlingu
         Date date = null;
         try {
@@ -184,7 +184,7 @@ public class UserDaoImpl implements UserDao {
         }
 
         if (map.containsKey("birthday")) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             if (map.get("birthday") == null || map.get("birthday").isEmpty()) user.getPersonalData().setBirthday(null);
             else {
                 //do wyjebania przy implementacji error handlingu

@@ -35,7 +35,7 @@ public class LogEntryDaoImpl implements LogEntryDao {
     @Override
     public LogEntry addLogEntry(long userId, String startDate, double loggedHours,
                                 long logTypeId, Long projectId) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         //do wyjebania przy implementacji error handlingu
         Date date = null;
         try {
