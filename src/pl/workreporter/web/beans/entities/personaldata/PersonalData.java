@@ -26,7 +26,7 @@ public class PersonalData {
     @JsonView(JsonDataView.User.class)
     private String lastName;
     @Column(name = "BIRTHDAY")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     @JsonView(JsonDataView.Myself.class)
     private Date birthday;
     @Column(name = "PHONE")

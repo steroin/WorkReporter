@@ -41,7 +41,7 @@ public class LogEntry implements Serializable {
     @JsonView(JsonDataView.User.class)
     private Project project;
     @Column(name = "LOG_START")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     @JsonView(JsonDataView.User.class)
     private Date logStart;
     @Column(name = "LOGGEDHOURS")
@@ -49,10 +49,10 @@ public class LogEntry implements Serializable {
     private double loggedHours;
     @Column(name = "LOG_DATE")
     @JsonView(JsonDataView.User.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     private Date logDate = new Date();
     @Column(name = "LAST_EDITION_DATE")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     @JsonView(JsonDataView.User.class)
     private Date lastEditionDate = new Date();
     @Column(name = "STATUS")

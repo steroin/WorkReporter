@@ -34,11 +34,11 @@ public class Project implements Serializable {
     @JsonView(JsonDataView.User.class)
     private String description;
     @Column(name = "CREATION_DATE")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     @JsonView(JsonDataView.SolutionManager.class)
     private Date creationDate = new Date();
     @Column(name = "LAST_EDITION_DATE")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     @JsonView(JsonDataView.SolutionManager.class)
     private Date lastEditionDate = new Date();
 

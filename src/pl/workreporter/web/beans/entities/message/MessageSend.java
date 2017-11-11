@@ -25,7 +25,7 @@ public class MessageSend implements Serializable {
     @JoinColumn(name = "RECEIVERID")
     private MessageReceiver receiver;
     @Column(name = "SENDDATE")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     private Date sendDate = new Date();
     @Column(name = "STATUS")
     private int status = 1;

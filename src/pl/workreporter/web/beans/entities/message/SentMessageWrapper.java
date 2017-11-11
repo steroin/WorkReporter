@@ -12,7 +12,7 @@ import java.util.List;
 public class SentMessageWrapper {
     private Message message;
     private List<MessageReceiver> receivers;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+2")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT+1")
     private Date sendDate;
 
     public Message getMessage() {
