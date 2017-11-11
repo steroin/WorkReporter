@@ -25,7 +25,7 @@
         <div class="col-xs-4">
             <div class="panel panel-default login-main-panel">
                 <div class="panel-heading">
-                    Zaloguj sie
+                    Zaloguj się
                 </div>
                 <div class="panel-body overflow-hidden">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSImlSQwrMdPCV3XPxZZv_m6oVz2O_4if8VuqGCPGb7JGDGs2QcE7gg_q4" class="image-rounded welcome-logo"/>
