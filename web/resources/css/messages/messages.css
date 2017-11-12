@@ -50,7 +50,7 @@
 
 .messageText {
     padding: 30px;
-    white-space: initial;
+    white-space: pre-line;
     word-wrap: break-word;
 }
 
