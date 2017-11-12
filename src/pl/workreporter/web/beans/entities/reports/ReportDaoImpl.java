@@ -96,7 +96,7 @@ public class ReportDaoImpl implements ReportDao {
                 "left join position p on au.positionid = p.id " +
                 "left join " +
                 "(select * from log_entry " +
-                "where log_start between " + dateParser.parseToDatabaseTimestamp(stringDateFrom) + " and " + dateParser.parseToDatabaseTimestamp(stringDateTo) + ") " +
+                "where log_start between " + dateParser.parseToDatabaseTimestamp(stringDateFrom) + " and " + dateParser.parseToDatabaseTimestamp(stringDateTo) + " and status=2) " +
                 "le on le.userid = au.id " +
                 "where au.solutionid = "+solutionId+" " +
                 "group by  au.id, pd.firstname, pd.lastname, ac.login, ac.email, t.name, p.name " +
@@ -153,7 +153,7 @@ public class ReportDaoImpl implements ReportDao {
         String query = "select p.name, nvl(sum(le.loggedhours), 0) as loggedhours from project p " +
                 "left join " +
                 "(select * from log_entry " +
-                "where log_start between " + dateParser.parseToDatabaseTimestamp(stringDateFrom) + " and " + dateParser.parseToDatabaseTimestamp(stringDateTo) + ") " +
+                "where log_start between " + dateParser.parseToDatabaseTimestamp(stringDateFrom) + " and " + dateParser.parseToDatabaseTimestamp(stringDateTo) + " and status=2) " +
                 "le on le.projectid = p.id " +
                 "where p.solutionid = "+solutionId+" " +
                 "group by p.name " +
@@ -206,7 +206,7 @@ public class ReportDaoImpl implements ReportDao {
                 "left join appuser au on au.positionid = p.id " +
                 "left join " +
                 "(select * from log_entry " +
-                "where log_start between " + dateParser.parseToDatabaseTimestamp(stringDateFrom) + " and " + dateParser.parseToDatabaseTimestamp(stringDateTo) + ") " +
+                "where log_start between " + dateParser.parseToDatabaseTimestamp(stringDateFrom) + " and " + dateParser.parseToDatabaseTimestamp(stringDateTo) + " and status=2) " +
                 "le on le.userid = au.id " +
                 "where p.solutionid = "+solutionId+" " +
                 "group by p.name " +
@@ -263,7 +263,7 @@ public class ReportDaoImpl implements ReportDao {
                 "left join personal_data pd on au.personaldataid = pd.id " +
                 "left join " +
                 "(select * from log_entry " +
-                "where log_start between " + dateParser.parseToDatabaseTimestamp(stringDateFrom) + " and " + dateParser.parseToDatabaseTimestamp(stringDateTo) + ") " +
+                "where log_start between " + dateParser.parseToDatabaseTimestamp(stringDateFrom) + " and " + dateParser.parseToDatabaseTimestamp(stringDateTo) + " and status=2) " +
                 "le on le.teamid = t.id " +
                 "where t.solutionid = "+solutionId+" " +
                 "group by t.name, pd.firstname, pd.lastname " +
