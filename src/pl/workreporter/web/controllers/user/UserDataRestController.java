@@ -64,6 +64,6 @@ public class UserDataRestController {
     @RequestMapping(value = "/users/{id}", method = PATCH)
     @ResponseBody
     public RestResponse<User> updateUserData(@PathVariable("id") long userId, @RequestBody Map<String, String> map) {
-        return userDaoWrapper.updateUser(userId, map);
+        return userDaoWrapper.updateUserBasicData(userId, map);
     }
 }

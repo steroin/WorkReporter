@@ -15,5 +15,6 @@ public interface UserDao {
                  String birthday, String phone, String login, String password, String email);
     void removeUser(long userId);
     void removeUsers(List<Long> userIds);
+    User updateUserBasicData(long userId, Map<String, String> map);
     User updateUser(long userId, Map<String, String> map);
 }

@@ -151,6 +151,37 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User updateUserBasicData(long userId, Map<String, String> map) {
+        EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
+        User user = entityManager.find(User.class, userId);
+        PersonalData personalData = user.getPersonalData();
+
+        entityManager.getTransaction().begin();
+
+        if (map.containsKey("birthday")) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            if (map.get("birthday") == null || map.get("birthday").isEmpty()) user.getPersonalData().setBirthday(null);
+            else {
+                //do wyjebania przy implementacji error handlingu
+                Date date = null;
+                try {
+                    date = sdf.parse(dateParser.makeParsableDate(map.get("birthday")));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                user.getPersonalData().setBirthday(date);
+            }
+        }
+        if (map.containsKey("phone")) {
+            personalData.setPhone(map.get("phone") == null || map.get("phone").isEmpty() ? null : map.get("phone"));
+        }
+
+        entityManager.merge(personalData);
+        entityManager.getTransaction().commit();
+        return user;
+    }
+
+    @Override
     public User updateUser(long userId, Map<String, String> map) {
         EntityManager entityManager = entityManagerFactoryBean.getObject().createEntityManager();
         User user = entityManager.find(User.class, userId);

@@ -157,4 +157,16 @@ public class UserDaoWrapper {
             return new RestResponseUpdateFailedError<>();
         }
     }
+
+    public RestResponse<User> updateUserBasicData(long userId, Map<String, String> map) {
+        try {
+            if (authenticator.authenticateUserId(userId)) {
+                return new RestResponseSuccess<>(userDao.updateUserBasicData(userId, map));
+            } else {
+                return new RestResponseAuthenticationError<>();
+            }
+        } catch (Exception e) {
+            return new RestResponseUpdateFailedError<>();
+        }
+    }
 }
