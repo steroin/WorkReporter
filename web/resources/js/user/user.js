@@ -11,7 +11,10 @@ module.config(['$httpProvider', function($httpProvider) {
 module.controller('userController', function($scope, $http) {
     $scope.init = function() {
         startLoading();
-        $http.get('users/me').then(function(data) {
+        $http.get('auth').then(function(data) {
+            $scope.authentication = data.data.response;
+            return $http.get('users/me');
+        }).then(function(data) {
             $scope.userData = data.data.response.user;
             $scope.currentSolution = data.data.response.solution;
             $("#userData").show();
